@@ -1,0 +1,56 @@
+Git environment:
+  git config --global user.name "Name"
+  git config --global user.email "Email"
+  git config --global branch.autosetuprebase always  (Avoid merge commits for pulling)
+  git config --global color.ui true
+  git config --global color.status auto
+  git config --global color.branch auto
+  git config --global core.editor vim
+  git config --global merge.tool vimdiff
+  git config --list
+Create a Bare Repo:
+  git --bare init
+  git clone --bare https://github.xx.xx.
+Push:
+  git add filename/directory_name
+  git commit -m "comment" (put file to local stash, aka local repo)
+  git remote add origin gituser@git_server_ip:project.git
+  git push origin master (or more generally git push <remote> <local branch name>:<remote branch to push into>)
+Sync from server
+  git pull
+Temporary put changed file to stash
+  git stash
+  git stash list
+  git stash pop
+Move file to difference directory
+  mkdir src
+  git mv filename src/
+  git commit -m "comment"
+  git push origin master
+Add, Rename, Delete file
+  git add "filename"
+  git mv "filename" "new_file"
+  git rm "filename"
+Revert Uncommitted changes or deleted files from local repo
+  git checkout "filename"
+Revert committed changes from committed
+  git checkout HEAD -- string_operations.c
+Reset
+  Soft - it will reset the HEAD pointer only without destroying anything
+  Mixed - reverts those changes from the staging area that have not been committed yet. It reverts the changes from the staging area only. The actual changes made to the working copy of the file are unaffected.
+  Hard - hard option with the Git reset command, it will clear the staging area; it will reset the HEAD pointer to the latest commit of the specific commit ID and delete the local file changes too.
+Tags:
+  allows giving meaningful names to a specific version in the repository
+  git tag -a 'Release_1_0' -m 'Tagged basic string operation code' HEAD
+  git push origin tag Release_1_0
+  git tag -l
+  git show "tag name"
+  git tag -d "tag name" (delete tag name)
+Branch
+  git branch "branch name" (create new branch)
+  git banch (list branches)
+  git checkout new_branch
+  git checkout -b test_branch (shortcut to create and switch branch)
+  git branch -D "branch name" (delete branch)
+  git branch -m "new branch" "old branch) (rename branch)
+  git merge origin/master (merge branch)
