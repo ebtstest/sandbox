@@ -96,3 +96,5 @@ style.use('ggplot')
 ##print(chart_columns)
 ##df[chart_columns].plot()
 ##plt.show()
+
+print("hello")
