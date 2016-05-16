@@ -88,11 +88,11 @@ style.use('ggplot')
 ##df.to_csv('stock_quote_new.csv')
 
 
-stock_list= ['TSLA', "GOOGL", "AMZN", "FB", "LNKD", "AAPL", "USO", "EBAY", "MSFT", "PFE", "MCD", "M", "QQQ", "SPY"]
-df = pd.read_csv('stock_quote_new.csv', index_col=0)
-chart_columns=[]
-for i in stock_list:
-   chart_columns.append(i+'_Adj_Close')
-print(chart_columns)
-df[chart_columns].plot()
-plt.show()
+##stock_list= ['TSLA', "GOOGL", "AMZN", "FB", "LNKD", "AAPL", "USO", "EBAY", "MSFT", "PFE", "MCD", "M", "QQQ", "SPY"]
+##df = pd.read_csv('stock_quote_new.csv', index_col=0)
+##chart_columns=[]
+##for i in stock_list:
+##   chart_columns.append(i+'_Adj_Close')
+##print(chart_columns)
+##df[chart_columns].plot()
+##plt.show()
