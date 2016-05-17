@@ -1,7 +1,11 @@
+################################################################################################
 string to list:
+################################################################################################
   list1 = list(str1)
 
+################################################################################################
 create list with for loop
+################################################################################################
   >>> def return_xy(x,y):
 	    return(x,y)
   >>> list3 = [return_xy(x,y) for x in list1 for y in list2]
@@ -11,12 +15,16 @@ create list with for loop
   >>> list3
       [['a', 'h'], ['a', 'e'], ['a', 'l'], ['a', 'l'], ['a', 'o'], ['b', 'h'], ['b', 'e'], ['b', 'l'], ['b', 'l'], ['b', 'o'], ['c', 'h'], ['c', 'e'], ['c', 'l'], ['c', 'l'], ['c', 'o'], ['d', 'h'], ['d', 'e'], ['d', 'l'], ['d', 'l'], ['d', 'o'], ['e', 'h'], ['e', 'e'], ['e', 'l'], ['e', 'l'], ['e', 'o']]
 
+################################################################################################
 list.reverse() vs reversed(list)
 list.sort() vs sorted(list)
+################################################################################################
   list.reverse() is inplace. reversed() return "list_reverseiterator object"
   list.sort() is inplace. reversed() return "sorted list"
 
+################################################################################################
 map() filter() reduce()
+################################################################################################
   >>> a = [1,2,3,4]
   >>> b = [17,12,11,10]
   >>> c = [-1,-4,5,9]
@@ -39,7 +47,10 @@ map() filter() reduce()
       102
   >>> reduce(lambda x, y: x+y, range(1,101))
       5050
+
+################################################################################################
 Slicing
+################################################################################################
   >>> str1='abcde'
   >>> str1[-1]
       'e'
@@ -48,7 +59,9 @@ Slicing
   >>> str1[::-1]
       'edcba'
 
+################################################################################################
 list.sort and the sorted
+################################################################################################
   >>> fruits = ['grape', 'raspberry', 'apple', 'banana']
   >>> sorted(fruits, reverse=True)
       ['raspberry', 'grape', 'banana', 'apple']
@@ -56,8 +69,10 @@ list.sort and the sorted
       ['grape', 'apple', 'banana', 'raspberry']
   >>> sorted(fruits, key=len, reverse=True)
       ['raspberry', 'banana', 'grape', 'apple']
-
+      
+################################################################################################
 bisect.bisect() and bisect.insort()
+################################################################################################
   >>> def grade(score, breakpoints=[60, 70, 80, 90], grades='FDCBA'):
       ... i = bisect.bisect(breakpoints, score)
       ... return grades[i]
@@ -66,7 +81,9 @@ bisect.bisect() and bisect.insort()
       ['F', 'A', 'C', 'C', 'B', 'A', 'A']
   insort(seq, item) inserts item into seq so as to keep seq in ascending order
 
+################################################################################################
 Array.array numpy scipy
+################################################################################################
   >>> a = numpy.arange(12)
   >>> a
       array([ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11])
@@ -87,7 +104,10 @@ Array.array numpy scipy
             [ 2, 6, 10],
             [ 3, 7, 11]])
             
+
+################################################################################################
 deque
+################################################################################################
   >>> from collections import deque
   >>> dq = deque(range(10), maxlen=10)
   >>> dq
@@ -108,13 +128,18 @@ deque
   >>> dq
       deque([40, 30, 20, 10, 3, 4, 5, 6, 7, 8], maxlen=10)
 
+################################################################################################
 enumerate(sequence, start=0)
+################################################################################################
   >>> seasons = ['Spring', 'Summer', 'Fall', 'Winter']
   >>> list(enumerate(seasons))
       [(0, 'Spring'), (1, 'Summer'), (2, 'Fall'), (3, 'Winter')]
   >>> list(enumerate(seasons, start=1))
       [(1, 'Spring'), (2, 'Summer'), (3, 'Fall'), (4, 'Winter')]
 
+################################################################################################
+Iterator functions
+################################################################################################
 Iterator	          Arguments	                                                        Results	Example
 count()	            start, [step]	start, start+step, start+2*step, ...	              count(10) --> 10 11 12 13 14 ...
 cycle()	            p	p0, p1, ... plast, p0, p1, ...	                                cycle('ABCD') --> A B C D A B C D ...
@@ -166,6 +191,9 @@ collections.Counter
       >>> ct.most_common(2)
           [('a', 10), ('z', 3)]
 
+################################################################################################
+set vs frozenset
+################################################################################################
 Though sets can't contain mutable objects, sets are mutable:
       >>> cities = set(["Frankfurt", "Basel","Freiburg"])
       >>> cities.add("Strasbourg")
@@ -179,3 +207,84 @@ Frozensets are like sets except that they cannot be changed, i.e. they are immut
           File "<stdin>", line 1, in <module>
           AttributeError: 'frozenset' object has no attribute 'add'
       >>> 
+
+################################################################################################
+Interesting lambda call:
+################################################################################################
+	>>> fruits = ['strawberry', 'fig', 'apple', 'cherry', 'raspberry', 'banana']
+	>>> sorted(fruits, key=lambda word: word[::-1])
+		['banana', 'apple', 'fig', 'raspberry', 'strawberry', 'cherry']
+
+################################################################################################
+Decorator:
+################################################################################################
+	def p_decorate(func):
+	   def func_wrapper(name):
+	       return "<p>{0}</p>".format(func(name))
+	   return func_wrapper
+	@p_decorate
+	def get_text(name):
+	   return "lorem ipsum, {0} dolor sit amet".format(name)
+	print get_text("John")
+
+
+	def p_decorate(func):
+	   def func_wrapper(name):
+	       return "<p>{0}</p>".format(func(name))
+	   return func_wrapper
+	def strong_decorate(func):
+	    def func_wrapper(name):
+	        return "<strong>{0}</strong>".format(func(name))
+	    return func_wrapper
+	def div_decorate(func):
+	    def func_wrapper(name):
+	        return "<div>{0}</div>".format(func(name))
+	    return func_wrapper
+	@div_decorate
+	@p_decorate
+	@strong_decorate
+	def get_text(name):
+	   return "lorem ipsum, {0} dolor sit amet".format(name)
+	print get_text("John")
+	
+	
+	def p_decorate(func):
+	   def func_wrapper(self):
+	       return "<p>{0}</p>".format(func(self))
+	   return func_wrapper
+	class Person(object):
+	    def __init__(self):
+	        self.name = "John"
+	        self.family = "Doe"
+	    @p_decorate
+	    def get_fullname(self):
+	        return self.name+" "+self.family
+	my_person = Person()
+	print my_person.get_fullname()
+
+
+	def p_decorate(func):
+	   def func_wrapper(*args, **kwargs):
+	       return "<p>{0}</p>".format(func(*args, **kwargs))
+	   return func_wrapper
+	class Person(object):
+	    def __init__(self):
+	        self.name = "John"
+	        self.family = "Doe"
+	    @p_decorate
+	    def get_fullname(self):
+	        return self.name+" "+self.family
+	my_person = Person()
+	print my_person.get_fullname()
+
+
+	def tags(tag_name):
+	    def tags_decorator(func):
+	        def func_wrapper(name):
+	            return "<{0}>{1}</{0}>".format(tag_name, func(name))
+	        return func_wrapper
+	    return tags_decorator
+	@tags("p")
+	def get_text(name):
+	    return "Hello "+name
+	print get_text("John")
