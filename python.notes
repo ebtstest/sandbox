@@ -292,3 +292,142 @@ Decorator:
 	def get_text(name):
 	    return "Hello "+name
 	print get_text("John")
+
+################################################################################################
+del and garbage collection:
+################################################################################################
+	The del statement deletes names, not objects. An object may be garbage collected as
+	result of a del command, but only if the variable deleted holds the last reference to the
+	object, or if the object becomes unreachable4. Rebinding a variable may also cause the
+	number of references to an object reach zero, causing its destruction.
+	
+################################################################################################
+Immutables tricks:
+################################################################################################
+	for a tuple/str/bytes t, t[:] does not make a copy, but returns a reference 
+	to the same object. You also get a reference to the same tuple if you write tuple(t)
+	a frozenset is not a sequence, so fs[:] does not work if fs is a frozenset
+	fs.copy() has the same effect: it cheats and returns a reference to the same object, and
+	not a copy at all.
+
+
+################################################################################################
+interning:
+################################################################################################
+	The sharing of string literals is an optimization technique called interning. String 
+	literals may create shared objects
+		>>> s1 = 'ABC'
+		>>> s2 = 'ABC' 
+		>>> s2 is s1 
+			True
+
+
+################################################################################################
+classmethod versus staticmethod:
+################################################################################################
+	classmethod defines a method that operates on the class and not on instances. 
+	classmethod changes the way the method is called, so it receives the class itself
+	as the first argument, instead of an instance. Its most common use is for alternate 
+	constructors, the first parameter of a class method should be class (not self aka instance)
+	
+	staticmethod decorator changes a method so that it receives no special first argument. 
+	In essence, a static method is just like a plain function that happens to live in a 
+	class body, instead of being defined at the module level.
+	
+
+################################################################################################
+bitwise operation ^ (XOR -- 1^1=0 0^0=0 1^0=1 0^1=1):
+################################################################################################
+
+
+################################################################################################
+name mangling -- Private and “protected” attributes in Python
+################################################################################################
+	name an instance attribute in the form __mood (two leading underscores and zero or at 
+	most one trailing underscore), Python stores the name in the instance __dict__ prefixed 
+	with a leading underscore and the class name, so in the	Dog class, __mood becomes 
+	_Dog__mood, and in Beagle it’s _Beagle__mood. This language feature goes by the lovely 
+	name of name mangling.
+
+################################################################################################
+Make class instances immutable
+################################################################################################
+	define attribute private using "name mangling"
+	Use @property decorator marks the getter method of a property
+		class Vector2d:
+			def __init__(self, x, y):
+				self.__x = float(x)
+				self.__y = float(y)
+			@property
+			def x(self):
+				return self.__x
+			@property
+			def y(self):
+				return self.__y
+			def __iter__(self):
+				return (i for i in (self.x, self.y))
+
+################################################################################################
+__slots__ saving memory
+################################################################################################
+	By defining __slots__ in the class, you are telling the interpreter: “These are all the
+	instance attributes in this class.” Python then stores them in a tuple-like structure in
+	each instance, avoiding the memory overhead of the per-instance __dict__. This can
+	make a huge difference in memory usage if your have millions of instances active at the
+	same time.
+	class Vector2d:
+		__slots__ = ('__x', '__y')
+	• You must remember to redeclare __slots__ in each subclass, since the inherited
+	  attribute is ignored by the interpreter.
+	• Instances will only be able to have the attributes listed in __slots__, unless you
+	  include '__dict__' in __slots__ — but doing so may negate the memory savings.
+	• Instances cannot be targets of weak references unless you remember to include
+	  '__weakref__' in __slots__.
+	  
+################################################################################################
+make class sliceable -- define __len__ and __getitem__
+make class iterable  -- define __iter__
+make class hashable  -- define __eq__ and __hash__
+################################################################################################
+
+################################################################################################
+monkey patching
+################################################################################################
+	A MonkeyPatch is a piece of Python code which extends or modifies other code at runtime.
+	A simple example looks like this:
+		from SomeOtherProduct.SomeModule import SomeClass
+		def speak(self):
+    			return "ook ook eee eee eee!"
+		SomeClass.speak = speak
+
+################################################################################################
+Define abstract based class
+################################################################################################
+	import abc
+	class Tombola(abc.ABC):
+		@abc.abstractmethod
+		def load(self, iterable):
+			"""Add items from an iterable."""
+		@abc.abstractmethod
+		def pick(self):
+			"""Remove item at random, returning it.
+			This method should raise `LookupError` when the instance is empty.
+			"""
+	However, the abc.ABC class is new in Python 3.4, so if you are using an earlier version
+	of Python — and it does not make sense to subclass another existing ABC — then you
+	must use the metaclass= keyword in the class statement, pointing to abc.ABCMeta
+	(not abc.ABC). 
+		class Tombola(metaclass=abc.ABCMeta): # this is prior to python 3.4
+		# ...
+	The metaclass= keyword argument was introduced in Python 3. In Python 2, you must
+	use the __metaclass__ class attribute:
+		class Tombola(object): # this is Python 2!!!
+		__metaclass__ = abc.ABCMeta
+
+################################################################################################
+Define virtual subclass
+################################################################################################
+	from random import randrange
+	from tombola import Tombola
+	@Tombola.register #
+	class TomboList(list):	
