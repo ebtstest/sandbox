@@ -1,0 +1,3346 @@
+###################################################################################
+What will be the output of the code below? Explain your answer.
+###################################################################################
+def extendList(val, list=[]):
+    list.append(val)
+    return list
+
+list1 = extendList(10)
+list2 = extendList(123,[])
+list3 = extendList('a')
+
+print "list1 = %s" % list1
+print "list2 = %s" % list2
+print "list3 = %s" % list3
+
+###################################################################################
+How would you modify the definition of extendList to produce the presumably desired behavior?
+###################################################################################
+The output of the above code will be:
+list1 = [10, 'a']
+list2 = [123]
+list3 = [10, 'a']
+
+
+Many will mistakenly expect list1 to be equal to [10] and list3 to be equal to ['a'], thinking that the list argument will be set to its default value of [] each time extendList is called.
+However, what actually happens is that the new default list is created only once when the function is defined, and that same list is then used subsequently whenever extendList is invoked without a list argument being specified. This is because expressions in default arguments are calculated when the function is defined, not when it’s called.
+list1 and list3 are therefore operating on the same default list, whereas list2 is operating on a separate list that it created (by passing its own empty list as the value for the list parameter).
+The definition of the extendList function could be modified as follows, though, to always begin a new list when no listargument is specified, which is more likely to have been the desired behavior:
+def extendList(val, list=None):
+  if list is None:
+    list = []
+  list.append(val)
+  return list
+
+
+With this revised implementation, the output would be:
+list1 = [10]
+list2 = [123]
+list3 = ['a']
+
+###################################################################################
+What will be the output of the code below? Explain your answer.
+def multipliers():
+  return [lambda x : i * x for i in range(4)]
+print [m(2) for m in multipliers()]
+
+How would you modify the definition of multipliers to produce the presumably desired behavior?
+###################################################################################
+The output of the above code will be [6, 6, 6, 6] (not [0, 2, 4, 6]).
+The reason for this is that Python’s closures are late binding. This means that the values of variables used in closures are looked up at the time the inner function is called. So as a result, when any of the functions returned by multipliers() are called, the value of i is looked up in the surrounding scope at that time. By then, regardless of which of the returned functions is called, the for loop has completed and i is left with its final value of 3. Therefore, every returned function multiplies the value it is passed by 3, so since a value of 2 is passed in the above code, they all return a value of 6 (i.e., 3 x 2).
+(Incidentally, as pointed out in The Hitchhiker’s Guide to Python, there is a somewhat widespread misconception that this has something to do with lambdas, which is not the case. Functions created with a lambda expression are in no way special and the same behavior is exhibited by functions created using an ordinary def.)
+Below are a few examples of ways to circumvent this issue.
+One solution would be use a Python generator as follows:
+def multipliers():
+  for i in range(4): yield lambda x : i * x 
+
+
+Another solution is to create a closure that binds immediately to its arguments by using a default argument. For example:
+def multipliers():
+  return [lambda x, i=i : i * x for i in range(4)]
+
+
+Or alternatively, you can use the functools.partial function:
+from functools import partial
+from operator import mul
+
+def multipliers():
+  return [partial(mul, i) for i in range(4)]
+  
+
+###################################################################################
+What will be the output of the code below? Explain your answer.
+
+class Parent(object):
+    x = 1
+
+class Child1(Parent):
+    pass
+
+class Child2(Parent):
+    pass
+
+print Parent.x, Child1.x, Child2.x
+Child1.x = 2
+print Parent.x, Child1.x, Child2.x
+Parent.x = 3
+print Parent.x, Child1.x, Child2.x
+###################################################################################
+The output of the above code will be:
+1 1 1
+1 2 1
+3 2 3
+
+
+What confuses or surprises many about this is that the last line of output is 3 2 3 
+rather than 3 2 1. Why does changing the value of Parent.x also change the value of 
+Child2.x, but at the same time not change the value of Child1.x?
+
+The key to the answer is that, in Python, class variables are internally handled as 
+dictionaries. If a variable name is not found in the dictionary of the current class,
+the class hierarchy (i.e., its parent classes) are searched until the referenced 
+variable name is found (if the referenced variable name is not found in the class
+itself or anywhere in its hierarchy, an AttributeError occurs).
+
+Therefore, setting x = 1 in the Parent class makes the class variable x 
+(with a value of 1) referenceable in that class and any of its children. 
+That’s why the first print statement outputs 1 1 1.
+
+Subsequently, if any of its child classes overrides that value (for example, 
+when we execute the statement Child1.x = 2), then the value is changed in 
+that child only. That’s why the second print statement outputs 1 2 1.
+Finally, if the value is then changed in the Parent (for example, when we 
+execute the statement Parent.x = 3), that change is reflected also by any 
+children that have not yet overridden the value (which in this case would 
+be Child2). That’s why the third print statement outputs 3 2 3.
+
+
+###################################################################################
+What will be the output of the code below in Python 2? Explain your answer.
+def div1(x,y):
+    print "%s/%s = %s" % (x, y, x/y)
+    
+def div2(x,y):
+    print "%s//%s = %s" % (x, y, x//y)
+
+div1(5,2)
+div1(5.,2)
+div2(5,2)
+div2(5.,2.)
+
+
+Also, how would the answer differ in Python 3 (assuming, of course, that the above 
+print statements were converted to Python 3 syntax)?
+###################################################################################
+In Python 2, the output of the above code will be:
+5/2 = 2
+5.0/2 = 2.5
+5//2 = 2
+5.0//2.0 = 2.0
+
+
+By default, Python 2 automatically performs integer arithmetic if both operands are 
+integers. As a result, 5/2 yields 2, while 5./2 yields 2.5.
+Note that you can override this behavior in Python 2 by adding the following import:
+from __future__ import division
+
+
+Also note that the “double-slash” (//) operator will always perform integer division, 
+regardless of the operand types. That’s why 5.0//2.0 yields 2.0 even in Python 2.
+Python 3, however, does not have this behavior; i.e., it does not perform integer 
+arithmetic if both operands are integers. Therefore, in Python 3, the output will 
+be as follows:
+5/2 = 2.5
+5.0/2 = 2.5
+5//2 = 2
+5.0//2.0 = 2.0
+
+###################################################################################
+What will be the output of the code below?
+list = ['a', 'b', 'c', 'd', 'e']
+print list[10:]
+###################################################################################
+  The above code will output [], and will not result in an IndexError.
+  As one would expect, attempting to access a member of a list using an index that 
+  exceeds the number of members (e.g., attempting to access list[10] in the list above) 
+  results in an IndexError. However, attempting to access a slice of a list at a 
+  starting index that exceeds the number of members in the list will not result in 
+  an IndexError and will simply return an empty list.
+  What makes this a particularly nasty gotcha is that it can lead to bugs that are 
+  really hard to track down since no error is raised at runtime.
+
+###################################################################################
+Consider the following code snippet:
+1. list = [ [ ] ] * 5
+2. list  # output?
+3. list[0].append(10)
+4. list  # output?
+5. list[1].append(20)
+6. list  # output?
+7. list.append(30)
+8. list  # output?
+
+
+What will be the ouput of lines 2, 4, 6, and 8? Explain your answer.
+###################################################################################
+The output will be as follows:
+[[], [], [], [], []]
+[[10], [10], [10], [10], [10]]
+[[10, 20], [10, 20], [10, 20], [10, 20], [10, 20]]
+[[10, 20], [10, 20], [10, 20], [10, 20], [10, 20], 30]
+
+
+Here’s why:
+The first line of output is presumably intuitive and easy to understand; i.e., 
+list = [ [ ] ] * 5 simply creates a list of 5 lists.
+
+However, the key thing to understand here is that the statement list = [ [ ] ] * 5 
+does NOT create a list containing 5 distinct lists; rather, it creates a list of 5 
+references to the same list. With this understanding, we can better understand the 
+rest of the output.
+list[0].append(10) appends 10 to the first list. But since all 5 lists refer to the 
+same list, the output is: [[10], [10], [10], [10], [10]].
+Similarly, list[1].append(20) appends 20 to the second list. But again, since all 5 lists 
+refer to the same list, the output is now: [[10, 20], [10, 20], [10, 20], [10, 20], [10, 20]].
+In contrast, list.append(30) is appending an entirely new element to the “outer” list, 
+which therefore yields the output: [[10, 20], [10, 20], [10, 20], [10, 20], [10, 20], 30].
+
+
+###################################################################################
+Given a list of N numbers, use a single list comprehension to produce a new list that 
+only contains those values that are:
+(a) even numbers, and
+(b) from elements in the original list that had even indices
+For example, if list[2] contains a value that is even, that value should be included 
+in the new list, since it is also at an even index (i.e., 2) in the original list. 
+However, if list[3] contains an even number, that number should not be included in 
+the new list since it is at an odd index (i.e., 3) in the original list.
+###################################################################################
+A simple solution to this problem would be as follows
+[x for x in list[::2] if x%2 == 0]
+
+
+For example, given the following list:
+#        0   1   2   3    4    5    6    7    8
+list = [ 1 , 3 , 5 , 8 , 10 , 13 , 18 , 36 , 78 ]
+
+
+the list comprehension [x for x in list[::2] if x%2 == 0] will evaluate to:
+[10, 18, 78]
+
+
+The expression works by first taking the numbers that are at the even indices, and 
+then filtering out all the odd numbers.
+
+###################################################################################
+Given the following subclass of dictionary:
+class DefaultDict(dict):
+  def __missing__(self, key):
+    return []
+
+
+Will the code below work? Why or why not?
+d = DefaultDict()
+d['florp'] = 127
+###################################################################################
+Yes, it will work. With this implementation of the DefaultDict class, whenever a key 
+is missing, the instance of the dictionary will automatically be instantiated with a list.
+
+
+3) What is pickling and unpickling?
+Pickle module accepts any Python object and converts it into a string representation and 
+dumps it into a file by using dump function, this process is called pickling.  While 
+the process of retrieving original Python objects from the stored string representation
+is called unpickling.
+4) How Python is interpreted?
+Python language is an interpreted language. Python program runs directly from the source code. It converts the source code that is written by the programmer into an intermediate language, which is again translated into machine language that has to be executed.
+5) How memory is managed in Python?
+Python memory is managed by Python private heap space. All Python objects and data structures are located in a private heap. The programmer does not have an access to this private heap and interpreter takes care of this Python private heap.
+The allocation of Python heap space for Python objects is done by Python memory manager.  The core API gives access to some tools for the programmer to code.
+Python also have an inbuilt garbage collector, which recycle all the unused memory and frees the memory and makes it available to the heap space.
+6) What are the tools that help to find bugs or perform static analysis?
+PyChecker is a static analysis tool that detects the bugs in Python source code and warns about the style and complexity of the bug. Pylint is another tool that verifies whether the module meets the coding standard.
+7) What are Python decorators?
+A Python decorator is a specific change that we make in Python syntax to alter functions easily.
+8) What is the difference between list and tuple?
+The difference between list and tuple is that list is mutable while tuple is not. Tuple can be hashed for e.g as a key for dictionaries.
+9) How are arguments passed by value or by reference?
+Everything in Python is an object and all variables hold references to the objects. The references values are according to the functions; as a result you cannot change the value of the references. However, you can change the objects if it is mutable.
+10) What is Dict and List comprehensions are?
+They are syntax constructions to ease the creation of a Dictionary or List based on existing iterable.
+11) What are the built-in type does python provides?
+There are mutable and Immutable types of Pythons built in types Mutable built-in types
+List
+Sets
+Dictionaries
+Immutable built-in types
+Strings
+Tuples
+Numbers
+12) What is namespace in Python?
+In Python, every name introduced has a place where it lives and can be hooked for. This is known as namespace. It is like a box where a variable name is mapped to the object placed.  Whenever the variable is searched out, this box will be searched, to get corresponding object.
+13) What is lambda in Python?
+It is a single expression anonymous function often used as inline function.
+14) Why lambda forms in python does not have statements?
+A lambda form in python does not have statements as it is used to make new function object and then return them at runtime.
+15) What is pass in Python?
+Pass means, no-operation Python statement, or in other words it is a place holder in compound statement, where there should be a blank left and nothing has to be written there.
+16) In Python what are iterators?
+In Python, iterators are used to iterate a group of elements, containers like list.
+17) What is unittest in Python?
+A unit testing framework in Python is known as unittest.  It supports sharing of setups, automation testing, shutdown code for tests, aggregation of tests into collections etc.
+18) In Python what is slicing?
+A mechanism to select a range of items from sequence types like list, tuple, strings etc. is known as slicing.
+19) What are generators in Python?
+The way of implementing iterators are known as generators.  It is a normal function except that it yields expression in the function.
+20) What is docstring in Python?
+A Python documentation string is known as docstring, it is a way of documenting Python functions, modules and classes.
+21)  How can you copy an object in Python?
+To copy an object in Python, you can try copy.copy () or copy.deepcopy() for the general case. You cannot copy all objects but most of them.
+22) What is negative index in Python?
+Python sequences can be index in positive and negative numbers.   For positive index, 0 is the first index, 1 is the second index and so forth.  For negative index, (-1) is the last index and (-2) is the second last index and so forth.
+23) How you can convert a number to a string?
+In order to convert a number into a string, use the inbuilt function str().  If you want a octal or hexadecimal representation, use the inbuilt function oct() or hex().
+24) What is the difference between Xrange and range?
+Xrange returns the xrange object while range returns the list, and uses the same memory and no matter what the range size is.
+25) What is module and package in Python?
+In Python, module is the way to structure program. Each Python program file is a module, which imports other modules like objects and attributes.
+The folder of Python program is a package of modules.  A package can have modules or subfolders.
+How are arguments passed - by reference of by value?
+The short answer is "neither", actually it is called "call by object” or “call by sharing"(you can check here for more info). The longer one starts with the fact that this terminology is probably not the best one to describe how Python works. In Python everything is an object and all variables hold references to objects. The values of these references are to the functions. As result you can not change the value of the reference but you can modify the object if it is mutable. Remember numbers, strings and tuples are immutable, list and dicts are mutable.
+Do you know what list and dict comprehensions are? Can you give an example?
+List/Dict comprehensions are syntax constructions to ease the creation of a list/dict based on existing iterable. According to the 3rd edition of "Learning Python" list comprehensions are generally faster than normal loops but this is something that may change between releases. Examples:
+# simple iteration
+a = []
+for x in range(10):
+    a.append(x*2)
+# a == [0, 2, 4, 6, 8, 10, 12, 14, 16, 18]
+
+# list comprehension
+a = [x*2 for x in range(10)]
+
+# dict comprehension
+a = {x: x*2 for x in range(10)}
+# a == {0: 0, 1: 2, 2: 4, 3: 6, 4: 8, 5: 10, 6: 12, 7: 14, 8: 16, 9: 18}
+
+
+What is PEP 8?
+PEP 8 is a coding convention(a set of recommendations) how to write your Python code in order to make it more readable and useful for those after you. For more information checkPEP 8.
+Can you sum all of the elements in the list, how about to multiply them and get the result?
+# the basic way
+s = 0
+for x in range(10):
+    s += x
+
+# the right way
+s = sum(range(10))
+
+
+# the basic way
+s = 1
+for x in range(1, 10):
+    s = s * x
+
+# the other way
+from operator import mul
+reduce(mul, range(1, 10))
+Do you know what is the difference between lists and tuples? Can you give me an example for their usage?
+First list are mutable while tuples are not, and second tuples can be hashed e.g. to be used as keys for dictionaries. As an example of their usage, tuples are used when the order of the elements in the sequence matters e.g. a geographic coordinates, "list" of points in a path or route, or set of actions that should be executed in specific order. Don't forget that you can use them a dictionary keys. For everything else use lists.
+Do you know the difference between range and xrange?
+Range returns a list while xrange returns a generator xrange object which takes the same memory no matter of the range size. In the first case you have all items already generated(this can take a lot of time and memory) while in the second you get the elements one by one e.g. only one element is generated and available per iteration. Simple example of generator usage can be find in the problem 2 of the "homework" for my presentation Functions in Python
+Tell me a few differences between Python 2.x and 3.x
+There are many answers here but for me some of the major changes in Python 3.x are: all strings are now Unicode, print is now function not a statement. There is no range, it has been replaced by xrange which is removed. All classes are new style and the division of integers now returns float.
+What are decorators and what is their usage?
+According to Bruce Eckel's Introduction to Python Decorators "Decorators allow you to inject or modify code in functions or classes". In other words decorators allow you to wrap a function or class method call and execute some code before or after the execution of the original code. And also you can nest them e.g. to use more than one decorator for a specific function. Usage examples include - logging the calls to specific method, checking for permission(s), checking and/or modifying the arguments passed to the method etc.
+The with statement and its usage.
+In a few words the with statement allows you to executed code before and/or after a specific set of operations. For example if you open a file for reading and parsing no matter what happens during the parsing you want to be sure that at the end the file is closed. This is normally achieved using the try... finally construction but the with statement simplifies it using the so called "context management protocol". To use it with your own objects you just have to define __enter__ and __exit__ methods. Some standard objects like the file object automatically support this protocol. For more information you may check Understanding Python's "with" statement.
+15. What are iterators in Python?
+Iterators in Python are used to iterate over a group of elements, containers, like list. For a container to support iterator, it must provide __iter__().
+
+container.__iter__() :
+This returns an iterator object.
+Iterator protocol:
+The iterator object is required to support the iterator protocol. Iterator protocol is implemented by an iterator object by providing definition of the following 2 functions:
+
+1. iterator.__iter__() :
+    It returns the iterator object itself. This is required to allow both containers and iterators to be used with the for and in statements.
+
+2. iterator.__next__() :
+    It returns the next item from the container. If there are no further items, raise the StopIteration exception.
+ 
+Example of iterator on list:
+>>> a=[1,2,3]
+>>> i1= a.__iter__()   # creating an iterator using __iter__() on container
+>>> i1          
+<listiterator object at 0x7f5192ccbd10>
+>>> i2= iter(a)        # creating another iterator using iter() which calls __iter__() on container
+>>> i2
+<listiterator object at 0x7f5192ccbcd0>
+>>> i1.next()
+1
+>>> next(i1)           # calls i1.next()
+2
+>>> next(i2)
+1
+Iterators are required to implement __iter__ which returns the iterator (self) . Hence it can be used with for in
+>>> for x in i1:
+...   print x
+...
+3
+ 
+16. What are generators in Python?
+Generators are way of implementing iterators. Generator function is a normal function except that it contains yield expression in the function definition making it a generator function. This function returns a generator iterator known as generator. To get the next value from a generator, we use the same built-in function as for iterators: next() . next() takes care of calling the generator's __next__() method.
+When a generator function calls yield, the "state" of the generator function is frozen; the values of all variables are saved and the next line of code to be executed is recorded until next() is called again. Once it is, the generator function simply resumes where it left off. If next() is never called again, the state recorded during the yield call is (eventually) discarded.
+Example of generators:
+def gen_func_odd_nums():
+    odd_num = 1
+    while True:
+        yield odd_num         # saves context and return from function
+        odd_num = odd_num + 2
+
+generator_obj = gen_func_odd_nums();
+print "First 10 odd numbers:"
+for i in range(10):
+    print next(generator_obj) # calls generator_obj.__next__()
+ 
+Output:
+
+First 10 odd numbers:
+1
+3
+5
+7
+9
+11
+13
+15
+17
+19
+
+
+
+
+
+Question 1
+What is Python really? You can (and are encouraged) make comparisons to other technologies in your answer
+Answer
+Here are a few key points: - Python is an interpreted language. That means that, unlike languages like C and its variants, Python does not need to be compiled before it is run. Other interpreted languages include PHP and Ruby.
+Python is dynamically typed, this means that you don't need to state the types of variables when you declare them or anything like that. You can do things like x=111 and thenx="I'm a string" without error
+Python is well suited to object orientated programming in that it allows the definition of classes along with composition and inheritance. Python does not have access specifiers (like C++'s public, private), the justification for this point is given as "we are all adults here"
+in Python, functions are first-class objects. This means that they can be assigned to variables, returned from other functions and passed into functions. Classes are also first class objects
+Writing Python code is quick but running it is often slower than compiled languages. Fortunately， Python allows the inclusion of C based extensions so bottlenecks can be optimised away and often are. The numpy package is a good example of this, it's really quite quick because a lot of the number crunching it does isn't actually done by Python
+Python finds use in many spheres - web applications, automation, scientific modelling, big data applications and many more. It's also often used as "glue" code to get other languages and components to play nice.
+Python makes difficult things easy so programmers can focus on overriding algorithms and structures rather than nitty-gritty low level details.
+Question 2
+Fill in the missing code:
+def print_directory_contents(sPath):
+    """
+    This function takes the name of a directory 
+    and prints out the paths files within that 
+    directory as well as any files contained in 
+    contained directories. 
+
+    This function is similar to os.walk. Please don't
+    use os.walk in your answer. We are interested in your 
+    ability to work with nested structures. 
+    """
+    fill_this_in
+
+
+Answer
+def print_directory_contents(sPath):
+    import os                                       
+    for sChild in os.listdir(sPath):                
+        sChildPath = os.path.join(sPath,sChild)
+        if os.path.isdir(sChildPath):
+            print_directory_contents(sChildPath)
+        else:
+            print(sChildPath)
+
+
+Pay special attention
+be consistent with your naming conventions. If there is a naming convention evident in any sample code, stick to it. Even if it is not the naming convention you usually use
+recursive functions need to recurse and terminate. Make sure you understand how this happens so that you avoid bottomless callstacks
+we use the os module for interacting with the operating system in a way that is cross platform. You could say sChildPath = sPath + '/' + sChild but that wouldn't work on windows
+familiarity with base packages is really worthwhile, but don't break your head trying to memorize everything, Google is your friend in the workplace!
+ask questions if you don't understand what the code is supposed to do
+KISS! Keep it Simple, Stupid!
+Why this matters:
+displays knowledge of basic operating system interaction stuff
+recursion is hella useful
+Question 3
+Looking at the below code, write down the final values of A0, A1, ...An.
+A0 = dict(zip(('a','b','c','d','e'),(1,2,3,4,5)))
+A1 = range(10)
+A2 = sorted([i for i in A1 if i in A0])
+A3 = sorted([A0[s] for s in A0])
+A4 = [i for i in A1 if i in A3]
+A5 = {i:i*i for i in A1}
+A6 = [[i,i*i] for i in A1]
+
+
+If you dont know what zip is don't stress out. No sane employer will expect you to memorize the standard library. Here is the output of help(zip).
+zip(...)
+    zip(seq1 [, seq2 [...]]) -> [(seq1[0], seq2[0] ...), (...)]
+
+    Return a list of tuples, where each tuple contains the i-th element
+    from each of the argument sequences.  The returned list is truncated
+    in length to the length of the shortest argument sequence.
+
+
+If that doesn't make sense then take a few minutes to figure it out however you choose to.
+Answer
+A0 = {'a': 1, 'c': 3, 'b': 2, 'e': 5, 'd': 4}  # the order may vary
+A1 = range(0, 10) # or [0, 1, 2, 3, 4, 5, 6, 7, 8, 9] in python 2
+A2 = []
+A3 = [1, 3, 2, 5, 4]
+A4 = [1, 2, 3, 4, 5]
+A5 = {0: 0, 1: 1, 2: 4, 3: 9, 4: 16, 5: 25, 6: 36, 7: 49, 8: 64, 9: 81}
+A6 = [[0, 0], [1, 1], [2, 4], [3, 9], [4, 16], [5, 25], [6, 36], [7, 49], [8, 64], [9, 81]]
+
+
+Why this is important
+List comprehension is a wonderful time saver and a big stumbling block for a lot of people
+if you can read them you can probably write them down
+some of this code was made to be deliberately weird. You may need to work with some weird people
+Get Your Python Code Reviewed
+Question 4
+Python and multi-threading. Is it a good idea? List some ways to get some Python code to run in a parallel way.
+Answer
+Python doesn't allow multi-threading in the truest sense of the word. It has a multi-threading package but if you want to multi-thread to speed your code up, then it's usually not a good idea to use it. Python has a construct called the Global Interpreter Lock (GIL). The GIL makes sure that only one of your 'threads' can execute at any one time. A thread acquires the GIL, does a little work, then passes the GIL onto the next thread. This happens very quickly so to the human eye it may seem like your threads are executing in parallel, but they are really just taking turns using the same CPU core. All this GIL passing adds overhead to execution. This means that if you want to make your code run faster then using the threading package often isn't a good idea.
+There are reasons to use Python's threading package. If you want to run some things simultaneously, and efficiency is not a concern, then it's totally fine and convenient. Or if you are running code that needs to wait for something (like some IO) then it could make a lot of sense. But the threading library wont let you use extra CPU cores.
+Multi-threading can be outsourced to the operating system (by doing multi-processing), some external application that calls your Python code (eg, Spark or Hadoop), or some code that your Python code calls (eg: you could have your Python code call a C function that does the expensive multi-threaded stuff).
+Why this is important
+Because the GIL is an A-hole. Lots of people spend a lot of time trying to find bottlenecks in their fancy Python multi-threaded code before they learn what the GIL is.
+Question 5
+How do you keep track of different versions of your code?
+Answer:
+Version control! At this point, you should act excited and tell them how you even use Git (or whatever is your favorite) to keep track of correspondence with Granny. Git is my preferred version control system, but there are others, for example subversion.
+Why this is important:
+Because code without version control is like coffee without a cup. Sometimes we need to write once-off throw away scripts and that's ok, but if you are dealing with any significant amount of code, a version control system will be a benefit. Version Control helps with keeping track of who made what change to the code base; finding out when bugs were introduced to the code; keeping track of versions and releases of your software; distributing the source code amongst team members; deployment and certain automations. It allows you to roll your code back to before you broke it which is great on its own. Lots of stuff. It's just great.
+Question 6
+What does this code output:
+def f(x,l=[]):
+    for i in range(x):
+        l.append(i*i)
+    print(l) 
+
+f(2)
+f(3,[3,2,1])
+f(3)
+
+
+Answer
+[0, 1]
+[3, 2, 1, 0, 1, 4]
+[0, 1, 0, 1, 4]
+
+
+Hu?
+The first function call should be fairly obvious, the loop appends 0 and then 1 to the empty list, l. l is a name for a variable that points to a list stored in memory. The second call starts off by creating a new list in a new block of memory. l then refers to this new list. It then appends 0, 1 and 4 to this new list. So that's great. The third function call is the weird one. It uses the original list stored in the original memory block. That is why it starts off with 0 and 1.
+Try this out if you don't understand:
+l_mem = []
+
+l = l_mem           # the first call
+for i in range(2):
+    l.append(i*i)
+
+print(l)            # [0, 1]
+
+l = [3,2,1]         # the second call
+for i in range(3):
+    l.append(i*i)
+
+print(l)            # [3, 2, 1, 0, 1, 4]
+
+l = l_mem           # the third call
+for i in range(3):
+    l.append(i*i)
+
+print(l)            # [0, 1, 0, 1, 4]
+
+
+Question 7
+What is monkey patching and is it ever a good idea?
+Answer
+Monkey patching is changing the behaviour of a function or object after it has already been defined. For example:
+import datetime
+datetime.datetime.now = lambda: datetime.datetime(2012, 12, 12)
+
+
+Most of the time it's a pretty terrible idea - it is usually best if things act in a well-defined way. One reason to monkey patch would be in testing. The mock package is very useful to this end.
+Why does this matter?
+It shows that you understand a bit about methodologies in unit testing. Your mention of monkey avoidance will show that you aren't one of those coders who favor fancy code over maintainable code (they are out there, and they suck to work with). Remember the principle of KISS? And it shows that you know a little bit about how Python works on a lower level, how functions are actually stored and called and suchlike.
+PS: it's really worth reading a little bit about mock if you haven't yet. It's pretty useful.
+Question 8
+What does this stuff mean: *args, **kwargs? And why would we use it?
+Answer
+Use *args when we aren't sure how many arguments are going to be passed to a function, or if we want to pass a stored list or tuple of arguments to a function. **kwargs is used when we dont know how many keyword arguments will be passed to a function, or it can be used to pass the values of a dictionary as keyword arguments. The identifiers args and kwargs are a convention, you could also use *bob and **billy but that would not be wise.
+Here is a little illustration:
+def f(*args,**kwargs): print(args, kwargs)
+
+l = [1,2,3]
+t = (4,5,6)
+d = {'a':7,'b':8,'c':9}
+
+f()
+f(1,2,3)                    # (1, 2, 3) {}
+f(1,2,3,"groovy")           # (1, 2, 3, 'groovy') {}
+f(a=1,b=2,c=3)              # () {'a': 1, 'c': 3, 'b': 2}
+f(a=1,b=2,c=3,zzz="hi")     # () {'a': 1, 'c': 3, 'b': 2, 'zzz': 'hi'}
+f(1,2,3,a=1,b=2,c=3)        # (1, 2, 3) {'a': 1, 'c': 3, 'b': 2}
+
+f(*l,**d)                   # (1, 2, 3) {'a': 7, 'c': 9, 'b': 8}
+f(*t,**d)                   # (4, 5, 6) {'a': 7, 'c': 9, 'b': 8}
+f(1,2,*t)                   # (1, 2, 4, 5, 6) {}
+f(q="winning",**d)          # () {'a': 7, 'q': 'winning', 'c': 9, 'b': 8}
+f(1,2,*t,q="winning",**d)   # (1, 2, 4, 5, 6) {'a': 7, 'q': 'winning', 'c': 9, 'b': 8}
+
+def f2(arg1,arg2,*args,**kwargs): print(arg1,arg2, args, kwargs)
+
+f2(1,2,3)                       # 1 2 (3,) {}
+f2(1,2,3,"groovy")              # 1 2 (3, 'groovy') {}
+f2(arg1=1,arg2=2,c=3)           # 1 2 () {'c': 3}
+f2(arg1=1,arg2=2,c=3,zzz="hi")  # 1 2 () {'c': 3, 'zzz': 'hi'}
+f2(1,2,3,a=1,b=2,c=3)           # 1 2 (3,) {'a': 1, 'c': 3, 'b': 2}
+
+f2(*l,**d)                   # 1 2 (3,) {'a': 7, 'c': 9, 'b': 8}
+f2(*t,**d)                   # 4 5 (6,) {'a': 7, 'c': 9, 'b': 8}
+f2(1,2,*t)                   # 1 2 (4, 5, 6) {}
+f2(1,1,q="winning",**d)      # 1 1 () {'a': 7, 'q': 'winning', 'c': 9, 'b': 8}
+f2(1,2,*t,q="winning",**d)   # 1 2 (4, 5, 6) {'a': 7, 'q': 'winning', 'c': 9, 'b': 8} 
+
+
+Why do we care?
+Sometimes we will need to pass an unknown number of arguments or keyword arguments into a function. Sometimes we will want to store arguments or keyword arguments for later use. Sometimes it's just a time saver.
+Question 9
+What do these mean to you: @classmethod, @staticmethod, @property?
+Answer Background knowledge
+These are decorators. A decorator is a special kind of function that either takes a function and returns a function, or takes a class and returns a class. The @ symbol is just syntactic sugar that allows you to decorate something in a way that's easy to read.
+@my_decorator
+def my_func(stuff):
+    do_things
+
+
+Is equivalent to
+def my_func(stuff):
+    do_things
+
+my_func = my_decorator(my_func)
+
+
+You can find a tutorial on how decorators in general work here.
+Actual Answer
+The decorators @classmethod, @staticmethod and @property are used on functions defined within classes. Here is how they behave:
+class MyClass(object):
+    def __init__(self):
+        self._some_property = "properties are nice"
+        self._some_other_property = "VERY nice"
+    def normal_method(*args,**kwargs):
+        print("calling normal_method({0},{1})".format(args,kwargs))
+    @classmethod
+    def class_method(*args,**kwargs):
+        print("calling class_method({0},{1})".format(args,kwargs))
+    @staticmethod
+    def static_method(*args,**kwargs):
+        print("calling static_method({0},{1})".format(args,kwargs))
+    @property
+    def some_property(self,*args,**kwargs):
+        print("calling some_property getter({0},{1},{2})".format(self,args,kwargs))
+        return self._some_property
+    @some_property.setter
+    def some_property(self,*args,**kwargs):
+        print("calling some_property setter({0},{1},{2})".format(self,args,kwargs))
+        self._some_property = args[0]
+    @property
+    def some_other_property(self,*args,**kwargs):
+        print("calling some_other_property getter({0},{1},{2})".format(self,args,kwargs))
+        return self._some_other_property
+
+o = MyClass()
+# undecorated methods work like normal, they get the current instance (self) as the first argument
+
+o.normal_method 
+# <bound method MyClass.normal_method of <__main__.MyClass instance at 0x7fdd2537ea28>>
+
+o.normal_method() 
+# normal_method((<__main__.MyClass instance at 0x7fdd2537ea28>,),{})
+
+o.normal_method(1,2,x=3,y=4) 
+# normal_method((<__main__.MyClass instance at 0x7fdd2537ea28>, 1, 2),{'y': 4, 'x': 3})
+
+# class methods always get the class as the first argument
+
+o.class_method
+# <bound method classobj.class_method of <class __main__.MyClass at 0x7fdd2536a390>>
+
+o.class_method()
+# class_method((<class __main__.MyClass at 0x7fdd2536a390>,),{})
+
+o.class_method(1,2,x=3,y=4)
+# class_method((<class __main__.MyClass at 0x7fdd2536a390>, 1, 2),{'y': 4, 'x': 3})
+
+# static methods have no arguments except the ones you pass in when you call them
+
+o.static_method
+# <function static_method at 0x7fdd25375848>
+
+o.static_method()
+# static_method((),{})
+
+o.static_method(1,2,x=3,y=4)
+# static_method((1, 2),{'y': 4, 'x': 3})
+
+# properties are a way of implementing getters and setters. It's an error to explicitly call them
+# "read only" attributes can be specified by creating a getter without a setter (as in some_other_property)
+
+o.some_property
+# calling some_property getter(<__main__.MyClass instance at 0x7fb2b70877e8>,(),{})
+# 'properties are nice'
+
+o.some_property()
+# calling some_property getter(<__main__.MyClass instance at 0x7fb2b70877e8>,(),{})
+# Traceback (most recent call last):
+#   File "<stdin>", line 1, in <module>
+# TypeError: 'str' object is not callable
+
+o.some_other_property
+# calling some_other_property getter(<__main__.MyClass instance at 0x7fb2b70877e8>,(),{})
+# 'VERY nice'
+
+# o.some_other_property()
+# calling some_other_property getter(<__main__.MyClass instance at 0x7fb2b70877e8>,(),{})
+# Traceback (most recent call last):
+#   File "<stdin>", line 1, in <module>
+# TypeError: 'str' object is not callable
+
+o.some_property = "groovy"
+# calling some_property setter(<__main__.MyClass object at 0x7fb2b7077890>,('groovy',),{})
+
+o.some_property
+# calling some_property getter(<__main__.MyClass object at 0x7fb2b7077890>,(),{})
+# 'groovy'
+
+o.some_other_property = "very groovy"
+# Traceback (most recent call last):
+#   File "<stdin>", line 1, in <module>
+# AttributeError: can't set attribute
+
+o.some_other_property
+# calling some_other_property getter(<__main__.MyClass object at 0x7fb2b7077890>,(),{})
+# 'VERY nice'
+
+
+Question 10
+Consider the following code, what will it output?
+class A(object):
+    def go(self):
+        print("go A go!")
+    def stop(self):
+        print("stop A stop!")
+    def pause(self):
+        raise Exception("Not Implemented")
+
+class B(A):
+    def go(self):
+        super(B, self).go()
+        print("go B go!")
+
+class C(A):
+    def go(self):
+        super(C, self).go()
+        print("go C go!")
+    def stop(self):
+        super(C, self).stop()
+        print("stop C stop!")
+
+class D(B,C):
+    def go(self):
+        super(D, self).go()
+        print("go D go!")
+    def stop(self):
+        super(D, self).stop()
+        print("stop D stop!")
+    def pause(self):
+        print("wait D wait!")
+
+class E(B,C): pass
+
+a = A()
+b = B()
+c = C()
+d = D()
+e = E()
+
+# specify output from here onwards
+
+a.go()
+b.go()
+c.go()
+d.go()
+e.go()
+
+a.stop()
+b.stop()
+c.stop()
+d.stop()
+e.stop()
+
+a.pause()
+b.pause()
+c.pause()
+d.pause()
+e.pause()
+
+
+Answer
+The output is specified in the comments in the segment below:
+a.go()
+# go A go!
+
+b.go()
+# go A go!
+# go B go!
+
+c.go()
+# go A go!
+# go C go!
+
+d.go()
+# go A go!
+# go C go!
+# go B go!
+# go D go!
+
+e.go()
+# go A go!
+# go C go!
+# go B go!
+
+a.stop()
+# stop A stop!
+
+b.stop()
+# stop A stop!
+
+c.stop()
+# stop A stop!
+# stop C stop!
+
+d.stop()
+# stop A stop!
+# stop C stop!
+# stop D stop!
+
+e.stop()
+# stop A stop!
+
+a.pause()
+# ... Exception: Not Implemented
+
+b.pause()
+# ... Exception: Not Implemented
+
+c.pause()
+# ... Exception: Not Implemented
+
+d.pause()
+# wait D wait!
+
+e.pause()
+# ...Exception: Not Implemented
+
+
+Why do we care?
+Because OO programming is really, really important. Really. Answering this question shows your understanding of inheritance and the use of Python's super function. Most of the time the order of resolution doesn't matter. Sometimes it does, it depends on your application.
+Question 11
+Consider the following code, what will it output?
+class Node(object):
+    def __init__(self,sName):
+        self._lChildren = []
+        self.sName = sName
+    def __repr__(self):
+        return "<Node '{}'>".format(self.sName)
+    def append(self,*args,**kwargs):
+        self._lChildren.append(*args,**kwargs)
+    def print_all_1(self):
+        print(self)
+        for oChild in self._lChildren:
+            oChild.print_all_1()
+    def print_all_2(self):
+        def gen(o):
+            lAll = [o,]
+            while lAll:
+                oNext = lAll.pop(0)
+                lAll.extend(oNext._lChildren)
+                yield oNext
+        for oNode in gen(self):
+            print(oNode)
+
+oRoot = Node("root")
+oChild1 = Node("child1")
+oChild2 = Node("child2")
+oChild3 = Node("child3")
+oChild4 = Node("child4")
+oChild5 = Node("child5")
+oChild6 = Node("child6")
+oChild7 = Node("child7")
+oChild8 = Node("child8")
+oChild9 = Node("child9")
+oChild10 = Node("child10")
+
+oRoot.append(oChild1)
+oRoot.append(oChild2)
+oRoot.append(oChild3)
+oChild1.append(oChild4)
+oChild1.append(oChild5)
+oChild2.append(oChild6)
+oChild4.append(oChild7)
+oChild3.append(oChild8)
+oChild3.append(oChild9)
+oChild6.append(oChild10)
+
+# specify output from here onwards
+
+oRoot.print_all_1()
+oRoot.print_all_2()
+
+
+Answer
+oRoot.print_all_1() prints:
+<Node 'root'>
+<Node 'child1'>
+<Node 'child4'>
+<Node 'child7'>
+<Node 'child5'>
+<Node 'child2'>
+<Node 'child6'>
+<Node 'child10'>
+<Node 'child3'>
+<Node 'child8'>
+<Node 'child9'>
+
+
+oRoot.print_all_2() prints:
+<Node 'root'>
+<Node 'child1'>
+<Node 'child2'>
+<Node 'child3'>
+<Node 'child4'>
+<Node 'child5'>
+<Node 'child6'>
+<Node 'child8'>
+<Node 'child9'>
+<Node 'child7'>
+<Node 'child10'>
+
+
+Why do we care?
+Because composition and object construction is what objects are all about. Objects are composed of stuff and they need to be initialised somehow. This also ties up some stuff about recursion and use of generators.
+Generators are great. You could have achieved similar functionality to print_all_2 by just constructing a big long list and then printing it's contents. One of the nice things about generators is that they don't need to take up much space in memory.
+It is also worth pointing out that print_all_1 traverses the tree in a depth-first manner, whileprint_all_2 is width-first. Make sure you understand those terms. Sometimes one kind of traversal is more appropriate than the other. But that depends very much on your application.
+Question 12
+Describe Python's garbage collection mechanism in brief.
+Answer
+A lot can be said here. There are a few main points that you should mention:
+Python maintains a count of the number of references to each object in memory. If a reference count goes to zero then the associated object is no longer live and the memory allocated to that object can be freed up for something else
+occasionally things called "reference cycles" happen. The garbage collector periodically looks for these and cleans them up. An example would be if you have two objects o1 and o2such that o1.x == o2 and o2.x == o1. If o1 and o2 are not referenced by anything else then they shouldn't be live. But each of them has a reference count of 1.
+Certain heuristics are used to speed up garbage collection. For example, recently created objects are more likely to be dead. As objects are created, the garbage collector assigns them to generations. Each object gets one generation, and younger generations are dealt with first.
+This explanation is CPython specific.
+Question 13
+Place the following functions below in order of their efficiency. They all take in a list of numbers between 0 and 1. The list can be quite long. An example input list would be[random.random() for i in range(100000)]. How would you prove that your answer is correct?
+def f1(lIn):
+    l1 = sorted(lIn)
+    l2 = [i for i in l1 if i<0.5]
+    return [i*i for i in l2]
+
+def f2(lIn):
+    l1 = [i for i in lIn if i<0.5]
+    l2 = sorted(l1)
+    return [i*i for i in l2]
+
+def f3(lIn):
+    l1 = [i*i for i in lIn]
+    l2 = sorted(l1)
+    return [i for i in l1 if i<(0.5*0.5)]
+
+
+Answer
+Most to least efficient: f2, f1, f3. To prove that this is the case, you would want to profile your code. Python has a lovely profiling package that should do the trick.
+import cProfile
+lIn = [random.random() for i in range(100000)]
+cProfile.run('f1(lIn)')
+cProfile.run('f2(lIn)')
+cProfile.run('f3(lIn)')
+
+
+For completion's sake, here is what the above profile outputs:
+>>> cProfile.run('f1(lIn)')
+         4 function calls in 0.045 seconds
+
+   Ordered by: standard name
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.009    0.009    0.044    0.044 <stdin>:1(f1)
+        1    0.001    0.001    0.045    0.045 <string>:1(<module>)
+        1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
+        1    0.035    0.035    0.035    0.035 {sorted}
+
+
+>>> cProfile.run('f2(lIn)')
+         4 function calls in 0.024 seconds
+
+   Ordered by: standard name
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.008    0.008    0.023    0.023 <stdin>:1(f2)
+        1    0.001    0.001    0.024    0.024 <string>:1(<module>)
+        1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
+        1    0.016    0.016    0.016    0.016 {sorted}
+
+
+>>> cProfile.run('f3(lIn)')
+         4 function calls in 0.055 seconds
+
+   Ordered by: standard name
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.016    0.016    0.054    0.054 <stdin>:1(f3)
+        1    0.001    0.001    0.055    0.055 <string>:1(<module>)
+        1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
+        1    0.038    0.038    0.038    0.038 {sorted}
+
+
+Why do we care?
+Locating and avoiding bottlenecks is often pretty worthwhile. A lot of coding for efficiency comes down to common sense - in the example above it's obviously quicker to sort a list if it's a smaller list, so if you have the choice of filtering before a sort it's often a good idea. The less obvious stuff can still be located through use of the proper tools. It's good to know about these tools.
+
+What are the ways to write a function using call by reference?
+Arguments in python are passed as an assignment. This assignment creates an object that has no relationship between an argument name in source and target. The procedure to write the function using call by reference includes:
+The tuple result can be returned to the object which called it. The example below shows it:
+def function(a, b):
+a = 'value' 
+b = b + 1 
+# a and b are local variables that are used to assign the new objects
+return a, b 
+# This is the function that is used to return the value stored in b
+- The use of global variables allows the function to be called as reference but this is not the safe method to call any function. 
+- The use of mutable (they are the classes that consists of changeable objects) objects are used to pass the function by reference.
+def function(a):
+a[0] = 'string' 
+a[1] = a[1] + 1 
+# The ‘a’ array give reference to the mutable list and it changes the changes that are shared
+args = ['string', 10]
+func1(args)
+print args[0], args[1] 
+#This prints the value stored in the array of ‘a’
+What are the commands that are used to copy an object in Python?
+The command that is used to copy an object in python includes: 
+- copy.copy() function: This makes a copy of the file from source to destination. It returns a shallow copy of the parameter that is passed. 
+- copy.deepcopy(): This also creates a copy of the object from source to destination. It returns a deep copy of the parameter that is passed to the function. 
+The dictionary consists of all the objects and the copy() method which is used as:
+newdict = olddict.copy()
+The assignment statement doesn’t copy any object but it creates a binding between the target and the object that is used for the mutable items. Copy is required to keep a copy of it using the modules that is provided to give generic and shallow operations.
+What is the difference between deep and shallow copy?
+- Shallow copy is used when a new instance type gets created and it keeps the values that are copied in the new instance. Whereas, deep copy is used to store the values that are already copied. 
+- Shallow copy is used to copy the reference pointers just like it copies the values. These references point to the original objects and the changes made in any member of the class will also affect the original copy of it. Whereas, deep copy doesn’t copy the reference pointers to the objects. Deep copy makes the reference to an object and the new object that is pointed by some other object gets stored. The changes made in the original copy won’t affect any other copy that uses the object. 
+- Shallow copy allows faster execution of the program and it depends on the size of the data that is used. Whereas, deep copy makes it slower due to making certain copies for each object that is been called.
+Write a program to find out the name of an object in python.
+The object doesn’t have any name and there is no way the can be found out for objects. The assignment is used to bind a name to the value that includes the name of the object that has to be bound by a value. If the value is callable then the statements are made true and then the program followed can be used to find the reference name of an object.
+class try:
+pass
+B = A
+a = B()
+b = a
+print b
+<__main__.try instance at 0x16D07CC>
+print b
+The class consists of name and the names are invoked by using the the variable B that creates an instance for the class try. The method is to find out from all the namespaces that the object exists and then print the name of the object.
+How can the ternary operators be used in python?
+The ternary operator is the operator that is used to show the conditional statements. This consists of the true or false values with a statement that has to be evaluated for it. The operator will be given as:
+[on_true] if [expression] else [on_false]
+x, y = 25, 50
+big = x if x < y else y
+This is the lowest priority operator that is used in making a decision that is based on the values of true or false. The expression gets evaluated like if x<y else y, in this case if x<y is true then the value is returned as big=x and if it is incorrect then big=y will be sent as a result.
+How the string does get converted to a number?
+- To convert the string into a number the built-in functions are used like int() constructor. It is a data type that is used like int (‘1’) ==1. 
+- float() is also used to show the number in the format as float(‘1’)=1.
+- The number by default are interpreted as decimal and if it is represented by int(‘0x1’) then it gives an error as ValueError. In this the int(string,base) function takes the parameter to convert string to number in this the process will be like int(‘0x1’,16)==16. If the base parameter is defined as 0 then it is indicated by an octal and 0x indicates it as hexadecimal number. 
+- There is function eval() that can be used to convert string into number but it is a bit slower and present many security risks like __import__('os').system("rm -rf$HOME") - use of this will delete the home directory of the system.
+What is the function of negative index?
+The sequences in python are indexed and it consists of the positive as well as negative numbers. The numbers that are positive uses ‘0’ that is uses as first index and ‘1’ as the second index and the process goes on like that. The index for the negative number starts from ‘-1’ that represents the last index in the sequence and ‘-2’ as the penultimate index and the sequence carries forward like the positive number. The negative index is used to remove any new-line spaces from the string and allow the string to except the last character that is given as S[:-1]. The negative index is also used to show the index to represent the string in correct order.
+Write a program to check whether the object is of a class or its subclass.
+There is a method which is built-in to show the instances of an object that consists of many classes by providing a tuple in a table instead of individual classes. The method is given as isinstance(obj,cls) and in more details given as:
+
+isinstance(obj, (class1, class2, ...)) that is used to check about the object’s presence in one of the classes. The built in types can also have many formats of the same function like isinstance(obj, str) or isinstance(obj, (int, long, float, complex)). 
+
+It is not preferred to use the class instead user-defined classes are made that allow easy object-oriented style to define the behavior of the object’s class. These perform different thing that is based on the class. The function differs from one class to another class. 
+To find out the object of the particular class the following program is used:
+def search(obj):
+if isinstance(obj, box):
+# This is the code that is given for the box and write the program in the object
+elif isinstance(obj, Document):
+# This is the code that searches the document and writes the values in it
+elif 
+obj.search()
+#This is the function used to search the object’s class.
+Why does delegation performed in Python?
+Delegation is a technique that is used in object oriented programming. This is used to show the object and the behavior of the methods that are used. The class can be created to provide an implementation of the method that allows the method to be referenced. The delegate is having the parameter and the return value in an object. It also allows the methods to be passed as parameters and allow the defining of the callback methods that can be grouped together in multiple methods. These methods can be called from a single event. The example shows a class that captures the behavior of the file and converts data from lower to uppercase.
+class upcase:
+def __init__(self, out):
+self._out = out
+def write(self, s):
+self._outfile.write(s.upper())
+def __getattr__(self, name):
+return getattr(self._out, name)
+The write() method that is used in the upcase class converts the string to the uppercase before calling another method. The delegation is being given using the self.__outfile object.
+What is the function of “self”?
+“Self” is a variable that represent the instance of the object to itself. In most of the object oriented programming language, this is passed as to the methods as a hidden parameters that is defined by an object. But, in python it is declare it and pass it explicitly. It is the first argument that gets created in the instance of the class A and the parameters to the methods are passed automatically. It refers to separate instance of the variable for individual objects. This is the first argument that is used in the class instance and the “self” method is defined explicitly to all the methods that are used and present. The variables are referred as “self.xxx”.
+
+How is “self” explicitly defined in a method?
+“Self” is a reference variable and an instance attribute that is used instead of the local variable inside the class. The function or the variable of the self like self.x or self.meth() can be used in case the class is not known. There are no variables declared as local. It doesn’t have any syntax and it allow the reference to be passed explicity or call the method for the class that is in use. The use of writebaseclass.methodname(self, <argument list>) shows that the method of _init_() can be extended to the base class methods. This also solves the problem that is syntactic by using the assignment and the local variables. This tells a way to the interpreter the values that are to be used for the instance variables and local variables. The use of explicit self.var solves the problem mentioned above.
+What is the use of join() for a string rather than list or tuple method?
+The functions and the methods that are used for the functionality uses the string module. This string module is represented as by using the join function in it:
+", ".join(['1', '2', '4', '8', '16']) that results in "1, 2, 4, 8, 16"
+The string variable that is used provide a fixed string literal to allow the names that are used to be bounded to the strings. join() is a string method that is used to provide a separator string to use the function over the sequence of the string and insert the function to an adjacent elements. The method uses any number of arguments that follow some rules that has to be put up for the sequence objects that the class defines for itself. The join is used for the string module that is used to join the string characters together as it is given in the program. The example is given as:
+string.join(['1', '2', '4', '8', '16'], ", ")
+What is the process of compilation and linking in python?
+The compiling and linking allows the new extensions to be compiled properly without any error and the linking can be done only when it passes the compiled procedure. If the dynamic loading is used then it depends on the style that is being provided with the system. The python interpreter can be used to provide the dynamic loading of the configuration setup files and will rebuild the interpreter. 
+The steps that is required in this as:
+- Create a file with any name and in any language that is supported by the compiler of your system. For example comp.c
+- Place this file in the Modules/ directory of the distribution which is getting used. 
+- Add a line in the file Setup.local that is present in the Modules/ directory. 
+- Run the file using spam comp.o
+- After successful run of this rebuild the interpreter by using the make command on the top-level directory. 
+- If the file is changed then run rebuild Makefile by using the command as ‘make Makefile’.
+What is the procedure to extract values from the object used in python?
+To extract the value it requires the object type to be defined and according to the object type only the values will be fetched. 
+The values will be extracted as:
+- If the object is a tuple then PyTuple_Size() method is used that returns the length of the values and another method PyTuple_GetItem() returns the data item that is stored at a specific index. 
+- If the object is a list then PyListSize() is having the same function that is defined for the tuple and PyList_GetItem() that also return the data items at a specified index.
+- Strings uses PyString_Size() to return the length of the value and PyString_AsString() that return the pointer to its value. 
+- To check the type of the object and the extracted values use of methods like PyString_Check(), PyTuple_Check(), PyList_Check(), etc are used.
+What are the steps required to make a script executable on Unix?
+The steps that are required to make a script executable are to:
+- First create a script file and write the code that has to be executed in it.
+- Make the file mode as executable by making the first line starts with #! this is the line that python interpreter reads. 
+- Set the permission for the file by using chmod +x file. The file uses the line that is the most important line to be used:
+#!/usr/local/bin/python
+- This explains the pathname that is given to the python interpreter and it is independent of the environment programs. 
+- Absolute pathname should be included so that the interpreter can interpret and execute the code accordingly. The sample code that is written:
+#! /bin/sh
+# Write your code here
+exec python $0 ${1+"$@"}
+# Write the function that need to be included.
+How does global value mutation used for thread-safety?
+The global interpreter lock is used to allow the running of the thread one at a time. This is internal to the program only and used to distribute the functionality along all the virtual machines that are used. Python allows the switching between the threads to be performed by using the byte code instructions that are used to provide platform-independence. The sys.setcheckinterval() method is used that allow the switching to occur during the implementation of the program and the instruction. This provides the understanding in the field of accounting to use the byte code implementation that makes it portable to use. The atomicity can be provided such that the shared variables can be given as built-in data types.
+Write a program to read and write the binary data using python?
+The module that is used to write and read the binary data is known as struct. This module allows the functionality and with it many functionalities to be used that consists of the string class. This class contains the binary data that is in the form of numbers that gets converted in python objects for use and vice versa. The program can read or write the binary data is:
+import struct
+f = open(file-name, "rb") 
+# This Open() method allows the file to get opened in binary mode to make it portable for # use. 
+s = f.read(8)
+x, y, z = struct.unpack(">hhl", s)
+The ‘>” is used to show the format string that allows the string to be converted in big-endian data form. For homogenous list of data the array module can be used that will allow the data to be kept more organized fashion.
+What is the process to run sub-process with pipes that connect both input and output?
+The popen2() module is used to run the sub-process but due to some difficulty in processing like creation of deadlock that keep a process blocked that wait for the output from the child and child is waiting for the input. The dead lock occurs due to the fact that parent and child doesn’t have the synchronization and both are waiting to get the processor to provide the resources to one another. Use of popen3() method allow the reading of stdout and stderr to take place where the internal buffer increases and there is no read() takes place to share the resources. popen2() take care of the deadlock by providing the methods like wait() and waitpid() that finishes a process first and when a request comes it hands over the responsibility to the process that is waiting for the resources. 
+The program is used to show the process and run it.
+import popen2
+fromchild, tochild = popen2.popen2("command")
+tochild.write("input\n")
+tochild.flush()
+output = fromchild.readline()
+What are the different ways to generate random numbers?
+Random module is the standard module that is used to generate the random number. 
+The method is defined as:
+import random
+random.random()
+The statement random.random() method return the floating point number that is in the range of [0, 1). The function generates the random float numbers. The methods that are used with the random class are the bound methods of the hidden instances. The instances of the Random can be done to show the multi-threading programs that creates different instance of individual threads. The other random generators that are used in this are:
+- randrange(a, b): it chooses an integer and define the range in-between [a, b). It returns the elements by selecting it randomly from the range that is specified. It doesn’t build a range object. 
+- uniform(a, b): it chooses a floating point number that is defined in the range of [a,b).Iyt returns the floating point number
+- normalvariate(mean, sdev): it is used for the normal distribution where the mu is a mean and the sdev is a sigma that is used for standard deviation. 
+- The Random class that is used and instantiated creates an independent multiple random number generators.
+Write a program to show the singleton pattern used in python.
+Singleton pattern is used to provide a mechanism that limits the number of instances that can be used by one class. It also allows the same object to be shared between many different parts of the code. This allows the global variables to be used as the actual data that is used is hidden by the singleton class interface. The singleton class interface can have only one public member and one class method Handle. Private constructors are not used to create an object that is used outside the class. The process waits for the static member function to create new instances and return the singleton object. 
+The code that is used to call the singleton object is:
+Singleton& Singleton::Handle() 
+{
+   if( !psingle ) 
+   {
+       psingle = new Singleton;
+   }
+   return *psingle;
+}
+Write a function f()
+Q: We have the following code with unknown function f(). In f(), we do not want to use return, instead, we may want to use generator.
+for x in f(5):
+    print x,
+
+
+The output looks like this:
+0 1 8 27 64
+
+
+Write a function f() so that we can have the output above.
+We may use the following f() to get the same output:
+def f(n):
+   return [x**3 for x in range(5)]
+But we want to use generator not using return.
+So, the answer should look like this:
+def f(n):
+    for x in range(n):
+        yield x**3
+
+
+The yield enables a function to comeback where it left off when it is called again. This is the critical difference from a regular function. A regular function cannot comes back where it left off. The yield keyword helps a function to remember its state.
+A generator function is a way to create an iterator. A new generator object is created and returned each time we call a generator function. A generator yields the values one at a time, which requires less memory and allows the caller to get started processing the first few values immediately.
+Another example of using yield:
+Let's build the primes() function so that I fills the n one at a time, and comes back to primes() function until n > 100.
+def isPrime(n):
+   if n == 1:
+      return False
+   for t in range(2,n):
+      if n % t == 0:
+         return False
+   return True
+
+for n in primes():
+   print n,
+The print out from the for-loop should look like this:
+2 3 5 7 11 ... 83 89 97
+Here is the primes() function:
+def primes(n=1):
+   while n < 100:
+      # yields n instead of returns n
+      if isPrime(n): yield n
+      # next call it will increment n by 1
+      n += 1
+Build a string with the numbers from 0 to 100, "0123456789101112..."
+We may want to use str.join rather than appending a number every time.
+>>> ''.join([`x` for x in xrange(101)])
+'0123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949596979899100'
+>>> 
+
+
+Note that the (`) is a backquote not a regiular single quote ('):
+>>> type(1)
+<type 'int'>
+>>> type(`1`)
+<type 'str'>
+
+
+Note that we cannot use double quote(") or single quote(') to make n a string:
+>>> type("1")
+<type 'str'>
+
+>>> ''.join(["n" for n in range(10)])
+'nnnnnnnnnn'
+>>> ''.join(['n' for n in range(10)])
+'nnnnnnnnnn'
+
+>>> n = 1
+>>> print `n`
+1
+>>> print "n"
+n
+
+
+Note: join() returns a string in which the string elements of sequence have been joined by string separator.
+We can use str(x) instead:
+>>> ''.join([str(x) for x in range(10)])
+'0123456789'
+
+
+Also, since the xrange() is replaced with range in Python 3.x, we should use range() instead for compatibility. The range() in Python 3.x just returns iterator. That means it does not produce the results in memory any more, and if we want to get list from range(), we need to force it to do so: list(range(...)).
+
+
+
+
+Basic file processing: Printing contents of a file.
+try:
+    with open('filename','r') as f:
+        print f.read()
+except IOError:
+    print "No such file exists"
+
+
+
+
+
+
+How can we get home directory using '~' in Python?
+We need to import os module, and add just one line:
+import os
+print os.path.expanduser('~')
+Output:
+/home/k
+
+
+
+
+The usage of os.path.dirname() & os.path.basename()
+For example, we have the path like this, /home/k/TEST/PYTHON/p.py:
+We can get the dir and file using the following:
+First, we need to import os module:
+>>> import os
+Then, we do:
+>>> os.path.dirname('/home/k/TEST/PYTHON/p.py')
+'/home/k/TEST/PYTHON'
+
+>>> os.path.basename('/home/k/TEST/PYTHON/p.py')
+'p.py'
+Or we can get them at once in tuple using os.path.split():
+>>> os.path.split('/home/k/TEST/PYTHON/p.py')
+('/home/k/TEST/PYTHON', 'p.py')
+If we want to combine and make a full path:
+>>> os.path.join('/home/k/TEST/PYTHON', 'p.py')
+'/home/k/TEST/PYTHON/p.py'
+
+
+Default Libraries
+We should be able to answer the questions about the standard library.
+Such as "Do you know if there's a standard library for recursive file renaming?", 
+or "In which library would you use for regular expression?" 
+os: operating system support
+os.path: Common pathname manipulations:
+>>> import os
+>>> print(os.getcwd())
+C:\Python32
+>>> cur_dir = os.curdir
+>>> print(cur_dir)
+.
+>>> scripts_dir = os.path.join(os.curdir, 'Tools\Scripts')
+>>> print(scripts_dir)
+.\Tools\Scripts
+>>> diff_py = os.path.join(scripts_dir, 'diff.py')
+>>> print(diff_py)
+.\Tools\Scripts\diff.py
+>>> os.path.basename(diff_py)
+' diff.py'
+>>> os.path.splitext(diff_py)
+('.\\Tools\\Scripts\\diff', '.py')
+
+
+The os.path.join() function constructs a pathname out of one or more partial pathnames. In this case, it simply concatenates strings.
+Other convenient ones are: dirname() and basename(), which are the 1st and 2nd element of split(), respectively:
+>>> import os
+>>> print(os.getcwd())
+C:\TEST\dirA\dirB\dirC
+>>> print(os.path.dirname(os.getcwd()))
+C:\TEST\dirA\dirB
+>>> print(os.path.basename(os.getcwd()))
+dirC
+>>> print(os.path.split(os.getcwd()))
+('C:\\TEST\\dirA\\dirB', 'dirC')
+>>> pathname = os.path.join(os.getcwd(),'myfile.py')
+>>> pathname
+'C:\\TEST\\dirA\\dirB\\dirC\\myfile.py'
+>>> (dirname, filename) = os.path.split(pathname)
+>>> dirname
+'C:\\TEST\\dirA\\dirB\\dirC'
+>>> filename
+'myfile.py'
+
+
+The split function splits a full pathname and returns a tuple containing the path and filename. We could use multi-variable assignment to return multiple values from a function. The os.path.split() function does exactly that. We assign the return value of the split function into a tuple of two variables. Each variable receives the value of the corresponding element of the returned tuple.
+The first variable, dirname, receives the value of the first element of the tuple returned from the os.path.split() function, the file path. The second variable, filename, receives the value of the second element of the tuple returned from the os.path.split()function, the filename.
+os.path also contains the os.path.splitext() function, which splits a filename and returns a tuple containing the filename and the file extension.
+The os.path.expanduser() function :
+>>> print(os.path.expanduser('~'))
+C:\Users\KHong
+
+
+will expand a pathname that uses ~ to represent the current user's home directory. This works on any platform where users have a home directory, including Linux, Mac OS X, and Windows. The returned path does not have a trailing slash, but the os.path.join()function doesn't mind:
+re: Regular expression operations
+Visit Regular Expressions with Python
+
+itertools: Functions creating iterators for efficient looping. 
+It includes permutations, combinations and other useful iterables.
+>>> [x for x in itertools.permutations('123')]
+[('1', '2', '3'), ('1', '3', '2'), ('2', '1', '3'), ('2', '3', '1'), ('3', '1', '2'), ('3', '2', '1')]
+>>> [x for x in itertools.permutations('123',2)]
+[('1', '2'), ('1', '3'), ('2', '1'), ('2', '3'), ('3', '1'), ('3', '2')]
+>>> 
+
+
+range vs xrange
+>>> sum(range(1,101))
+5050
+>>> sum(xrange(1,101))
+5050
+>>> 
+
+
+range() returns a list to the sum function containing all the numbers from 1 to 100. But xrange() returns an iterator rather than a list, which makes it more lighter in terms of memory use as shown below.
+>>> range(1,5)
+[1, 2, 3, 4]
+>>> xrange(1,5)
+xrange(1, 5)
+>>> 
+Note: Since the xrange() is replaced with range in Python 3.x, we should use range() instead for compatibility. The range() in Python 3.x just returns iterator. That means it does not produce the results in memory any more, and if we want to get list from range(), we need to force it to do so: list(range(...)).
+Iterators
+Python defines several iterator objects to support iteration over general and specific sequence types, dictionaries.
+Any object with a __next__() method to advance to a next result is considered iterable.
+For more info, please visit 
+http://www.bogotobogo.com/python/python_iterators.php.
+
+Generators
+Generators allow us to declare a function that behaves like an iterator, i.e. it can be used in a for loop. It's a function type generator, but there is another type of generator that may be more familiar to us - expression type generator used in list comprehension:
+>>> # List comprehension makes a list
+>>> [ x ** 3 for x in range(5)]
+[0, 1, 8, 27, 64]
+>>> 
+>>> # Generator expression makes an iterable
+>>> (x ** 3 for x in range(5))
+<generator object <genexpr> at 0x000000000315F678>
+
+
+With the generator expression, to make list comprehension, we can just wrap it with list() call:
+>>> list(x ** 3 for x in range(5))
+[0, 1, 8, 27, 64]
+
+
+For more information about generators, please visit:
+http://www.bogotobogo.com/python/python_generators.php
+Manipulating functions as first-class objects
+Functions as first-class objects?
+That means we can pass them around as objects and can manipulate them. In other words, most of the times, this just means we can pass these first-class citizens as arguments to functions, or return them from functions. Everything in Python is a proper object. Even things that are "primitive types" in other languages:
+>>> dir (100)
+['__abs__', '__add__', '__and__', '__class__', '__cmp__', '__coerce__', 
+'__delattr__', '__div__', '__divmod__', '__doc__', '__float__', 
+....
+ 'numerator', 'real']
+>>> 
+
+
+Functions have attributes and can be referenced and assigned to variables.
+>>> def one(arg):
+    '''I am a function returning arg I received.'''
+    return arg
+
+>>> one(1)
+1
+>>> one
+<function one at 0x0284AA70>
+>>> One = one
+>>> One
+<function one at 0x0284AA70>
+>>> one.__doc__
+'I am a function returning arg I received.'
+>>> 
+
+
+docstrings vs comments
+A docstring is the documentation string for a function. We use it as shown below:
+function_name.__doc__
+
+
+We can declare it like this:
+def my_function():
+    """our docstring"""
+
+
+or:
+def my_function():
+    '''our docstring'''
+
+
+Everything between the triple quotes (with double quotes, """ or with single quotes,''') is the function's docstring, which documents what the function does. A docstring, if it exists, must be the first thing defined in a function. In other words, it should appear on the next line after the function declaration. We don't technically need to give our function a docstring, but we always should. The docstring will be available at runtime as an attribute of the function.
+Writing documentation for our program this way makes the code more readable. We can also use comments for clarification of what the code is doing. In general, docstrings are for documentation, comments are for a code reader.
+Monkey-patching
+The origin of monkey-patch according to wiki is :
+"The term monkey patch seems to have come from an earlier term, guerrilla patch, which referred to changing code sneakily at runtime. The word guerrilla, homophonous with gorilla, became monkey, possibly to make the patch sound less intimidating."
+In Python, the term monkey patch only refers to dynamic modifications of a class or module at runtime, motivated by the intent to patch existing third-party code as a workaround to a bug or feature which does not act as we desire.
+We have a module called m.py like this:
+# m.py
+class MyClass:
+    def f(self):
+        print "f()"
+
+
+Then, if we run the monkey-patch testing like this:
+>>> import m
+>>> def monkey_f(self):
+    print "monkey_f()"
+
+    
+>>> m.MyClass.f = monkey_f
+>>> obj = m.MyClass()
+>>> obj.f()
+monkey_f()
+>>> 
+
+
+As we can see, we did make some changes in the behavior of f() in MyClass using the function we defined, monkey_f(), outside of the module m.
+It is a risky thing to do, but sometimes we need this trick, such as testing.
+pdb - The Python Debugger
+The module pdb defines an interactive source code debugger for Python programs. It supports setting (conditional) breakpoints and single stepping at the source line level, inspection of stack frames, source code listing, and evaluation of arbitrary Python code in the context of any stack frame. It also supports post-mortem debugging and can be called under program control.
+Using Lambda
+Python supports the creation of anonymous functions (i.e. functions that are not bound to a name) at runtime, using a construct called lambda. This is not exactly the same as lambda in functional programming languages such as Lisp, but it is a very powerful concept that's well integrated into Python and is often used in conjunction with typical functional concepts like filter(), map() and reduce().
+The following code shows the difference between a normal function definition, func and a lambda function, lamb:
+>>> 
+>>> def func(x): return x ** 3
+
+>>> print(func(5))
+125
+>>> 
+>>> lamb = lambda x: x ** 3
+>>> print(lamb(5))
+125
+>>> 
+
+
+As we can see, func() and lamb() do exactly the same and can be used in the same ways. Note that the lambda definition does not include a return statement -- it always contains an expression which is returned. Also note that we can put a lambda definition anywhere a function is expected, and we don't have to assign it to a variable at all.
+The lambda's general form is :
+lambda arg1, arg2, ...argN : expression using arguments
+
+
+Function objects returned by running lambda expressions work exactly the same as those created and assigned by defs. However, there are a few differences that make lambda useful in specialized roles:
+lambda is an expression, not a statement.
+Because of this, a lambda can appear in places a def is not allowed. For example, places like inside a list literal, or a function call's arguments. As an expression, lambda returns a value that can optionally be assigned a name. In contrast, the def statement always assigns the new function to the name in the header, instead of returning is as a result.
+lambda's body is a single expression, not a block of statements.
+The lambda's body is similar to what we'd put in a def body's return statement. We simply type the result as an expression instead of explicitly returning it. Because it is limited to an expression, a lambda is less general that a def. We can only squeeze design, to limit program nesting. lambda is designed for coding simple functions, and def handles larger tasks.
+>>> 
+>>> def f(x, y, z): return x + y + z
+
+>>> f(2, 30, 400)
+432
+
+
+We can achieve the same effect with lambda expression by explicitly assigning its result to a name through which we can call the function later:
+>>> 
+>>> f = lambda x, y, z: x + y + z
+>>> f(2, 30, 400)
+432
+>>> 
+
+
+Here, the function object the lambda expression creates is assigned to f. This is how def works, too. But in def, its assignment is an automatic must.
+For more, please go to Functions lambda
+Properties vs Getters/Setters
+We have more detailed discussion in Classes and Instances - Method: Properties.
+In general, properties are more flexible than attributes. That's because we can define functions that describe what is supposed to happen when we need setting, getting or deleting them. If we don't need this additional flexibility, we may just use attributes since they are easier to declare and faster.
+However, when we convert an attribute into a property, we just define some getter and setter that we attach to it, that will hook the data access. Then, we don't need to rewrite the rest of our code, the way for accessing the data is the same, whatever our attribute is a property or not.
+classmethod vs staticmethod
+From the official Python documentation on @classmethod:
+classmethod(function)
+    Return a class method for function.
+
+    A class method receives the class as implicit first argument, 
+    just like an instance method receives the instance. 
+    To declare a class method, use this idiom:
+
+class C:
+    @classmethod
+    def f(cls, arg1, arg2, ...): ...
+
+The @classmethod form is a function decorator.
+It can be called either on the class (such as C.f()) or on an instance (such as C().f()). 
+The instance is ignored except for its class. If a class method is called for a derived class, 
+the derived class object is passed as the implied first argument.
+
+
+And for the @staticmethod, the python doc describes it as below:
+staticmethod(function)
+    Return a static method for function.
+
+    A static method does not receive an implicit first argument. 
+    To declare a static method, use this idiom:
+
+class C:
+    @staticmethod
+    def f(arg1, arg2, ...): ...
+
+The @staticmethod form is a function decorator.
+It can be called either on the class (such as C.f()) or on an instance (such as C().f()). 
+The instance is ignored except for its class.
+Static methods in Python are similar to those found in Java or C++.
+
+
+For more info on static vs class methods, please visit:
+@static method vs class method
+
+Making a list with unique element from a list with duplicate elements
+Iterating the list is not a desirable solution. The right answer should look like this:
+>>> dup_list = [1,2,3,4,4,4,5,1,2,7,8,8,10]
+>>> unique_list = list(set(dup_list))
+>>> print unique_list
+[1, 2, 3, 4, 5, 7, 8, 10]
+>>> 
+
+
+Name the functional approach that Python is taking.
+Python provides the following:
+map(aFunction, aSequence)
+filter(aFunction, aSequence)
+reduce(aFunction, aSequence)
+lambda
+list comprehension
+These functions are all convenience features in that they can be written in Python fairly easily. Functional programming is all about expressions. We may say that the Functional programming is an expression oriented programming.
+What is map?
+The syntax of map is:
+map(aFunction, aSequence)
+
+
+The first argument is a function to be executed for all the elements of the iterable given as the second argument. If the function given takes in more than 1 arguments, then many iterables are given.
+>>> def cubic(x):
+    return x*x*x
+
+>>> items = [x for x in range(11) if x % 2 == 0]
+>>> list(map(cubic, items))
+[0, 8, 64, 216, 512, 1000]
+>>>
+>>> list(map(lambda x,y: x*y, [1,2,3], [4,5,6]))
+[4, 10, 18]
+>>> 
+map is similar to list comprehension but is more limited because it requires a function instead of an arbitrary expression.
+What is filter and reduce?
+Just for comparison purpose, in the following example, we will include map as well.
+>>> integers = [ x for x in range(11)]
+>>> filter(lambda x: x % 2 == 0, integers)
+[0, 2, 4, 6, 8, 10]
+>>> map(lambda x: x**2, integers)
+[0, 1, 4, 9, 16, 25, 36, 49, 64, 81, 100]
+>>> reduce(lambda x, y: x + y, integers)
+55
+>>> 
+
+
+In the above example, we defined a simple list of integer values, then we use the standard functions filter(), map() and reduce() to do various things with that list. All of the three functions expect two arguments: A function and a list.
+In the first example, filter() calls our lambda function for each element of the list, and returns a new list that contains only those elements for which the function returned "True". In this case, we get a list of all even numbers.
+In the second example, map() is used to convert our list. The given function is called for every element in the original list, and a new list is created which contains the return values from our lambda function. In this case, it computes x^2 for every element.
+Finally, reduce() is somewhat special. The function for this one must accept two arguments (x and y), not just one. The function is called with the first two elements from the list, then with the result of that call and the third element, and so on, until all of the list elements have been handled. This means that our function is called n-1 times if the list contains n elements. The return value of the last call is the result of the reduce() construct. In the above example, it simply adds the arguments, so we get the sum of all elements.
+*args and **kwargs
+Putting *args and/or **kwargs as the last items in our function definition's argument list allows that function to accept an arbitrary number of anonymous and/or keyword arguments.
+Those arguments are called Keyword Arguments. Actually, they are place holders for multiple arguments, and they are useful especially when we need to pass a different number of arguments each time we call the function.
+We may want to use *args when we're not sure how many arguments might be passed to our function, i.e. it allows us to pass an arbitrary number of arguments to your function as shown in the example below:
+>>> def print_all(*args):
+    for x in enumerate(args):
+        print x
+        
+>>> print_all('A','b','b','a')
+(0, 'A')
+(1, 'b')
+(2, 'b')
+(3, 'a')
+>>> 
+
+
+The keyword arguments is a special name=value syntax in function calls that specifies passing by name. It is often used to provide configuration options.
+>>> def kargs_function(**kargs):
+    for k,v in kargs.items():
+        print (k,v)
+
+>>> kargs_function(**{'uno':'one','dos':'two','tres':'three'})
+('dos', 'two')
+('tres', 'three')
+('uno', 'one')
+>>>
+>>> kargs_function(dos='two', tres='three', uno='one')
+('dos', 'two')
+('tres', 'three')
+('uno', 'one')
+>>> 
+
+
+For more details, please visit *args and **kwargs - Collecting and Unpacking Arguments.
+mutable vs immutable
+The content of objects of immutable types cannot be changed after they are created.
+immutable
+mutable
+tuple, frozen set, int, float, str
+list, set, dict, byte array
+
+Difference between remove, del and pop on lists
+To remove a list element, we can use either the del statement if we know exactly which element(s) we are deleting or the remove() method if we do not know.
+list.remove(element), del list(index), list.pop(index)
+remove() removes the first matching value, not a specific index:
+>>> a = [5,6,7,7,8]
+>>> a.remove(7)
+>>> a
+[5, 6, 7, 8]
+Both del and pop work on index:
+>>> a = [5,6,7,7,8]
+>>> del a[1]
+>>> a
+[5, 7, 7, 8]
+
+>>> a = [5,6,7,7,8]
+>>> a.pop(1)
+6
+>>> a
+[5, 7, 7, 8]
+
+>>> a = [5,6,7,7,8]
+>>> a.pop(a.index(6)) # get the index for 6
+6
+>>> a
+[5, 7, 7, 8]
+
+
+Join with new line
+Given a list of string, ['Black', 'holes', 'are', 'where', 'God', 'divided', 'by', 'zero'], print each word in a new line:
+>>> s = ['Black', 'holes', 'are', 'where', 'God', 'divided', 'by', 'zero']
+>>> print '\n'.join(s)
+Black
+holes
+are
+where
+God
+divided
+by
+zero
+Creating a dictionary using tuples
+>>> list_of_tuple = [('one',1),('two',2),('three',3)]
+>>> d = {}
+>>> for t in list_of_tuple:
+...    d[t[0]]=t[1]
+... 
+>>> d
+{'three': 3, 'two': 2, 'one': 1}
+Floor operation on integers
+Write a floor division function without using '/' or '%' operator. For example, f(5,2) = 5/2 = 2, f(-5,2) = -5/2 = -3.
+def floor(a,b):
+   count = 0
+   sign = 1
+   if a < 0: sign = -1
+   while True:
+      if b == 1: return a
+      # positive
+      if a >= 0:
+         a -= b
+         if a < 0: break
+      # negative
+      else:
+         a = -a - b
+         a = -a
+         if a > 0:
+            count += 1
+            break
+      count += 1
+   return count*sign
+
+from random import randint
+n = 20
+while n > 0:
+  a, b = randint(-20,20), randint(1,10)
+  print '%s/%s = %s' %(a,b, floor(a,b))
+  n -= 1
+Output:
+11/4 = 2
+3/5 = 0
+11/5 = 2
+10/1 = 10
+-6/9 = -1
+14/2 = 7
+-4/7 = -1
+8/6 = 1
+7/1 = 7
+-7/1 = -7
+-20/5 = -4
+11/4 = 2
+16/10 = 1
+-9/7 = -2
+-7/6 = -2
+-8/2 = -4
+13/7 = 1
+-3/2 = -2
+-10/2 = -5
+-6/1 = -6
+
+
+
+
+Fetching every other item in the list
+Q1: How do you fetch every other item in the list?
+Suppose we have a list like this:
+>>> L = [x*10 for x in range(10)]
+>>> L
+[0, 10, 20, 30, 40, 50, 60, 70, 80, 90]
+We can use enumerate(L) to get indexed series:
+>>> for i,v in enumerate(L):
+...    if i % 2 == 0:
+...       print v,
+... 
+0 20 40 60 80
+This one may be the simplest solution:
+L2 = L[::2]
+>>> L2
+[0, 20, 40, 60, 80]
+
+
+
+
+Python type() - function
+What's get printed?
+def f(): 
+   pass
+print type(f())
+print type(1J)
+print 1j*1j
+print type(lambda:None)
+Answer:
+<type 'NoneType'>
+<type 'complex'>
+(-1+0j)
+<type 'function'>
+The argument to the type() call is a return value of a function call, which returns None.
+'lambda arguments: expression' yields a function object.
+An imaginary literal yields a complex number with a real part of 0.0.
+Dictionary Comprehension
+Q2: What's the list comprehension? How about dictionary comprehension? 
+Construct x^3 from a list of integers, L = [0,1,2,3,4,5]
+List comprehension:
+>>> L2 = [x**3 for x in L]
+>>> L2
+[0, 1, 8, 27, 64, 125]
+Or:
+>>> L2 = [x**3 for x in range(6)]
+>>> L2
+[0, 1, 8, 27, 64, 125]
+
+Dictionary comprehension:
+>>> D1 = dict((k,k**3) for k in L)
+>>> D1
+{0: 0, 1: 1, 2: 8, 3: 27, 4: 64, 5: 125}
+Or for Python 3:
+>>> D2 = {k:k**3 for k in L}
+>>> D2
+{1: 1, 2: 8, 3: 27}
+
+
+
+
+Sum
+Q3: Sum of all elements in a list ([1,2,3,...,100] with one line of code.
+>>> Ans = sum(range(101))
+>>> Ans
+5050
+Q3.b: How about summing only odd elements?
+>>> sum(range(1,101,2))
+Or:
+>>> Ans = sum(x for x in range(101) if x % 2 != 0)
+>>> Ans
+2500
+Or:
+>>> Ans = reduce(lambda x,y: x+y, filter(lambda x: x % 2 != 0, range(1,101)))
+>>> Ans
+2500
+Or
+>>> sum(filter(lambda x: x % 2, range(1,101)))
+
+
+
+
+Truncating division
+Two divisions - '/' and '//':
+>>> 5.5/2
+2.75
+>>> 5.5//2
+2.0
+
+
+
+
+Python 2 vs Python 3
+Q: What are the differences between Python 2 and Python 3? 
+Please visit Python 2 vs Python 3.
+
+
+
+
+len(set)
+What's the output?
+>>> len(set([1,1,2,3,3,3,4]))
+Output:
+4
+set() only retains unique values.
+
+
+
+
+Print a list of file in a directory
+We want to print a list of files in a directory including the sub-directories. We may want to do it recursively.
+import os
+
+def file_list(dir):
+    basedir = dir
+    subdir_list = []
+    for item in os.listdir(dir):
+        fullpath = os.path.join(basedir,item)
+        if os.path.isdir(fullpath):
+            subdir_list.append(fullpath)
+        else:
+            print fullpath
+
+    for d in subdir_list:
+        file_list(d)
+
+file_list('/dir')
+
+ 
+Output:
+./d3/f1
+./d3/d4/d7/f2
+./d3/d4/d7/f3
+./d3/d5/d9/d10/f4
+./d3/d5/d9/d10/f5
+
+
+
+
+Count occurrence of a character in a Python string
+For a given sentence, for example, "The Mississippi River", count the occurrence of a character in the string.
+sentence='The Mississippi River'
+
+def count_chars(s):
+        s=s.lower()
+        count=list(map(s.count,s))
+        return (max(count))
+
+print count_chars(sentence)
+Let's look into the code, count=list(map(s.count,s))
+>>> count = map(s.count,s)
+>>> count
+[1, 1, 2, 2, 1, 5, 4, 4, 5, 4, 4, 5, 2, 2, 5, 2, 1, 5, 1, 2, 1]
+Actually, the each item in the list output represents the occurrence of each character including space:
+T  h  e     M  i  s  s  i  s  s  i  p  p  i     R  i  v  e  r
+[1, 1, 2, 2, 1, 5, 4, 4, 5, 4, 4, 5, 2, 2, 5, 2, 1, 5, 1, 2, 1]
+Answer = 5
+In the line, map(func, sequence), the s.count counts the occurrence of a character while it iterates the character sequence of s.
+Or
+sentence='The Mississippi River'
+
+def count_chars(s):
+    s=s.lower()
+    L = [s.count(c) for c in s]
+    return max(L)
+
+print (count_chars(sentence))
+
+
+
+
+Make a prime number list from (1,100)
+import math
+def isPrime(n):
+    if n <= 1:
+        return False
+    if n == 2:
+        return True
+    if n % 2 == 0:
+        return False
+    for t in range(3, int(math.sqrt(n)+1),2):
+        if n % t == 0:
+            return False
+    return True
+
+print [n for n in range(100) if isPrime(n)]
+Output:
+[2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97]
+A simpler code:
+def isPrime(n):
+   if n == 1:
+      return False
+   for t in range(2,n):
+      if n % t == 0:
+         return False
+   return True
+
+print [n for n in range(1,100) if isPrime(n)]
+
+
+
+Not much but a little bit of tweak: generate a list with the first 100 primes:
+import math
+def isPrime(n):
+   if n == 1:
+      return False
+   elif n == 2:
+      return True
+   elif n % 2 == 0:
+      return False
+   else:
+      for t in range(3, int(math.sqrt(n)+1), 2):
+         if ( n % t == 0 ):
+            return False
+   return True
+
+count = 1
+n = 1
+primes = []
+while (count <= 100):
+   if isPrime(n):
+      primes.append(n)
+      count += 1
+   n += 1
+
+print primes
+Run it:
+$ python prime2.py
+python prime.py
+[2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127, 131, 137, 139, 149, 151, 157, 163, 167, 173, 179, 181, 191, 193, 197, 199, 211, 223, 227, 229, 233, 239, 241, 251, 257, 263, 269, 271, 277, 281, 283, 293, 307, 311, 313, 317, 331, 337, 347, 349, 353, 359, 367, 373, 379, 383, 389, 397, 401, 409, 419, 421, 431, 433, 439, 443, 449, 457, 461, 463, 467, 479, 487, 491, 499, 503, 509, 521, 523, 541]
+
+
+
+Reversing a string - Recursive
+When it comes to reversing a string in python, we do have s[::-1], boring!
+In the following recursive code, at every call, the first string will go to the end and stored in stack. So, when there is only one character left as an input string, the code starts rewind and retrieve the character one by one. The net effect is it gets the character in reverse. It becomes obvious when we see the printed output below:
+def reverse(input):
+    print input
+    if len(input) <= 1:
+        return input
+    
+    return reverse(input[1:]) + input[0]
+
+s = 'reverse'    
+print(reverse(s))
+Output:
+reverse
+everse
+verse
+erse
+rse
+se
+e
+esrever
+See also Reversing words
+
+
+
+
+Reversing a string - Iterative
+In the code below, we use range index operation, putting the characters into the list in reverse order. Than we pack them using join():
+def reverse(input):
+    return ''.join([input[i] for i in range(len(input)-1, -1, -1)])
+    
+s = 'reverse'    
+print(reverse(s))
+Output:
+esrever
+See also Reversing words
+
+
+
+
+Output?
+Q: What's the output from the following code?
+def f():
+    yield
+
+def g():
+    return
+
+print 'f()=', f()
+print 'g()=', g()
+You can find the answer from generator.send() method.
+
+
+
+
+Merging overlapped range
+Q: We have a list of tuples where each tuple is a (start, end). We want to merge all overlapping ranges and return a list of distinct ranges. For example:
+[(1, 5), (2, 4), (3, 6)] --->  [(1, 6)]
+[(1, 3), (2, 4), (5, 6)] --->  [(1, 4), (5, 6)]
+Write a code to produce a list of tuples with distinct ranges. Try with this data:
+data = [(4,9), (20, 22), (1, 3), (24, 32), (23, 31), (12, 15), (8,13)]
+We'll have two answers.
+Answer A:
+def combine(data):
+    sd = sorted(data)
+    print 'sorted data = ', sd
+    stored = list(sd[0])
+    for s, e in sd:
+        if s <= stored[1]:
+            stored[1] = max(stored[1], e)
+        else:
+            print 'yield_A: ', tuple(stored)
+            yield tuple(stored)
+            stored[0] = s
+            stored[1] = e
+    print 'yield_B: ', tuple(stored)
+    yield tuple(stored)
+
+if __name__ == '__main__':
+
+    data = [(4,9), (20, 22), (1, 3), (24, 32), (23, 31), (12, 15), (8,13)]
+    print 'result = %s'  %(list(combine(data)))
+Output:
+sorted data =  [(1, 3), (4, 9), (8, 13), (12, 15), (20, 22), (23, 31), (24, 32)]
+yield_A:  (1, 3)
+yield_A:  (4, 15)
+yield_A:  (20, 22)
+yield_B:  (23, 32)
+result = [(1, 3), (4, 15), (20, 22), (23, 32)]
+If we have a list of list, we can just loop through the list with the same combine() function:
+if __name__ == '__main__':
+
+    data = [[(1, 5), (2, 4), (3, 6)],
+            [(1, 3), (2, 4), (5, 6)],
+            [(4,9), (20, 22), (1, 3), (24, 32), (23, 31), (12, 15), (8,13)],
+            ]
+    for d in data:
+        print 'result = %s'  %(list(combine(d)))
+Output:
+sorted data =  [(1, 5), (2, 4), (3, 6)]
+yield_B:  (1, 6)
+result = [(1, 6)]
+sorted data =  [(1, 3), (2, 4), (5, 6)]
+yield_A:  (1, 4)
+yield_B:  (5, 6)
+result = [(1, 4), (5, 6)]
+sorted data =  [(1, 3), (4, 9), (8, 13), (12, 15), (20, 22), (23, 31), (24, 32)]
+yield_A:  (1, 3)
+yield_A:  (4, 15)
+yield_A:  (20, 22)
+yield_B:  (23, 32)
+result = [(1, 3), (4, 15), (20, 22), (23, 32)]
+
+
+Answer B:
+First, we need to sort the list of tuples using sorted() function giving the first element of each tuple as a key.
+Then, iterate through the items while comparing the 2nd element with the first one of the next element.
+data = [(4,9), (20, 22), (1, 3), (24, 32), (23, 31), (12, 15), (8,13)]
+#data = [(1, 3), (2, 4), (5, 6)]
+#data = [(1, 5), (2, 4), (3, 6)]
+
+def getKey(item):
+   return item[0]
+
+data = sorted(data, key=getKey)
+
+data2 = []
+i = 0
+while i < len(data):
+   dmin = data[i][0]
+   dmax = data[i][1]
+   while i < len(data)-1:
+     if dmax <= data[i+1][0] :
+        break
+     else:
+        # The 2nd element > the 1st element of next item
+        dmax = data[i+1][1]
+        i += 1
+   data2.append(tuple([dmin,dmax]))
+   i += 1
+
+print data2
+Output:
+[(1, 3), (4, 15), (20, 22), (23, 32)]
+
+
+
+
+Conditional expressions (ternary operator)
+Q: Outputs the result using ternary operator. 'pass' when the 'expected' is the same as 'returned', otherwise outputs 'fail'. Assume 'expected' = 1, 'returned' = 0.
+expected = 1
+returned = 0
+result = 'pass' if expected == returned else 'fail'
+print result
+
+
+
+
+Function args
+What will printed?
+def getThem(arg1, *arg2):
+   print type(arg2), arg2
+
+getThem('uno','dos','tres','cuatro','cinco')
+arg2 aggregates the rest of args into a tuple. So, the output should look like this:
+<type 'tuple'> ('dos', 'tres', 'cuatro', 'cinco')
+How about this one:
+def getThem(arg1, **arg2):
+   print type(arg2), arg2
+
+getThem('numbers',one='uno',two='dos',three='tres',four='cuatro',five='cinco')
+arg2 aggregates the remaining parameters into a dictionary. So, the output is:
+<type 'dict'> {'four': 'cuatro', 'three': 'tres', 'five': 'cinco', 'two': 'dos', 'one': 'uno'}
+
+
+
+
+Unpacking args
+Will the code below work?
+def getThem(a,b,c,d,e):
+   print a,b,c,d,e
+
+mList = ['uno','dos','tres','cuatro','cinco']
+getThem(mList)
+Answer: No.
+We'll get an error:
+TypeError: getThem() takes exactly 5 arguments (1 given)
+So, the code should be changed like this:
+getThem(*mList)
+*mList will unpack the list into individual elements to be passed to the function.
+
+
+
+
+Finding the 1st revision with a bug
+We have (oth-7th) revisions committed to Github, and due to a testing flaw, we found that a bug has been introduced at 7th revision. We want to find when it was committed:
+# r0 r1 r2 r3 r4 r5 r6 r7
+# G  ?  ?  ?  ?  ?  ?  B   (G: good, B: buggy)
+We may want to use binary search: if found bug, move backwards (previous rev.), if not, mode forwards (later rev.). In the code sample below, we're testing 6 cases:
+def hasBug(i):
+   if rev[i] == 'B':
+      return True
+   return False
+
+def find_bug(good, bad):
+   st = good
+   end = bad
+   ret = -1
+   mid = (st + end) / 2
+   while (mid > good and mid < bad):
+      # backwards
+      if hasBug(mid):
+         end = mid
+         ret = mid
+         if mid == good + 1: break
+      # forwards
+      else:
+         st = mid
+         if mid == end - 1: break
+      mid = (st + end ) / 2
+
+   return ret
+
+if __name__ == "__main__":
+   rev = ['G','B','B','B','B','B','B','B']
+   print 1 == find_bug(0,7)
+
+   rev = ['G','G','B','B','B','B','B','B']
+   print 2 == find_bug(0,7)
+
+   rev = ['G','G','G','B','B','B','B','B']
+   print 3 == find_bug(0,7)
+
+   rev = ['G','G','G','G','B','B','B','B']
+   print 4 == find_bug(0,7)
+
+   rev = ['G','G','G','G','G','B','B','B']
+   print 5 == find_bug(0,7)
+
+   rev = ['G','G','G','G','G','G','B','B']
+   print 6 == find_bug(0,7)
+Note that the find_bug() function returns the first revision # that introduced a bug.
+Output:
+True
+True
+True
+True
+
+
+
+
+Which one has higher precedence in Python? - NOT, AND , OR
+What will be printed out?
+>>> True or False and False
+Since AND is higher precedence than OR, AND will be evaluated first, "True" will be printed out.
+Then, how about this one?
+>>> not True or False or not False and True
+True
+NOT has first precedence, then AND, then OR.
+
+
+
+
+Decorator(@) - with dollar sign($)
+We have a function that returns the amount with tax added. We want to prefix the amount with a dollar($) using decorator:
+@dollar
+def price(amount, tax_rate):
+    return amount + amount*tax_rate
+How do we want to implement the decorator function, dollar()?
+Here is the code:
+def dollar(fn):
+    def new(*args):
+        return '$' + str(fn(*args))
+    return new
+
+@dollar
+def price(amount, tax_rate):
+    return amount + amount*tax_rate
+
+print price(100,0.1)
+Output:
+$110
+Note that we did not modify the decorated function, price(), at all.
+
+
+
+
+Multi-line coding
+The following code won't print out properly. What's wrong with the code?
+days = ['Monday',
+        'Tuesday',
+        'Wednesday']
+
+months = ['Jan', \
+         'Feb', \
+         'Mar']
+
+print "DAYS: %s, MONTHS %s" % 
+    (days, months)
+days is OK because expressions in parentheses, square brackets or curly braces can be split over more than one physical line without using backslashes. The months is also OK because backslashes are used to join physical lines, even though they are not required in this case. The print statement will not print the data because 2 logical lines are used without a backslash to join them into a logical line.
+So, correct code should look like this:
+print "DAYS: %s, MONTHS %s" %\ 
+    (days, months)
+
+
+
+
+
+
+Recursive binary search
+Recursive binary serach:
+# returns True if found the item
+# otherwise, returns False
+def bSearch(a, item):
+   if len(a) == 0:
+      return False
+   mid = len(a)/2
+   if a[mid] == item:
+      return True
+   else:
+      if a[mid] < item:
+         return bSearch(a[mid+1:], item)
+      else:
+         return bSearch(a[:mid], item)
+
+if __name__ =="__main__":
+   a = [1,3,4,5,8,9,17,22,36,40]
+   print bSearch(a, 9)
+   print bSearch(a, 10)
+   print bSearch(a, 36)
+Output:
+True
+False
+True
+
+
+
+
+Iterative binary search
+Iterative binary search:
+# returns True if found the item
+# otherwise, returns False
+def bSearch(a, item):
+   st = 0
+   end = len(a)-1
+   mid = len(a)/2
+   left = st
+   right = end
+   while True:
+      # found
+      if a[mid] == item:
+         return True
+      # upper
+      elif a[mid] < item:
+         left = mid + 1
+      # lower
+      else:
+         right = mid - 1
+
+      mid = (left+right)/2
+      if mid < st or mid > end: break
+      if left == right: break
+   return False
+
+if __name__ =="__main__":
+   a = [1,3,4,5,8,9,17,22,36,40]
+   print bSearch(a, 9)
+   print bSearch(a, 10)
+   print bSearch(a, 36)
+   print bSearch(a, 5)
+   print bSearch(a, 22)
+Output:
+True
+False
+True
+True
+True
+
+
+
+
+Pass by reference
+List is passed by reference to the function and modifications to the function parameter also effect the original list.
+What's the size of the list, (len(mList)).
+def addItem(l):
+    l += [0]
+
+mList = [1, 2, 3, 4]
+addItem(mList)
+print len(mList)
+Answer: 5
+
+
+
+
+Simple calculator
+This is not a real calculator. It's a practice of stack implementation by manipulating list's pop() and append().
+The code should pass the following test:
+test = {"11++":-1, "1+2": -1, "12+":3, "12+4*":12, "12+4*5+":17, "42-5*7-":3}
+The keys are the question strings, and the values are the correct answers.
+Note the following:
+We should have at least two items in the list whenever we see '+'/'-'/'*' operators. Otherwise, it should issue -1 and exit.
+For '-' operation, we need to take care of the the order of pop() operation. In the code, we prepend '-' for the last item in the list and then pops the 2nd to the last after that.
+Here is the code:
+def sol(input):
+   a = []
+   print "input=",input
+   for c in input:
+      if c.isdigit():
+         a.append(c)
+      elif c == '+':
+         if len(a) < 2:
+            return -1
+         a.append(int(a.pop())+int(a.pop()))
+      elif c == '-':
+         if len(a) < 2:
+            return -1
+         a.append(-int(a.pop())+int(a.pop()))
+      elif c == '*':
+         if len(a) < 2:
+            return -1
+         a.append(int(a.pop())*int(a.pop()))
+      else:
+         pass
+   return a[0]
+
+test = {"11++":-1, "1+2": -1, "12+":3, "12+4*":12, "12+4*5+":17, "42-5*7-":3}
+
+for k,v in test.items():
+   if sol(k) == v:
+      print k, v, 'Passed'
+      print
+   else:
+      print k, v, 'Error'
+      print
+Output:
+input= 12+4*
+12+4* 12 Passed
+
+input= 42-5*7-
+42-5*7- 3 Passed
+
+input= 11++
+11++ -1 Passed
+
+input= 12+
+12+ 3 Passed
+
+input= 12+4*5+
+12+4*5+ 17 Passed
+
+input= 1+2
+1+2 -1 Passed
+
+
+
+
+iterator class that returns network interfaces
+Write a class that returns network interfaces (eth0, wlan0, ...).
+Use subprocess and ip link show command.
+import subprocess
+
+class interfaces:
+   def __init__(self):
+      self.intf = []
+      proc = subprocess.Popen(['ip', 'link', 'show'], stdout=subprocess.PIPE)
+      line_count = 0
+      while True:
+         line = proc.stdout.readline()
+         if line != '':
+            if line_count % 2 == 0:
+               self.intf.append(line)
+         else:
+            break
+         line_count += 1
+      self.counter = -1
+      self.max = len(self.intf)
+
+   def __iter__(self):
+      return self
+
+   def next(self):
+      if self.counter >= self.max-1:
+         raise StopIteration
+      self.counter += 1
+      return self.intf[self.counter]
+
+f = interfaces()
+for i in f:
+   print i
+Note that we used next() instead of __next__() because we're using Python 2.
+Output:
+1: lo: mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default 
+
+2: eth0: mtu 1500 qdisc pfifo_fast state DOWN mode DEFAULT group default qlen 1000
+
+3: wlan0: mtu 1500 qdisc mq state UP mode DORMANT group default qlen 1000
+
+4: lxcbr0: mtu 1500 qdisc noqueue state UNKNOWN mode DEFAULT group default 
+
+5: docker0: mtu 1500 qdisc noqueue state DOWN mode DEFAULT group default 
+
+8: vmnet1: mtu 1500 qdisc pfifo_fast state UNKNOWN mode DEFAULT group default qlen 1000
+
+9: vmnet8: mtu 1500 qdisc pfifo_fast state UNKNOWN mode DEFAULT group default qlen 1000
+
+
+
+
+Converting domain to ip
+We have a file that lists domain names. We want to write a Python function takes the file and returns a dictionary that has a key for the domain and a value for ip.
+For example, the input file ('domains.txt') looks like this:
+google.com
+yahoo.com
+Output is:
+{'yahoo.com': '98.139.183.24', 'google.com': '216.58.192.14'}
+Hint: we may want to use dig command, and to make the output simpler (only want to get ANSWER section), we can use it with additional options: +noall and +answer.
+Here is the code:
+import subprocess
+
+def getIPs(file):
+   ips = {}
+   with open(file) as f:
+      for line in f:
+         domain = line.strip()
+         out = subprocess.check_output(["dig","+noall","+answer", domain])
+         ips[domain] = out.split()[4]
+   return ips
+
+print getIPs('domains.txt')
+
+
+
+
+How to count the number of instances
+We have a class A, and we want to count the number of A instances.
+Hint : use staticmethod
+class A:
+   total = 0
+
+   def __init__(self, name):
+     self.name = name
+     A.total += 1
+
+   def status():
+      print "Total number of instance of A : ", A.total
+   status = staticmethod(status)
+
+
+a1 = A("A1")
+a2 = A("A2")
+a3 = A("A3")
+a4 = A("A4")
+
+A.status()
+Output:
+Total number of instance of A :  4
+We can use decorator (@staticmethod) like this:
+  @staticmethod
+   def status():
+      print "Total number of instance of A : ", A.total
+
+Copy an object
+How can we copy an object in Python?
+We can use copy.copy() or copy.deepcopy():
+import copy
+class A(object):
+   def __init__(self, s):
+      self.x = s
+
+a = A("Hello")
+
+a1 = copy.copy(a)
+a2 = copy.deepcopy(a)
+print a1.x
+print a2.x
+For dictionary object, we can use dict.copy():
+>>> d = {'a':1, 'b':2, 'c':3}
+>>> d1 = d.copy()
+>>> print d1
+{'a': 1, 'c': 3, 'b': 2}
+For a sequence like list, we can do copy simply:
+>>> l = [1,2,3]
+>>> l1 = l[:]
+>>> print l1
+[1, 2, 3]
+
+
+
+
+Filter
+What will be the output from the code below"
+a = [1,2,4,1,2,3]
+s = set(a)
+
+def check(n):
+   if n in s:
+      return True
+   else:
+      return False
+
+print filter(check, a)
+filter takes two args: (fn, sequence), and returns a list. The filter will return all items from the list a which return True when passed to the function check() which will check if the value is in the set, s. Since all the numbers in the set come from the values list, all of the original values in the list will return True. So, the output should look like this:
+[1, 2, 4, 1, 2, 3]
+Products
+We have an array of integers, and for each index we want to find the product of every integer except the integer at that index.
+For example, given:
+[5, 7, 3, 4]
+our function would return:
+[84, 60, 140, 105]
+by calculating:
+[7*3*4, 5*3*4, 5*7*4, 5*7*3]
+Here is the code:
+a = [5,7,3,4]
+print a
+out = []
+for i,e1 in enumerate(a):
+   prod = 1
+   for j,e2 in enumerate(a):
+      if i != j:
+         print e2,
+         prod *= e2
+   print
+   out.append(prod)
+print out
+Output:
+[5, 7, 3, 4]
+7 3 4
+5 3 4
+5 7 4
+5 7 3
+[84, 60, 140, 105]
+
+
+
+
+Pickle
+What's the output from the following code?
+import pickle
+
+class account:
+        def __init__(self, id, balance):
+                self.id = id
+                self.balance = balance
+        def deposit(self, amount):
+                self.balance += amount
+        def withdraw(self, amount):
+                self.balance -= amount
+
+my_account = account('00123', 1000)
+my_account.deposit(700)
+my_account.withdraw(400)
+
+fd = open( "archive", "w" )
+pickle.dump( my_account, fd)
+fd.close()
+
+my_account.deposit(500)
+print my_account.balance,
+
+fd = open( "archive", "r" )
+my_account = pickle.load( fd )
+fd.close()
+
+print my_account.balance
+Answer:
+1800 1300
+
+
+
+
+Overlapped Rectangles
+Find the overlapped rectangle.
+ 
+import json
+class rect(object):
+   def __init__(self,x=1,y=1,w=10,h=5):
+      self.geom = {'x':x, 'y':y, 'width': w, 'height': h}
+
+   def __repr__(self):
+      return (json.dumps(self.geom))
+
+def getKey(item):
+   return item[0]
+
+def intersection(r1,r2):
+   # rect 1
+   x11 = r1.geom['x']
+   x12 = x11 +  r1.geom['width']
+   y11 = r1.geom['y']
+   y12 = y11 + r1.geom['height']
+
+   # rect 2
+   x21 = r2.geom['x']
+   x22 = x21 +  r2.geom['width']
+   y21 = r2.geom['y']
+   y22 = y21 + r2.geom['height']
+
+   # construct list of tuples
+   x = [(x11,x12),(x21,x22)]
+   y = [(y11,y12),(y21,y22)]
+
+   # sort the list
+   x = sorted(x, key=getKey)
+   y = sorted(y, key=getKey)
+
+   # get intersection
+   xmin = x[0][0]
+   xmax = x[1][1]
+
+   if x[0][1] > x[1][0]:
+      xmin = x[1][0]
+      xmax = x[0][1]
+   else:
+      xmin = None
+      xmax = None
+
+   if y[0][1] > y[1][0]:
+      ymin = y[1][0]
+      ymax = y[0][1]
+   else:
+      ymin = None
+      ymax = None
+
+   return (xmin,xmax),(ymin,ymax)
+
+if __name__=='__main__':
+   # rect (x=1,y=1,w=10,h=5):
+
+   r1 = rect(2,2,2,2)
+   r2 = rect(1,1,2,2)
+   #r2 = rect(0,0,1,1)
+   #r2 = rect(3,3,2,2)
+   #r2 = rect(5,5,1,1)
+   print 'r1 = ', r1
+   print 'r2 = ', r2
+
+   x,y = intersection(r1,r2)
+   if x[0] == None or x[1] == None or y[0] == None or y[1] == None:
+      print 'No overlap'
+   else:
+      rOverlapped = rect(x[0],y[0],x[1]-x[0],y[1]-y[0])
+      print 'rOverlapped = ', rOverlapped
+
+
+Output:
+r1 =  {"y": 2, "x": 2, "height": 2, "width": 2}
+r2 =  {"y": 1, "x": 1, "height": 2, "width": 2}
+rOverlapped =  {"y": 2, "x": 2, "height": 1, "width": 1}
+
+
+
+
+__dict__
+Output from the code below?
+class Planet:
+   def __init__(self, sz):
+      pass
+      self.size = sz
+
+mars = Planet(2106)
+mars.__dict__['rank'] = 4
+
+print mars.size + len(mars.__dict__)
+We created a member variable named 'rank' by adding it directly the objects dictionary. The value of 'size' is initialized to 2106. There are 2 items in the dictionary, 'rank' and 'size', therefore the sum of the 'size' value 2106 and then size of the dictionary, 2 items, is 2108.
+
+
+
+
+Fibonacci
+Write a code that prints out n Fibonacci numbers.
+# iterative
+def fibi(n):
+   a, b = 0, 1
+   for i in range(0,n):
+     a, b = b, a+b
+   return a
+
+# recursive
+def fibr(n):
+   if n == 0: return 0
+   if n == 1: return 1
+   return fibr(n-2)+fibr(n-1)
+
+for i in range(10):
+   print (fibi(i), fibr(i))
+Output:
+(0, 0)
+(1, 1)
+(1, 1)
+(2, 2)
+(3, 3)
+(5, 5)
+(8, 8)
+(13, 13)
+(21, 21)
+(34, 34)
+
+
+
+
+Stack
+Implemented a Stack class, and then add a new class MaxStack as a child class of the Stack class. The new class MaxStack should have a function getMax() that returns the largest element in the stack, and it should not remove the item.
+class Stack:
+   def __init__(self):
+      self.items = []
+
+   def push(self, item):
+      print item,
+      self.items.append(item)
+
+   def pop(self):
+      if not self.items:
+         return None
+      return self.items.pop()
+
+   def peek(self):
+      if not self.items:
+         return None
+      return self.items[-1]
+
+class MaxStack(Stack):
+   def getMax(self):
+      return max(self.items)
+
+
+if __name__ == '__main__':
+   import random
+
+   s = MaxStack()
+   for i in range(10):
+      s.push(random.randint(1,100))
+
+   print 'max=', s.getMax()
+
+
+Output:
+42 43 30 62 80 89 49 9 41 72 max= 89
+
+
+
+
+Finding duplicate integers from a list - 1
+For a given list of integers, make list of duplicate integers.
+a = [10,30,50,70,70,30,40,30,10]
+We'll import collections, and it works like this:
+import collections
+
+a = [10,30,50,70,70,30,40,30,10]
+
+b = collections.Counter(a)
+print b
+
+for k,v in collections.Counter(a).items():
+   print (k,v),
+Output:
+Counter({30: 3, 10: 2, 70: 2, 40: 1, 50: 1})
+(40, 1) (10, 2) (70, 2) (50, 1) (30, 3)
+So, we can make a list of duplicate integers like this:
+import collections
+
+a = [10,30,50,70,70,30,40,30,10]
+print  [k for k,v in collections.Counter(a).items() if v > 1]
+Output:
+[10, 70, 30]
+
+
+
+
+Finding duplicate integers from a list - 2
+We can use dictionary with {integer:counter}. First, we initialize the counter with 0, and then increment while we browse through the list.
+a = [10,30,50,70,70,30,40,30,10]
+
+# initialize d = {key:counter}
+d = {}
+for k in a:
+   d[k] = 0
+
+# increase counter
+for k in a:
+   d[k] += 1
+
+print [k for k,v in d.items() if v > 1]
+Output:
+[10, 70, 30]
+
+
+
+
+Reversing words 1
+Write a function reverse_words() that takes a string message and reverses the order of the words.
+def reverse_words(message):
+   reverse = message[::-1]
+   words = reverse.split()
+   r_words = []
+   for w in words:
+      r_words.append(w[::-1])
+   return ' '.join(r_words)
+
+if __name__ == "__main__":
+   message = "I like to think the moon is there even if I am not looking at it - Einstein"
+   print "In = ", message
+   print "Out = ", reverse_words(message)
+As we can see from the function, we reverse all characters of the input string. Then, constructed a list of words using a space as a delimiter. Then, we created a list of words, and reverse the characters of each words. Finally, join all the elements of the list to construct a sentence and returned it from the function.
+Output:
+In =  I like to think the moon is there even if I am not looking at it - Einstein
+Out =  Einstein - it at looking not am I if even there is moon the think to like I
+We can use more compact version of the function like this with two lines:
+def reverse_words2(message):
+   return ' '.join([m[::-1] for m in message[::-1].split()])
+Another way of solving the problem though it's similar to the previous solution:
+def reverse_words(message):
+   words = message.split()
+   words_rev = words[::-1]
+   return ' '.join(words_rev)
+
+if __name__ == "__main__":
+   message = "I like to think the moon is there even if I am not looking at it - Einstein"
+   print "In = ", message
+   print "Out = ", reverse_words(message)
+See also Reversing a string
+
+
+
+
+Parenthesis, a lot of them
+Write a function that outputs a list of tuples [(an opening parenthesis, the corresponding closing parenthesis), () ...]. The tuple should be an index of the position of parenthesis. For example, "(())()", the list should be [(0,3),(1,2),(4,5)]
+Use the following string, and write the code:
+"You know parentheses()? (Those little crescent-shaped thingies()?) 
+Well, sometimes they drive me crazy (overusing(), even nested ones(()), lack of clarity, fuzzy writing)"
+Here is the code:
+s = "You know parentheses()? (Those little crescent-shaped thingies()?) Well, sometimes they drive me crazy (overusing(), even nested ones(()), lack of clarity, fuzzy writing)"
+op = []
+cp = []
+pair = []
+
+for i in range(len(s)):
+   if s[i] == '(':
+      op.append(i)
+   elif s[i] == ')':
+      cp.append(i)
+      pair.append((op.pop(),cp.pop()))
+   else:
+      pass
+
+print pair
+Output:
+[(20, 21), (62, 63), (24, 65), (113, 114), (134, 135), (133, 136), (103, 169)]
+
+Or we can use a little bit simpler code using two lists instead of three:
+def parenthesis(s):
+   idx=[]
+   ans = []
+   for i,c in enumerate(s):
+      if c == '(':
+         idx.append(i)
+      elif c == ')':
+         ans.append((idx.pop(),i))
+      else:
+         pass
+   return ans
+
+s = "You know parentheses()? (Those little crescent-shaped thingies()?) Well, sometimes they drive me crazy (overusing(), even nested ones(()), lack of clarity, fuzzy writing)"
+print parenthesis(s)
+
+
+
+
+Palindrome / Permutations
+Write a function that checks whether any permutation of an input string is a palindrome. For example,
+"civic" should return True
+"livci" should return False
+"icvci" should return True
+"civil" should return False
+Here is the code:
+import itertools
+def isPalindrome(w):
+   for i in range((len(w)+1)/2):
+      if w[i] != w[-i-1]:
+         return False
+   return True
+
+if __name__ == "__main__":
+   word = "civic"
+   for w in itertools.permutations(word):
+      word = "".join(w)
+      print "Is %s palindrome ? %s"  %(word, isPalindrome(word))
+Output looks like this:
+Is civic palindrome ? True
+Is civci palindrome ? False
+Is ciivc palindrome ? False
+...
+Is icvic palindrome ? False
+Is icvci palindrome ? True
+Is icivc palindrome ? False
+...
+The isPalindrome() function could be more compact:
+def isPalindrome(w):
+   return w == w[::-1]
+
+
+
+
+Constructing new string after removing white spaces
+Remove white spaces and make a new string from a string "a b c "
+s = "a b c "
+ss = ''.join(s.rstrip().split())
+print "ss =", ss
+The rstrip() strips off (white space by default) characters from the end of the string.
+Output:
+ss = abc
+
+
+
+
+Removing duplicate list items
+Write a small program to remove duplicate items from a given list.
+a = [1,2,9,7,5,1,2,3]
+a.sort()
+item = a[-1]
+for i in range(len(a)-2,-1,-1):
+   if a[i] == item:
+      del a[i]
+   else:
+      item = a[i]
+print a
+Output:
+[1, 2, 3, 5, 7, 9]
+The simplest solution is to use set():
+a = [1,2,9,7,5,1,2,3]
+s = list(set(a))
+
+
+
+
+Dictionary exercise
+Marketing fees
+Develop an algorithm that can be used to identify the best marketing source, by dollar spent per lead cost, each quarter based on the cost structure outlined below:
+Apartment Guide = $495 per month, flat rate.
+Apartments.com = $295 per signed lease.
+Rent.com = $595 or 50% per lease signed, whichever is higher.
+For Rent = $195 monthly, plus $25 per lead.
+Craigslist = Free!
+Resident Referral = $500 per signed lease.
+
+Dataset Description:/p>
+guest_cards.json - Each record is a unique person who has visited the apartment. The record will let you determine who leased a unit.
+Metric Definitions:
+Closing Time - Each record contains a "first_seen" and "lease_signed" value. A lease is considered closed when there is a date in "lease_signed." You should use the delta in days as the time to close.
+Closing Rate - The total number of records with "lease_signed" in a month.
+Output:
+This is not real output, use it as a guide for formatting.
+Q1 2014:
+
+1. For Rent - total leads: 10, signed leases: 1, total cost: $445.00, avg cost per lead: $44.50
+1. Rent.com - total leads: 10, signed leases: 2, total cost: $1,190.00, avg cost per lead: $119.00
+1. Apartments Guide - total leads: 1, signed leases: 1, total cost: $495.00, avg cost per lead: $495.00
+Solution: kihong.py
+"""
+Python : kihong.py
+
+Afer loading info from json, 
+this code construct monthly numbers (data),
+aggregate it (out) after applying cost info depending on the source type. 
+Then, writes quarterly report.
+
+
+Here are the steps in the code:
+1. load data from json file, and convert it to a list
+2. initialize data by year-month and source sub keys
+   (data - interim data to process loaded info from json)
+3. adding leads to the data
+4. Updating total cost based on cost structure
+5. Construct quarterly data struct, out
+6. Writing report to console
+7. (Note) For degging purpose, did not remove intermediate prints to console. 
+"""
+
+
+import json
+
+# load data from json file, and convert it to a list
+json_data = json.loads(open("guest_cards.json").read())
+
+# Construct year & month set 
+# These sets will be used to make a new dictionary from the json info.  
+# This new dictionary (data) will be used to make monthly numbers.
+ym_set = set()
+source_set = set()
+for js in json_data:
+    ym = ''
+    # Takes year and month from the string
+    if js['lease_signed'] is not None:
+        ym = str(js['lease_signed'])[:7]
+    else:
+        ym = str(js['first_seen'])[:7]
+
+    ym_set.add(ym)
+    s = str(js['marketing_source'])
+    source_set.add(s)
+
+print 'ym_set=',ym_set
+print 'source_set=',source_set
+
+
+# initialize data by year-month and source sub keys
+# data - interim data to process loaded info from json
+
+data = {}
+for m in ym_set:
+    data[m] = {}
+    for s in source_set: 
+        data[m][s] = {'signed_leases':0, 'total_leads':0,
+                      'total_cost':0, 'avg_cost_per_lead':0}
+
+
+# adding leads to data
+for js in json_data:
+    if js['lease_signed'] is not None:
+        m = str(js['lease_signed'])[:7]
+        s = str(js['marketing_source'])
+        data[m][s]['signed_leases'] += 1 
+        data[m][s]['total_leads'] += 1 
+    else:
+        m = str(js['first_seen'])[:7]
+        s = str(js['marketing_source'])
+        data[m][s]['total_leads'] += 1 
+        
+
+# Updating total cost based on cost structure
+for key,val in data.items():
+    for v in val:
+        # check source type
+        if v == 'Apartment Guide':
+            data[key][v]['total_cost'] = 495
+        elif v == 'Apartments.com':
+            data[key][v]['total_cost'] = 295*data[key][v]['signed_leases']
+        elif v == 'Rent.com':
+            data[key][v]['total_cost'] = max(595,295*data[key][v]['signed_leases'])
+        elif v == 'For Rent':
+            data[key][v]['total_cost'] = 195+25*data[key][v]['total_leads']
+        elif v == 'Resident Referral':
+            data[key][v]['total_cost'] = 500*data[key][v]['signed_leases']
+        else:
+            pass
+       
+# A funtion returning quarter & year string, for example, 'Q1 2014' from '2014-03'
+def get_quarter(key):
+    ym = str(key).split('-')
+    year = ym[0]
+    month = ym[1]
+    if month <= '03':
+        q = 'Q1'
+    elif month <= '06':
+        q = 'Q2'
+    elif month <= '09':
+        q = 'Q3'
+    else:
+        q = 'Q4'
+    return (q + ' ' + year)
+
+# Construct quarterly data struct
+out = {}
+for key, val in data.items():
+    q = get_quarter(key)
+    out[q] = {}
+    for v in val:
+        out[q][v] = {'quarter':q, 'source':v, 'total_leads':0, 
+                     'signed_leases':0, 'total_cost':0, 'avg_cost_per_lead':0} 
+
+# Populate quarterly info : combines monthly to get quarterly
+for key, val in data.items():
+    q = get_quarter(key)
+    for v in val:
+        if q == out[q][v]['quarter']:
+            out[q][v]['total_cost'] += data[key][v]['total_cost']
+            out[q][v]['total_leads'] += data[key][v]['total_leads']
+            out[q][v]['signed_leases'] += data[key][v]['signed_leases']
+
+print "=============== Quarterly report =================="
+print
+# Writing report
+for key, val in out.items():
+    print key,':'
+    print
+    for v in val:
+        print ("%s - total leads: %s, signed leases: %s, total cost: $%s, avg cost per lead: $%s") %(out[key][v]['source'], out[key][v]['total_leads'], out[q][v]['signed_leases'], out[q][v]['total_cost'], out[q][v]['total_cost']/max(1,out[key][v]['total_leads'])) 
+    print
+    print
+Output from the code (snippet):
+Q2 2014 :
+
+Website - total leads: 0, signed leases: 1, total cost: $0, avg cost per lead: $0
+None - total leads: 3, signed leases: 7, total cost: $0, avg cost per lead: $0
+Rentlix.com - total leads: 1, signed leases: 0, total cost: $0, avg cost per lead: $0
+zillow.com - total leads: 0, signed leases: 0, total cost: $0, avg cost per lead: $0
+Transfer Unit - total leads: 0, signed leases: 0, total cost: $0, avg cost per lead: $0
+Resident Referral - total leads: 0, signed leases: 2, total cost: $1000, avg cost per lead: $1000
+Drive By - total leads: 0, signed leases: 12, total cost: $0, avg cost per lead: $0
+online-apartments-listings.co - total leads: 0, signed leases: 0, total cost: $0, avg cost per lead: $0
+Apartment Guide - total leads: 1, signed leases: 9, total cost: $1485, avg cost per lead: $1485
+Phonebook - total leads: 0, signed leases: 0, total cost: $0, avg cost per lead: $0
+Housing Authority - total leads: 0, signed leases: 0, total cost: $0, avg cost per lead: $0
+Facebook - total leads: 0, signed leases: 0, total cost: $0, avg cost per lead: $0
+Apartments.com - total leads: 0, signed leases: 0, total cost: $0, avg cost per lead: $0
+rentdigs.com - total leads: 0, signed leases: 0, total cost: $0, avg cost per lead: $0
+Craigslist.com - total leads: 9, signed leases: 2, total cost: $0, avg cost per lead: $0
+
+
+
+
+printing numbers in Z-shape
+For a given number n, print the numbers to make Z-shape output on nxn grid (matrix). For example (n=3,4,5,6), we get the following output.
+We can print blank for a number not in diagonal(top right to lower left)
+We should drop other than lowest digit: 10->0, 11->1, 12->2, ... 23->3
+1 2 3
+  4  
+5 6 7
+
+1 2 3 4
+    5  
+  6    
+7 8 9 0
+
+1 2 3 4 5
+      6  
+    7    
+  8      
+9 0 1 2 3
+
+1 2 3 4 5 6
+        7  
+      8    
+    9      
+  0        
+1 2 3 4 5 6
+Ok, here is the code outputs the above:
+def print_z(n):
+    pos = 1
+    for r in range(n):
+        for c in range(n):
+            pos = pos % 10
+            if r == 0 or r == n-1:
+                print pos,
+                pos += 1
+            elif c == n - r - 1:
+                print pos,
+                pos += 1
+            else:
+                print ' ',
+
+        print
+
+for n in range(3,7):
+   print_z(n)
+   print
+
+
+
+
+Factorial
+Here is the factorial code : iterative & recursive:
+# iterative
+def fact(n):
+   i = 1
+   f = 1
+   while(i <= n):
+      f *= i
+      i += 1
+   return f
+
+# recursive
+def fact2(n):
+   if n == 0:
+      return 1
+   return n * fact(n-1)
+
+n = 10
+for n in range(n):
+   print '%s:%s %s' %(n, fact(n), fact2(n))
+
+
+Output:
+0:1 1
+1:1 1
+2:2 2
+3:6 6
+4:24 24
+5:120 120
+6:720 720
+7:5040 5040
+8:40320 40320
+9:362880 362880
+
+
+
+
+lambda
+Python supports the creation of anonymous functions (i.e. functions that are not bound to a name) at runtime, using a construct called lambda. This is not exactly the same as lambda in functional programming languages such as Lisp, but it is a very powerful concept that's well integrated into Python and is often used in conjunction with typical functional concepts like filter(), map() and reduce().
+f1 = lambda x:x**1
+f2 = lambda x:x**2
+f3 = lambda x:x**3
+f4 = lambda x:x**4
+f5 = lambda x:x**5
+for x in [1,2,3,4,5]:
+   print f1(x),f2(x),f3(x),f4(x),f5(x)
+Output:
+1 1 1 1 1
+2 4 8 16 32
+3 9 27 81 243
+4 16 64 256 1024
+5 25 125 625 3125
+With map():
+print map(lambda x:x**2, [i for i in range(10)])  # [0, 1, 4, 9, 16, 25, 36, 49, 64, 81]
+
+
+
+
+Number of pairs of integers whose difference is K
+a = [1,2,3,4,5,6,7,8,9,10]
+K = 4
+count = 0
+for n in a:
+   if n + K in a:
+      count += 1
+
+print count
+Output:
+6
+
+
+
+
+iterator vs generator
+iterable - an iterable is an object
+that has an __iter__ method which returns an iterator
+>>> L = [1,2,3]
+>>> iterableObj = iter(L)
+>>> iterableObj.next()
+1
+>>> iterableObj.next()
+2
+
+
+Or
+>>> L = [1,2,3]
+>>> iterableObj = L.__iter__()
+>>> iterableObj.next()
+1
+>>> iterableObj.next()
+2
+
+
+that has a __getitem__ method that can take sequential indexes starting from zero (and raises an IndexError when the indexes are no longer valid).
+In short, an iterable is an object that we can get an iterator from.
+iterators - iterators are iterables with some kind of position state and a __next__() method. An iterator is an object with a next(Python 2) or __next__ (Python 3) method. Whenever we use a for loop, or map, or a list comprehension, etc., the next method is called automatically to get each item from the iterator, thus going through the process of iteration.
+generators - A generator function is a way to create an iterator. Generator functions let us use local variables and the position of the program counter as state for a generator object. A new generator object is created and returned each time we call a generator function. The generator object is an iterator. A generator yields the values one at a time, which requires less memory and allows the caller to get started processing the first few values immediately. In short, a generator looks like a function but behaves like an iterator.
+
+
+
+Picture source : Iterables, Iterators and Generators: Part 1
+
