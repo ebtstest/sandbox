@@ -537,3 +537,65 @@ s[-4:-1]
 ##############################################################################
 The pandas DataFrame Object
 ##############################################################################
+# create a DataFrame from a 2-d ndarray
+pd.DataFrame(np.array([[10, 11], [20, 21]]))
+
+# what's the shape of this DataFrame
+df1.shape
+# it is two rows by 5 columns
+          (2,5)
+
+# specify column names
+df = pd.DataFrame(np.array([[10, 11], [20, 21]]), columns=['a', 'b'])
+
+# retrieve just the names of the columns by position
+"{0}, {1}".format(df.columns[0], df.columns[1])
+
+# rename the columns
+df.columns = ['c1', 'c2']
+
+# create a DataFrame with named columns and rows
+df = pd.DataFrame(np.array([[0, 1], [2, 3]]),
+                  columns=['c1', 'c2'],
+                  index=['r1', 'r2'])
+                  
+# retrieve the index of the DataFrame
+df.index
+
+# create a DataFrame with two Series objects
+# and a dictionary
+s1 = pd.Series(np.arange(1, 6, 1))
+s2 = pd.Series(np.arange(6, 11, 1))
+pd.DataFrame({'c1': s1, 'c2': s2})
+              c1 c2
+            0 1 6
+            1 2 7
+            2 3 8
+            3 4 9
+            4 5 10
+            
+# demonstrate alignment during creation
+s3 = pd.Series(np.arange(12, 14), index=[1, 2])
+df = pd.DataFrame({'c1': s1, 'c2': s2, 'c3': s3})
+df
+                         c1 c2 c3
+                        0 1 6 NaN
+                        1 2 7 12
+                        2 3 8 13
+                        3 4 9 NaN
+                        4 5 10 NaN
+
+# read in the data and print the first five rows
+# use the Symbol column as the index, and
+# only read in columns in positions 0, 2, 3, 7
+sp500 = pd.read_csv("data/sp500.csv",
+                        index_col='Symbol',
+                        usecols=[0, 2, 3, 7])
+
+# get first and second columns (1 and 2) by location
+sp500[[1, 2]].head()
+
+# it's a DataFrame, not a Series
+type(sp500[[1]].head())
+            pandas.core.frame.DataFrame
+            
