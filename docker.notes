@@ -1,0 +1,173 @@
+##############################################################################
+Downloading the first Docker image
+##############################################################################
+$ sudo docker pull busybox
+
+$ sudo docker images
+
+$ sudo docker run busybox echo "Hello World!"
+      "Hello World!"
+
+Run image with tag name, -t and -i flags make the container interactive
+$ sudo docker run -t -i busybox:ubuntu-14.04 
+
+$ sudo service docker status
+
+-a option downloads all the variants that are associated with that image
+$ sudo docker pull -a busybox
+
+$ sudo docker pull busybox:ubuntu-14.04 (download image with tag name)
+
+$ sudo docker search mysql (search Docker images in the Docker hub)
+
+$ sudo docker ps
+
+detach from our container interactive by using the Ctrl + P and Ctrl + Q escape sequence.
+
+attach to a running container 
+$ sudo docker attach jolly_lovelace
+
+tracking changes made to the running container
+$ sudo docker diff d5ad60f174d3
+
+$ sudo docker stop da1c0f7daa2a
+$ sudo docker start da1c0f7daa2a
+$ sudo docker pause c439077aa80a
+$ sudo docker unpause c439077aa80a
+
+delete all contrainers that are not currently running
+$ sudo docker rm 'sudo docker ps -aq --no-trunc'
+
+The docker run subcommand supports an option -d, which will launch a container in a detached mode
+
+Generating a Docker image by using the preceding Dockerfile by calling docker 
+build along with the path of Dockerfile.
+$ sudo docker build .
+
+You could specify an IMAGE name and optionally a TAG name by using the docker tag subcommand, as shown here:
+$ sudo docker tag 0a2abe57c325 busyboxplus
+
+The alternative approach is to build the image with an image name during the build time
+$ sudo docker build -t busyboxplus .
+
+###########################################
+# Dockerfile to build an Apache2 image
+###########################################
+    # Base image is Ubuntu
+    FROM ubuntu:14.04
+    # Author: Dr. Peter
+    MAINTAINER Dr. Peter <peterindia@gmail.com>
+    # Install apache2 package
+    RUN apt-get update && \
+    apt-get install -y apache2 && \
+    apt-get clean
+    # Set the log directory PATH
+    ENV APACHE_LOG_DIR /var/log/apache2
+    # Launch apache2 server in the foreground
+    ENTRYPOINT ["/usr/sbin/apache2ctl", "-D", "FOREGROUND"]
+
+  
+##############################################################################
+Publishing Images
+##############################################################################
+$ sudo docker commit -m="NewImage" containerforhub vinoddandy/imageforhub
+$ sudo docker push vinoddandy/imageforhub
+
+We can also delete the vinoddandy/imageforhub image:
+$ sudo docker rmi vinoddandy/imageforhub
+
+##############################################################################
+The REST APIs for the Docker Hub
+##############################################################################
+User Login: This is used for user login to the Docker Hub:
+GET /v1/users
+$ curl --raw -L --user vinoddandy:password
+https://index.docker.io/v1/users
+
+User Register: This is used for registration of a new user:
+POST /v1/users
+
+Update user: This is used to update the user's password and e-mail:
+PUT /v1/users/(usename)/
+
+Create a user repository: This creates a user repository:
+PUT /v1/repositories/(namespace)/(repo_name)/
+$ curl --raw -L -X POST --post301 -H "Accept:application/json" -H "Content-Type: application/json" --data-ascii '{"email":
+"singh_vinod@yahoo.com", "password": "password", "username":"singhvinod494" }' https://index.docker.io/v1/users
+
+Delete a user repository: This deletes a user repository:
+DELETE /v1/repositories/(namespace)/(repo_name)/
+
+Create a library repository: This creates the library repository, and it is
+available only to Docker administrators:
+PUT /v1/repositories/(repo_name)/
+
+Delete a library repository: This deletes the library repository, and it is
+available only to Docker administrators:
+DELETE /v1/repositories/(repo_name)/
+
+Update user repository images: This updates the images of a user's
+repository:
+PUT /v1/repositories/(namespace)/(repo_name)/images
+
+
+
+This command generates quite a lot of information about the container. Here, we
+show some excerpts of the container's network configuration from the output of the
+docker inspect subcommand:
+$ sudo docker inspect 4b0b567b6019
+
+        "NetworkSettings": {
+        "Bridge": "docker0",
+        "Gateway": "172.17.42.1",
+        "IPAddress": "172.17.0.12",
+        "IPPrefixLen": 16,
+        "PortMapping": null,
+        "Ports": {}
+        },
+        
+using the -p <hostPort>:<containerPort> option of the docker run subcommand        
+$ sudo docker run -d -p 80:80 apache2
+
+Automatic configuration of the NAT rule in Linux iptables as follows:
+$ sudo iptables -t nat -L -n
+
+Binding a container to a specific IP address
+$ sudo docker run -d -p 198.51.100.73:80:80 apache2
+
+Auto-generating the Docker host port
+$ sudo docker run -d -p 80:80 apache2
+
+The Docker  allows us to embed the port information using the EXPOSE instruction in the Dockerfile:
+          ###########################################
+          # Dockerfile to build an apache2 image
+          ###########################################
+          # Expose port 80
+          EXPOSE 80
+          # Launch apache2 server in the foreground
+          ENTRYPOINT ["/usr/sbin/apache2ctl", "-D", "FOREGROUND"]
+
+##############################################################################
+Sharing host data
+##############################################################################
+1. -v <container mount path>
+2. -v <host path>/<container mount path>
+3. -v <host path>/<container mount path>:<read write mode>
+
+$ sudo docker run -v /tmp/hostdir:/MountPoint -it ubuntu:14.04
+
+
+Launching an interactive container that can be used as a source container for 
+linking, using the following command, --rm option is used to clean up the 
+container as soon as you exit from the container.
+$ sudo docker run --rm --name example -it busybox:latest
+
+
+Launch an interactive recipient container by linking it to our source container 
+using the --link option of the docker run subcommand:
+$ sudo docker run --rm --link example:ex -it busybox:latest
+
+The docker-compose command
+The docker-compose tool provides sophisticated orchestration functionality
+with a handful of commands. All the docker-compose commands use the
+docker-compose.yml file as the base to orchestrate one or more services.
