@@ -1,0 +1,320 @@
+Express.js is a Node.js web application server framework, designed for building single-page, 
+multi-page, and hybrid web applications. It is the de facto standard server framework for 
+node.js meaning that it is relatively minimal with many features available as plugins. 
+Express is the backend part of the MEAN stack, together with MongoDB database and AngularJS 
+frontend framework.
+
+
+Node.js is a platform for building server-side event-driven i/o application using javascript.
+
+Express.js is a framework based on node.js for building web-application using principles and 
+approaches of node.js
+
+
+Node.js is an open-source, cross-platform runtime environment for developing server-side Web 
+applications
+
+Model–view–controller (MVC) is a software architectural pattern for implementing user 
+interfaces on computers. It divides a given software application into three interconnected 
+parts, so as to separate internal representations of information from the ways that information 
+is presented to or accepted from the user.
+
+
+CommonJS modules
+CommonJS is a project started in 2009 to standardize the way of working with
+JavaScript outside the browser. The project has evolved since then to support a variety
+of JavaScript issues, including the global namespace issue, which was solved through a
+simple specification of how to write and include isolated JavaScript modules.
+The CommonJS standards specify the following three key components when working with modules:
+      • require(): This method is used to load the module into your code.
+      • exports: This object is contained in each module and allows you to expose
+      pieces of your code when the module is loaded.
+      • module: This object was originally used to provide metadata information
+      about the module. It also contains the pointer of an exports object as a
+      property. However, the popular implementation of the exports object as a
+      standalone object literally changed the use case of the module object.
+      In Node's CommonJS module implementation, each module is written in a single
+      JavaScript file and has an isolated scope that holds its own variables. The author of
+      the module can expose any functionality through the exports object.
+
+var http = require('http');
+http.createServer(function(req, res) {
+    res.writeHead(200, {
+        'Content-Type': 'text/plain'
+    });
+    res.end('Hello World');
+}).listen(3000);
+
+#####################################################################
+Connect Module
+#####################################################################
+The way a Connect application works is by using an object called dispatcher.
+The dispatcher object handles each HTTP request received by the server and
+then decides, in a cascading way, the order of middleware execution.
+
+Below example helloWorld() is the middleware
+
+Using the app.use() method, you'll be able to set a series of
+middleware functions that will be executed in FIFO order.
+
+var connect = require('connect');
+var app = connect();
+
+var logger = function(req, res, next) {
+      console.log(req.method, req.url);
+      next();
+};
+
+var helloWorld = function(req, res, next) {
+      res.setHeader('Content-Type', 'text/plain');
+      res.end('Hello World');
+};
+
+app.use(logger);
+app.use(helloWorld);
+app.listen(3000);
+
+
+#####################################################################
+Mounting Connect middleware
+#####################################################################
+app.use(logger);
+app.use('/hello', helloWorld);
+app.use('/goodbye', goodbyeWorld);
+
+
+#####################################################################
+Express.js
+#####################################################################
+    var express = require('express');
+    var app = express();
+    app.use('/', function(req, res) {
+          res.send('Hello World');
+    });
+    app.listen(3000);
+    console.log('Server running at http://localhost:3000/');
+    module.exports = app;
+    
+Express presents three major objects that you'll frequently use. 
+      The application object is the instance of an Express application 
+      you created in the first example and is usually used to configure 
+      your application. 
+      
+      The request object is a wrapper of Node's HTTP request object and
+      is used to extract information about the currently handled HTTP 
+      request. 
+      
+      The response object is a wrapper of Node's HTTP response object and
+      is used to set the response data and headers.
+
+
+#####################################################################
+Express.js -- The application object
+####################################################################
+        • app.set(name, value): This is used to set environment variables that
+        Express will use in its configuration.
+        • app.get(name): This is used to get environment variables that Express is
+        using in its configuration.
+        • app.engine(ext, callback): This is used to define a given template
+        engine to render certain file types, for example, you can tell the EJS template
+        engine to use HTML files as templates like this: app.engine('html',
+        require('ejs').renderFile).
+        • app.locals: This is used to send application-level variables to all rendered
+        templates.
+        • app.use([path], callback): This is used to create an Express middleware
+        to handle HTTP requests sent to the server. Optionally, you'll be able to
+        mount middleware to respond to certain paths.
+        • app.VERB(path, [callback...], callback): This is used to define one or
+        more middleware functions to respond to HTTP requests made to a certain
+        path in conjunction with the HTTP verb declared. For instance, when you
+        want to respond to requests that are using the GET verb, then you can just
+        assign the middleware using the app.get() method. For POST requests you'll
+        use app.post(), and so on.
+        • app.route(path).VERB([callback...], callback): This is used to define
+        one or more middleware functions to respond to HTTP requests made to a
+        certain unified path in conjunction with multiple HTTP verbs. For instance,
+        when you want to respond to requests that are using the GET and POST
+        verbs, you can just assign the appropriate middleware functions using app.
+        route(path).get(callback).post(callback).
+        • app.param([name], callback): This is used to attach a certain
+        functionality to any request made to a path that includes a certain routing
+        parameter. For instance, you can map logic to any request that includes the
+        userId parameter using app.param('userId', callback).
+        
+
+#####################################################################
+Express.js -- The request object
+####################################################################
+        • req.query: This is an object containing the parsed query-string parameters.
+        • req.params: This is an object containing the parsed routing parameters.
+        • req.body: This is an object used to retrieve the parsed request body. This
+        property is included in the bodyParser() middleware.
+        • req.param(name): This is used to retrieve a value of a request parameter.
+        Note that the parameter can be a query-string parameter, a routing
+        parameter, or a property from a JSON request body.
+        • req.path, req.host, and req.ip: These are used to retrieve the current
+        request path, host name, and remote IP.
+        • req.cookies: This is used in conjunction with the cookieParser()
+        middleware to retrieve the cookies sent by the user-agent.
+        
+        
+#####################################################################
+Express.js -- The response object
+####################################################################
+        • res.status(code): This is used to set the response HTTP status code.
+        • res.set(field, [value]): This is used to set the response HTTP header.
+        • res.cookie(name, value, [options]): This is used to set a response
+        cookie. The options argument is used to pass an object defining common
+        cookie configuration, such as the maxAge property.
+        • res.redirect([status], url): This is used to redirect the request to a
+        given URL. Note that you can add an HTTP status code to the response.
+        When not passing a status code, it will be defaulted to 302 Found.
+        • res.send([body|status], [body]): This is used for non-streaming
+        responses. This method does a lot of background work, such as setting the
+        Content-Type and Content-Length headers, and responding with the
+        proper cache headers.
+        • res.json([status|body], [body]): This is identical to the res.send()
+        method when sending an object or array. Most of the times, it is used as
+        syntactic sugar, but sometimes you may need to use it to force a JSON
+        response to non-objects, such as null or undefined.
+        • res.render(view, [locals], callback): This is used to render a view
+        and send an HTML response.
+
+#####################################################################        
+Express.js External middleware
+#####################################################################
+The popular Express middleware are as follows:
+        • Morgan: This is an HTTP request logger middleware.
+        • body-parser: This is a body-parsing middleware that is used to parse the
+        request body, and it supports various request types.
+        • method-override: This is a middleware that provides HTTP verb support
+        such as PUT or DELETE in places where the client doesn't support it.
+        • Compression: This is a compression middleware that is used to compress the
+        response data using gzip/deflate.
+        • express.static: This middleware used to serve static files.
+        • cookie-parser: This is a cookie-parsing middleware that populates the
+        req.cookies object.
+        • Session: This is a session middleware used to support persistent sessions.
+
+#####################################################################        
+MEAN.js folder structure
+#####################################################################        
+      The controllers folder is where you keep application controllers
+      The models folder is where you keep application models
+      The routes folder is where you keep application routing middleware
+      The views folder is where you keep application views
+      
+The public folder is where keep  static client-side files and is
+divided into the following folders that represent a separation of 
+functionality to comply with the MVC pattern:
+
+        °° The config folder is where you keep your AngularJS
+        application configuration files
+        °° The controllers folder is where you keep your
+        AngularJS application controllers
+        °° The css folder is where you keep your CSS files
+        °° The directives folder is where you keep your
+        AngularJS application directives
+        °° The filters folder is where you keep your AngularJS
+        application filters
+        °° The img folder is where you keep your image files
+        °° The views folder is where you keep your AngularJS
+        application views
+        °° The application.js file is where you initialize your
+        AngularJS application
+        
+The package.json file is the metadata file that helps you to organize your
+application dependencies.
+
+The server.js file is the main file of your Node.js application, and it will
+load the express.js file as a module to bootstrap your Express application.
+
+Handling request routing
+Express supports the routing of requests using either the app.route(path).
+VERB(callback) method or the app.VERB(path, callback) method, where
+VERB should be replaced with a lowercase HTTP verb. 
+      app.get('/', function(req, res) {
+          res.send('This is a GET request');
+      });
+      
+      app.route('/').get(function(req, res) {
+          res.send('This is a GET request');
+      }).post(function(req, res) {
+          res.send('This is a POST request');
+      });
+      
+Express is the ability to chain several middleware in a single routing definition.
+      var app = express();
+      app.get('/', hasName, sayHello);
+      
+#####################################################################
+A Express.js project
+#####################################################################
+in application's root folder create a package.json file that contains the following code snippet:
+{
+    "name" : "MEAN",
+    "version" : "0.0.3",
+    "dependencies" : {
+        "express" : "~4.8.8"
+    }
+}
+
+in the app/controllers folder, create a file named index.server.controller.js with the following lines of code:
+  exports.render = function(req, res) {
+     res.send('Hello World');
+  };
+  
+In the app/routes folder create a file named index.server.routes.js with the following code snippet:
+  module.exports = function(app) {
+      var index = require('../controllers/index.server.controller');
+      app.get('/', index.render);
+  };
+
+create the Express application object and bootstrap it using the controller 
+and routing modules you just created. In the config folder and create a file
+named express.js with the following code snippet:
+  var express = require('express');
+  module.exports = function() {
+      var app = express();
+      require('../app/routes/index.server.routes.js')(app);
+      return app;
+  };
+
+To finalize your application, you'll need to create a file named server.js in the root
+folder and copy the following code:
+    var express = require('./config/express');
+    var app = express();
+    app.listen(3000);
+    module.exports = app;
+
+##############################################################################
+Rendering views
+##############################################################################
+Express has two methods for rendering views: 
+      . app.render(), which is used to render the view and then pass the HTML to 
+      a callback function. (you'd like your application to send HTML e-mails)
+      . and the more common res.render(), which renders the view locally and sends the HTML as a response.
+      
+
+In order to configure the Express view system, you will need to use the EJS template
+engine in package.json file:
+{
+      "name": "MEAN",
+      "version": "0.0.3",
+      "dependencies": {
+      "express": "~4.8.8",
+      "morgan": "~1.3.0",
+      "compression": "~1.0.11",
+      "body-parser": "~1.8.0",
+      "method-override": "~2.2.0",
+      "ejs": "~1.0.0"
+      }
+}
+
+To configure your Express application, go to the config/express.js file 
+and change it to look like the following lines of code:
+
+      app.set('views', './app/views');
+      app.set('view engine', 'ejs');
+
+EJS templates will reside in the app/views folder and will have the .ejs extension.
