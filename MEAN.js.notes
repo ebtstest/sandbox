@@ -318,3 +318,317 @@ and change it to look like the following lines of code:
       app.set('view engine', 'ejs');
 
 EJS templates will reside in the app/views folder and will have the .ejs extension.
+
+
+##############################################################################
+MongoDB
+##############################################################################
+
+The BSON format (Binary JSON format)
+
+MongoDB query that requests for documents with more than 10 comments
+would be as follows
+      db.posts.find({ commentsCount: { $gt: 10 } });
+
+##############################################
+MongoDB replica set
+##############################################
+
+##############################################
+MongoDB sharding
+##############################################
+
+##############################################
+MongoDB databases
+##############################################
+> use mean
+or
+$ mongo mean
+
+> show dbs
+
+##############################################
+MongoDB collections
+##############################################
+below will create a collection named "posts" and insert first documents
+> db.posts.insert({"title":"First Post", "user": "bob"})
+
+> db.posts.find()
+
+> show collections
+
+delete the posts collection, you will need to execute the drop()
+command as follows:
+> db.posts.drop()
+
+Creating a new document
+You're already familiar with the basic method of creating a new document using
+the insert() method, as you previously did in earlier examples. Besides the
+insert() method, there are two more methods called update() and save() to
+create new objects.
+
+Creating a document using insert()
+The most common way to create a new document is to use the insert() method.
+The insert method takes a single argument that represents the new document.
+To insert a new post, just issue the following command in the MongoDB shell:
+      > db.posts.insert({"title":"Second Post", "user": "alice"})
+
+Creating a document using update()
+The update() method is usually used to update an existing document. You can also
+use it to create a new document, if no document matches the query criteria, using the
+following upsert flag:
+      > db.posts.update({
+      "user": "alice"
+      }, {
+      "title": "Second Post",
+      "user": "alice"
+      }, {
+      upsert: true
+      })
+      
+Creating a document using save()
+Another way of creating a new document is by calling the save() method, passing it
+a document that either doesn't have an _id field or has an _id field that doesn't exist
+in the collection:
+      > db.posts.save({"title":"Second Post", "user": "alice"})
+
+Finding all the collection documents
+> db.posts.find()
+
+> db.posts.find({ "user": "alice" })
+
+retrieve all the posts that were created by either alice or bob , 
+you can use the following $in operator:
+> db.posts.find({ "user": { $in: ["alice", "bob"] } })
+
+> db.posts.find( { $or: [{ "user": "alice" }, { "user": "bob" }] })
+
+Updating documents using update()
+      > db.posts.update({
+            "user": "alice"
+      }, {
+      $set: {
+            "title": "Second Post"
+      }
+      }, {
+            multi: true
+      })
+      
+Deleting all documents
+> db.posts.remove()
+
+> db.posts.remove({ "user": "alice" })
+
+to remove the first post made by alice , you'll need to execute the following command:
+      > db.posts.remove({ "user": "alice" }, true)
+      
+##########################################
+Mongoose
+##########################################
+Mongoose is a robust Node.js ODM module that adds MongoDB support to
+your Express application.
+
+Connecting to MongoDB
+      mongodb://username:password@hostname:port/database
+
+Connecting to a local instance, you can skip the username and password
+and use the following URI:
+      mongodb://localhost/mean-book
+
+            In config/env/development.js file
+                  module.exports = {
+                        db: 'mongodb://localhost/mean-book',
+                        sessionSecret: 'developmentSessionSecret'
+                  };
+            in your config folder, create a new file named mongoose.js that contains
+            the following code snippet
+                  var config = require('./config'),
+                        mongoose = require('mongoose');
+                  module.exports = function() {
+                        var db = mongoose.connect(config.db);
+                        return db;
+                  };
+            
+            To initialize your Mongoose configuration, go back to your server.js 
+            file, and change it to look like the following code snippet
+                  var mongoose = require('./config/mongoose'),
+                        express = require('./config/express');
+                  var db = mongoose();
+                  var app = express();
+                  app.listen(3000);
+                  module.exports = app;
+
+Creating the user schema and model
+Under app/models folder and create a new file named user.server.model.js
+      var mongoose = require('mongoose'),
+            Schema = mongoose.Schema;
+      var UserSchema = new Schema({
+            firstName: String,
+            lastName: String,
+            email: String,
+            username: String,
+            password: String
+      });
+      mongoose.model('User', UserSchema);
+
+change your config/mongoose.js file to look like the following code snippet
+      var config = require('./config'),
+            mongoose = require('mongoose');
+      module.exports = function() {
+            var db = mongoose.connect(config.db);
+            require('../app/models/user.server.model');
+            return db;
+      };
+
+Creating new users using save()
+Under the app/controllers folder, create a new file named users.server.
+controller.js and paste the following lines of code
+var User = require('mongoose').model('User');
+      exports.create = function(req, res, next) {
+            var user = new User(req.body);
+            user.save(function(err) {
+            if (err) {
+                  return next(err);
+            } else {
+                  res.json(user);
+            }
+            });
+      };
+
+creating a file named users.server.routes.js inside the app/routes folder. 
+In this newly created file, paste the following lines of code:
+      var users = require('../../app/controllers/users.server.controller');
+      module.exports = function(app) {
+            app.route('/users').post(users.create);
+      };
+
+best practice to build your routes according to the REST principles.
+In this case, the proper way to create a new user is to use an HTTP POST request to
+the base users route as you defined here. Change your config/express.js file to
+look like the following code snippet:
+
+            app.set('views', './app/views');
+            app.set('view engine', 'ejs');
+            require('../app/routes/index.server.routes.js')(app);
+            require('../app/routes/users.server.routes.js')(app);
+            app.use(express.static('./public'));
+            return app;
+            
+test your application would be to execute the following curl
+command in your command-line tool:
+            $ curl -X POST -H "Content-Type: application/json" -d
+            '{"firstName":"First", "lastName":"Last","email":"user@example.com","user
+            name":"username","password":"password"}' localhost:3000/users
+
+Finding multiple user documents using find()
+add the following list() method in your app/controllers/users.server.controller.js file:
+            exports.list = function(req, res, next) {
+                  User.find({}, function(err, users) {
+                        if (err) {
+                              return next(err);
+                        } else {
+                        res.json(users);
+                        }
+                  });
+            };
+            
+go to your app/routes/users.server.routes.js file and change it to 
+look like the following code snippet:
+            var users = require('../../app/controllers/users.server.controller');
+            module.exports = function(app) {
+                  app.route('/users').post(users.create).get(users.list);
+            };
+            
+Advanced querying using find()
+to paginate through the users collection and retrieve only a subset of your 
+users collection, you can use the skip and limit options as follows:
+      User.find({}, 'username email', {
+            skip: 10,
+            limit: 10
+      }, function(err, users) {
+      ...
+      });
+This will return a subset of up to 10 user documents while skipping the first
+10 documents.
+
+Reading a single user document using findOne()
+Add the following lines of code at the end of your app/controllers/users.server.controller.js file:
+            exports.read = function(req, res) {
+                  res.json(req.user);
+            };
+            exports.userByID = function(req, res, next, id) {
+                  User.findOne({
+                        _id: id
+                  }, function(err, user) {
+                        if (err) {
+                              return next(err);
+                        } else {
+                              req.user = user;
+                              next();
+                        }
+                  });
+            };
+
+the userById() method is the one responsible for populating the
+req.user object. You will use the userById() method as a middleware to deal with
+the manipulation of single documents when performing read, delete, and update
+operations. To do so, you will have to modify your app/routes/users.server.
+routes.js file to look like the following lines of code:
+            var users = require('../../app/controllers/users.server.controller');
+            module.exports = function(app) {
+                  app.route('/users').post(users.create).get(users.list);
+                  app.route('/users/:userId').get(users.read);
+                  app.param('userId', users.userByID);
+            };
+            
+Updating an existing user document
+update() , findOneAndUpdate() , and findByIdAndUpdate() methods.
+
+go back
+to your app/controllers/users.server.controller.js file, and add a new
+update() method:
+            exports.update = function(req, res, next) {
+                  User.findByIdAndUpdate(req.user.id, req.body, function(err, user) {
+                        if (err) {
+                              return next(err);
+                        } else {
+                              res.json(user);
+                        }
+                  });
+            };
+            
+Go back to your app/routes/users.server.routes.js file and change it
+to look like the following code snippet:
+            var users = require('../../app/controllers/users.server.controller');
+            module.exports = function(app) {
+                  app.route('/users').post(users.create).get(users.list);
+                  app.route('/users/:userId').get(users.read).put(users.update);
+                  app.param('userId', users.userByID);
+            };
+            
+Deleting an existing user document
+The Mongoose model has several available methods to remove an existing
+document. Among those are the remove() , findOneAndRemove() , and
+findByIdAndRemove() methods.
+
+go back to your app/controllers/users.server.controller.js file, and add the following delete() method:
+            exports.delete = function(req, res, next) {
+                  req.user.remove(function(err) {
+                  if (err) {
+                        return next(err);
+                  } else {
+                        res.json(req.user);
+                  }
+                  })
+            };
+            
+Go to your app/routes/users.server.routes.js file and change it to look like the
+following code snippet:
+            var users = require('../../app/controllers/users.server.controller');
+            module.exports = function(app) {
+                  app.route('/users').post(users.create).get(users.list);
+                  app.route('/users/:userId').get(users.read).put(users.update).delete(users.delete);
+                  app.param('userId', users.userByID);
+            };
+
+$ curl -X DELETE localhost:3000/users/[id]
