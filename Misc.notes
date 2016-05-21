@@ -1,0 +1,16 @@
+Reed-Solomon
+
+OpenStack is a free and open-source software platform for cloud computing, 
+mostly deployed as an infrastructure-as-a-service (IaaS).[3] The software 
+platform consists of interrelated components that control hardware pools 
+of processing, storage, and networking resources throughout a data center. 
+Users either manage it through a web-based dashboard, through command-line 
+tools, or through a RESTful API. 
+
+To the extent that systems conform to the constraints of REST they can be 
+called RESTful. RESTful systems typically, but not always, communicate over 
+Hypertext Transfer Protocol (HTTP) with the same HTTP verbs (GET, POST, PUT, DELETE, etc.) 
+that web browsers use to retrieve web pages and to send data to remote servers.
+REST systems interface with external systems as web resources identified by 
+Uniform Resource Identifiers (URIs), for example /people/tom, which can be 
+operated upon using standard verbs such as GET /people/tom.
