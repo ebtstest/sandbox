@@ -1,0 +1,155 @@
+OpenStack Swift is the magic that converts a set of unconnected commodity storage
+servers into a scalable, durable, and easy-to-manage storage system.
+
+Physical data organization
+•	 Region: At the highest level, Swift stores data in regions that are geographically
+separated and thus suffer from a high-latency link. A user may use only one
+region if, for example, the cluster utilizes only one data center.
+•	 Zone: Within regions, there are zones. Zones are a set of storage nodes that
+share different availability characteristics. Availability may be a function of
+different physical buildings, power sources, or network connections. This
+means that a zone could be a single storage server, a rack, or a complete data
+center depending on your requirements. Zones need to be connected to each
+other via low-latency links. Rackspace recommends having at least five zones
+per region.
+•	 Storage servers: A zone consists of a set of storage servers ranging from
+one to several racks.
+•	 Disk (or devices): Disk drives are part of a storage server. These can
+be inside the server or connected via a just a bunch of disks (JBOD).
+The devices can be spinning disks or SSDs.
+
+Data path software servers
+The data path consists of the following four software servers. These are technically
+services but the Swift documentation calls them servers. To be consistent, we will
+call them servers too:
+•	Proxy server
+•	Account server
+•	Container server
+•	Object server
+
+the ring (also called the ring builder, or simply the builder file) contains information 
+required to map the user API request information on the physical location of the account, 
+container, or object.
+
+
+
+
+
+Server setup and network configuration
+All the servers are installed with the Ubuntu server operating system (64-bit LTS
+version 14.04). You'll need to configure three networks, which are as follows:
+•	 Public network: The proxy server connects to this network. This network
+provides public access to the API endpoints within the proxy server.
+•	 Storage network: This is a private network and it is not accessible to the
+outside world. All the storage servers and the proxy server will connect
+to this network. Communication between the proxy server and the storage
+servers and communication between the storage servers take place within
+this network. In our configuration, the IP addresses assigned in this network
+are 172.168.10.0 and 172.168.10.99 .
+•	 Replication network: This is also a private network that is not accessible to
+the outside world. It is dedicated to replication traffic, and only storage servers
+connect to it. All replication-related communication between storage servers
+takes place within this network. In our configuration, the IP addresses assigned
+in this network are 172.168.9.0 and 172.168.9.99 . This network is optional,
+and if it is set up, the traffic on it needs to be monitored closely.
+
+
+
+Implementing storage policies
+Storage policies were introduced in the Juno release of OpenStack Swift.
+There is a default policy called policy-0 . It is set up by default
+
+Python
+The python-swiftclient library provides Python language bindings for OpenStack
+Swift. After authentication, the following sample code is used to list containers:
+      #!/usr/bin/env python
+      http_connection = http_connection(url)
+      cont = get_container(url, token, container, marker, limit, prefix,
+      delimiter, end_marker, path, http_conn)
+
+Swift in Sahara
+Sahara is a project within OpenStack intended for data processing. This is achieved
+by creating a Hadoop cluster using the various components available in OpenStack.
+Sahara was formerly known as Savanna project.
+
+
+Swift dispersion tool
+Swift dispersion tool is a post-processing tool and is used to determine the overall
+health of a Swift cluster. The swift-dispersion-populate tool (which comes
+with python-swiftclient ) is used to distribute random objects and containers
+throughout the Swift cluster in such a way that the random objects and containers
+fall under distinct partitions
+
+StatsD
+Swift services have been instrumented to send statistics (counters, logs, and so on)
+directly to a StatsD server that is configured.
+
+Swift metrics
+Swift has the ability to log metrics such as counters, timings, and so on built into
+it. Some of the metrics sent to the StatsD server from various Swift services
+
+
+Create/PUT                               Read/GET                             Update/POST                              Delete
+
+account-server.PUT.errors.timing       account-server.GET.errors.timing       account-server.POST.errors.timing    account-server.DELETE.errors.timing
+account-server.PUT.timing              account-server.GET.timing              account-server.POST.timing           account-server.DELETE.timing
+container-server.PUT.errors.timing     container-server.GET.errors.timing     container-server.POST.errors.timing  container-server.DELETE.errors.timing
+container-server.PUT.timing            container-server.GET.timing            container-server.POST.timing         container-server.DELETE.timing
+object-server.async_pendings           object-server.GET.errors.timing        object-server.POST.errors.timing     object-server.async_pendings
+object-server.PUT.errors.timing        object-server.GET.timing               object-server.POST.timing            object-server.DELETE.errors.timing
+
+
+Tulsi – a Swift health monitoring tool
+Tulsi is an open source tool used to monitor the health of a Swift cluster.
+
+
+Logging using rsyslog
+It is very useful to get logs from various Swift services, and this can be achieved by
+configuring proxy-server.conf and rsyslog :
+1.	 In order to receive logs from the proxy server, we modify the /etc/swift/
+proxy-server.conf configuration file by adding the following lines:
+        log_name = name
+        log_facility = LOG_LOCALx
+        log_level = LEVEL
+Let's describe these entries. The name parameter can be any name that
+you want to see in the logs. The letter x in LOG_LOCALx can be any number
+between 0 and 7. LEVEL can be any one of emergency, alert, critical, error,
+warning, notification, informational, or debug.
+2.	 Next, we modify /etc/rsyslog.conf to add the following line of code in
+the GLOBAL_DIRECTIVES section:
+        $PrivDropToGroup adm
+3.	 Also, we create a config file called /etc/rsyslog.d/swift.conf and add
+the following line of code to it:
+        local2.*
+        /var/log/swift/proxy.log
+        
+Handling drive failure
+we have to first unmount the drive
+
+Proxy server failure
+If there is only one proxy server in the cluster and it goes down, then there is a
+chance that no objects can be accessed (uploaded or downloaded) by the client,
+so this needs immediate attention.
+
+
+Setting up a Swift proxy container using the Docker image
+To download this image, run this command:
+# docker pull vedams/swift-proxy
+# docker run –i –t --net=host --name="proxy" vedams/swift-proxy /bin/bash
+
+Ensure proper ownership of the /etc/swift folder by running this command:
+# chown -R swift:swift /etc/swift
+Run this command to start all the services of the proxy node:
+# service mysql restart
+# service supervisor restart
+
+Update the /home/keystonerc file to provide the username, password, tenant,
+endpoint, and so on. Provide the Swift environment variables using this command:
+# source keystonerc
+
+Setting up the storage container using the Docker image
+Download the swift-storage image using the following command:
+# docker pull vedams/swift-storage
+
+The following command is used to install the XFS filesystem:
+# apt-get install xfsprogs
