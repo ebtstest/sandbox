@@ -129,6 +129,18 @@ deque
       deque([40, 30, 20, 10, 3, 4, 5, 6, 7, 8], maxlen=10)
 
 ################################################################################################
+heapq
+################################################################################################
+cheap = heapq.nsmallest(3, portfolio, key=lambda s: s['price'])
+expensive = heapq.nlargest(3, portfolio, key=lambda s: s['price'])
+
+>>> import heapq
+>>> nums = [1, 8, 2, 23, 7, -4, 18, 23, 42, 37, 2]
+>>> heapq.heapify(nums)
+>>> heapq.nlargest(3, nums)
+
+
+################################################################################################
 enumerate(sequence, start=0)
 ################################################################################################
   >>> seasons = ['Spring', 'Summer', 'Fall', 'Winter']
@@ -136,6 +148,240 @@ enumerate(sequence, start=0)
       [(0, 'Spring'), (1, 'Summer'), (2, 'Fall'), (3, 'Winter')]
   >>> list(enumerate(seasons, start=1))
       [(1, 'Spring'), (2, 'Summer'), (3, 'Fall'), (4, 'Winter')]
+
+
+In order to perform useful calculations on the dictionary contents, it is often useful to
+invert the keys and values of the dictionary using zip() .
+
+	min_price = min(zip(prices.values(), prices.keys()))
+	# min_price is (10.75, 'FB')
+	max_price = max(zip(prices.values(), prices.keys()))
+	# max_price is (612.78, 'AAPL')
+Similarly, to rank the data, use zip() with sorted() , as in the following:
+	prices_sorted = sorted(zip(prices.values(), prices.keys()))
+
+
+Finding Commonalities in Two Dictionaries
+	# Find keys in common
+	a.keys() & b.keys()
+	# { 'x', 'y' }
+	# Find keys in a that are not in b
+	a.keys() - b.keys()
+	# { 'z' }
+	# Find (key,value) pairs in common
+	a.items() & b.items() # { ('y', 2) }
+	# Make a new dictionary with certain keys removed
+	c = {key:a[key] for key in a.keys() - {'z', 'w'}}
+
+Sorting a List of Dictionaries by a Common Key
+sorting this type of structure is easy using the operator module’s itemgetter function.
+		rows = [
+		{'fname': 'Brian', 'lname': 'Jones', 'uid': 1003},
+		{'fname': 'David', 'lname': 'Beazley', 'uid': 1002},
+		{'fname': 'John', 'lname': 'Cleese', 'uid': 1001},
+		{'fname': 'Big', 'lname': 'Jones', 'uid': 1004} ]
+		
+		from operator import itemgetter
+		rows_by_fname = sorted(rows, key=itemgetter('fname'))
+		rows_by_uid = sorted(rows, key=itemgetter('uid'))
+
+subset of dictionary:
+	# Make a dictionary of all prices over 200
+	p1 = { key:value for key, value in prices.items() if value > 200 }
+	# Make a dictionary of tech stocks
+	tech_names = { 'AAPL', 'IBM', 'HPQ', 'MSFT' }
+	p2 = { key:value for key,value in prices.items() if key in tech_names }
+
+collections.namedtuple:
+	>>> from collections import namedtuple
+	>>> Subscriber = namedtuple('Subscriber', ['addr', 'joined'])
+	>>> sub = Subscriber('jonesy@example.com', '2012-10-19')
+	>>> sub
+	Subscriber(addr='jonesy@example.com', joined='2012-10-19')
+	>>> sub.addr
+	'jonesy@example.com'
+	>>> sub.joined
+	'2012-10-19'
+	>>>
+	
+Combining Multiple Mappings into a Single Mapping
+	from collections import ChainMap
+	c = ChainMap(a,b)
+
+split string:
+	>>> line = 'asdf fjdk; afed, fjek,asdf,	foo'
+	>>> import re
+	>>> re.split(r'[;,\s]\s*', line)
+	['asdf', 'fjdk', 'afed', 'fjek', 'asdf', 'foo']
+
+	>>> fields = re.split(r'(;|,|\s)\s*', line)
+	>>> fields
+	['asdf', ' ', 'fjdk', ';', 'afed', ',', 'fjek', ',', 'asdf', ',', 'foo']
+
+
+	>>>> text1 = '11/27/2012'
+	>>>> text2 = 'Nov 27, 2012'
+	import re
+	# Simple matching: \d+ means match one or more digits
+	if re.match(r'\d+/\d+/\d+', text1):
+		print('yes')
+	else:
+		print('no')
+	if re.match(r'\d+/\d+/\d+', text2):
+		print('yes')
+	else:
+		print('no')
+
+
+
+
+Matching Strings Using Shell Wildcard Patterns
+	The fnmatch module provides two functions— fnmatch() and fnmatchcase() —that
+	can be used to perform such matching. The usage is simple:
+	>>> from fnmatch import fnmatch, fnmatchcase
+	>>> fnmatch('foo.txt', '*.txt')
+	True
+	>>> fnmatch('foo.txt', '?oo.txt')
+	True
+	>>> fnmatch('Dat45.csv', 'Dat[0-9]*')
+
+>>> text = 'yeah, but no, but yeah, but no, but yeah'
+>>> # Exact match
+>>> # Match at start or end
+>>> text.startswith('yeah')
+True
+>>> text.endswith('no')
+False
+>>> # Search for the location of the first occurrence
+>>> text.find('no')
+10
+>>>
+
+
+Searching and Replacing Text
+	>> text = 'yeah, but no, but yeah, but no, but yeah'
+	>>> text.replace('yeah', 'yep')
+	'yep, but no, but yep, but no, but yep'
+	>>>
+	
+	>>> text = 'Today is 11/27/2012. PyCon starts 3/13/2013.'
+	>>> import re
+	>>> re.sub(r'(\d+)/(\d+)/(\d+)', r'\3-\1-\2', text)
+	'Today is 2012-11-27. PyCon starts 2013-3-13.'
+	>>>
+
+Searching and Replacing Case-Insensitive Text
+	>>> text = 'UPPER PYTHON, lower python, Mixed Python'
+	>>> re.findall('python', text, flags=re.IGNORECASE)
+	['PYTHON', 'python', 'Python']
+	>>> re.sub('python', 'snake', text, flags=re.IGNORECASE)
+	'UPPER snake, lower snake, Mixed snake'
+	>>>
+
+Combining and Concatenating Strings
+	>>> parts = ['Is', 'Chicago', 'Not', 'Chicago?']
+	>>> ' '.join(parts)
+	'Is Chicago Not Chicago?'
+	>>> ','.join(parts)
+	'Is,Chicago,Not,Chicago?'
+	>>> ''.join(parts)
+	'IsChicagoNotChicago?'
+
+>>> 'The value is {:0,.2f}'.format(x)
+'The value is 1,234.57'
+>>> x
+1234.56789
+>>> format(x, '0.1f')
+'1234.6'
+>>> format(-x, '0.1f')
+'-1234.6'
+>>> int.from_bytes(data, 'little')
+69120565665751139577663547927094891008
+>>> int.from_bytes(data, 'big')
+94522842520747284487117727783387188
+>>> x = 94522842520747284487117727783387188
+>>> x.to_bytes(16, 'big')
+b'\x00\x124V\x00x\x90\xab\x00\xcd\xef\x01\x00#\x004'
+>>> x.to_bytes(16, 'little')
+b'4\x00#\x00\x01\xef\xcd\x00\xab\x90x\x00V4\x12\x00'
+>>> from fractions import Fraction
+>>> a = Fraction(5, 4)
+>>> b = Fraction(7, 16)
+>>> print(a + b)
+27/16
+>>> print(a * b)
+35/64
+
+
+Picking Things at Random
+	import random
+	values = [1, 2, 3, 4, 5, 6]
+	random.choice(values)
+
+	random.shuffle(values)
+	values
+	[2, 4, 6, 5, 3, 1]
+	random.shuffle(values)
+To produce uniform floating-point values in the range 0 to 1, use random.random() :
+	>>> random.random()
+	0.9406677561675867
+	>>> random.random()
+	0.133129581343897
+
+random.seed()
+# Seed based on system time or os.urandom()
+random.seed(12345)
+# Seed based on integer given
+
+>>> from datetime import datetime
+>>> a = datetime(2012, 9, 23)
+>>> print(a + timedelta(days=10))
+2012-10-03 00:00:00
+>>> now = datetime.today()
+>>> print(now)
+2012-12-21 14:54:43.094063
+>>> print(now + timedelta(minutes=10))
+2012-12-21 15:04:43.094063
+
+Converting Strings into Datetimes
+	>>> from datetime import datetime
+	>>> text = '2012-09-20'
+	>>> y = datetime.strptime(text, '%Y-%m-%d')
+
+>>> # Localize the date for Chicago
+>>> central = timezone('US/Central')
+>>> loc_d = central.localize(d)
+>>> print(loc_d)
+2012-12-21 09:30:00-06:00
+
+>>> d = datetime(2013, 3, 10, 1, 45)
+>>> loc_d = central.localize(d)
+>>> print(loc_d)
+2013-03-10 01:45:00-06:00
+>>> from datetime import timedelta
+>>> later = central.normalize(loc_d + timedelta(minutes=30))
+>>> print(later)
+2013-03-10 03:15:00-05:00
+
+#################################################################
+Class
+#################################################################
+class C(B):
+	def __init__(self):
+		super().__init__()
+		self.__private = 1
+	# Does not override B.__private
+	# Does not override B.__private_method()
+	def __private_method(self):
+
+Calling a Method on a Parent Class
+	class A:
+		def spam(self):
+			print('A.spam')
+	class B(A):
+		def spam(self):
+			print('B.spam')
+			super().spam()
 
 ################################################################################################
 Iterator functions
@@ -168,6 +414,17 @@ permutations('ABCD', 2)	 	                  AB AC AD BA BC BD CA CB CD DA DB DC
 combinations('ABCD', 2)	 	                  AB AC AD BC BD CD
 combinations_with_replacement('ABCD', 2)	  AA AB AC AD BB BC BD CC CD DD
 
+groupby example:
+from operator import itemgetter
+from itertools import groupby
+# Sort by the desired field first
+rows.sort(key=itemgetter('date'))
+# Iterate in groups
+for date, items in groupby(rows, key=itemgetter('date')):
+	print(date)
+		for i in items:
+			print(' ', i)
+
 
 ################################################################################################
 collections
@@ -194,6 +451,7 @@ collections.Counter
           Counter({'a': 10, 'z': 3, 'b': 2, 'r': 2, 'c': 1, 'd': 1})
       >>> ct.most_common(2)
           [('a', 10), ('z', 3)]
+
 
 ################################################################################################
 set vs frozenset
