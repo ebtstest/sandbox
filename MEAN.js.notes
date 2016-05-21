@@ -632,3 +632,186 @@ following code snippet:
             };
 
 $ curl -X DELETE localhost:3000/users/[id]
+
+
+Introducing AngularJS
+AngularJS is a frontend JavaScript framework designed to build single-page
+applications using the MVC architecture. The AngularJS approach is to extend
+the functionality of HTML using special attributes that bind JavaScript business
+logic with HTML elements.
+
+The core module of AngularJS
+The core module of AngularJS is loaded with everything you need to bootstrap your
+application. It contains several objects and entities that enable the basic operation of
+an AngularJS application.
+
+Application modules
+Every AngularJS application needs at least one module to bootstrap, and we'll refer
+to this module as the application module. AngularJS modules are created and
+retrieved using the angular.module(name, [requires], [configFn]) method,
+which accepts three arguments:
+•	 name : This is a string defining the module name
+•	 requires : This is an array of strings defining other modules as dependencies
+•	 configFN : This is a function that will run when the module is being registered
+
+Two-way data binding
+One of the most popular features of AngularJS is its two-way data binding
+mechanism. Two-way data binding enables AngularJS applications to always keep
+the model synchronized with the view and vice versa. This means that what the
+view renders is always the projection of the model.
+
+AngularJS uses the browser to compile HTML templates, which contain special
+directives and binding instructions that produce a live view. Any events that happen
+in the view automatically update the model, while any changes occurring in the
+model immediately get propagated to the view.
+
+Core directives
+AngularJS comes prebundled with necessary directives, which define the
+functionality of an Angular application. A directive is usually placed on an element
+as an attribute or defined as the element name.
+
+The most basic directive is called ng-app and is placed on the DOM element (usually
+the page's body or html tag) you want Angular to use as the root application
+element. A body tag with the ng-app directive will be as follows:
+<body ng-app></body>
+
+•	 ng-controller : This tells the compiler which controller class to use to
+manage this element view
+•	 ng-model : This is placed on input elements and binds the input value to a
+property on the model
+•	 ng-show/ng-hide : This shows and hides an element according to a
+Boolean expression
+•	 ng-repeat : This iterates over a collection and duplicates the element for
+each item
+
+Bootstrapping an AngularJS application
+Bootstrapping an AngularJS application means that we tell Angular which DOM
+element is the root element of the application and when to initiate the Angular
+application.
+
+Automatic bootstrap
+To automatically bootstrap the AngularJS application, you will need to use the
+ng-app directive.
+
+Configuring AngularJS
+To start using AngularJS, you will need to include the framework JavaScript file
+in your main EJS view. In our case, we will use the app/views/index.ejs file as
+the main application page. Go to your app/views/index.ejs file and change it,
+as follows:
+      <!DOCTYPE html>
+      <html xmlns:ng="http://angularjs.org">
+      <head>
+            <title><%= title %></title>
+      </head>
+      <body>
+            <% if (userFullName) { %>
+                  <h2>Hello <%=userFullName%> </h2>
+                  <a href="/signout">Sign out</a>
+            <% } else { %>
+                  <a href="/signup">Signup</a>
+                  <a href="/signin">Signin</a>
+            <% } %>
+            <script type="text/javascript" src="/lib/angular/angular.js"></script>
+      </body>
+      </html>
+      
+Bootstrapping your AngularJS application
+create a file named public/application.js inside the public folder, and paste the following code in it:
+      var mainApplicationModuleName = 'mean';
+      var mainApplicationModule = angular.module(mainApplicationModuleName
+      , []);
+      angular.element(document).ready(function() {
+      angular.bootstrap(document, [mainApplicationModuleName]);
+      });
+      
+AngularJS views
+AngularJS views are HTML templates rendered by the AngularJS compiler to
+produce a manipulated DOM on your page. To start with your first view, create a
+new example.client.view.html file inside your public/example/views folder,
+and paste the following lines of code:
+      <section>
+            <input type=text id=text1 ng-model=name>
+            <input type=text id=text2 ng-model=name>
+      </section>
+      
+To use this template as a view, you'll have to go back to your app/views/index.ejs
+file and change it again, as follows:
+      <!DOCTYPE html>
+      <html xmlns:ng="http://angularjs.org">
+      <head>
+            <title><%= title %></title>
+      </head>
+      <body>
+            <% if (userFullName) { %>
+                  <h2>Hello <%=userFullName%> </h2>
+                  <a href="/signout">Sign out</a>
+            <% } else { %>
+                  <a href="/signup">Signup</a>
+                  <a href="/signin">Signin</a>
+            <% } %>
+            <section ng-include="'example/views/example.client.view.html'"></section>
+            <script type="text/javascript" src="/lib/angular/angular.js"></script>
+            <script type="text/javascript" src="/example/example.client.module.js"></script>
+            <script type="text/javascript" src="/application.js"></script>
+      </body>
+      </html>
+      
+AngularJS controllers and scopes
+Controllers are basically constructor functions, which AngularJS uses to create a new
+instance of a controller object. Their purpose is to augment data model reference
+objects called scopes.
+Controller instances are usually created when you use the ng-controller directive.
+Inside your public/example/controllers folder, create a new file called
+example.client.controller.js containing the following code snippet:
+      angular.module('example').controller('ExampleController', ['$scope',
+            function($scope) {
+                  $scope.name = 'MEAN Application';
+            }
+      ]);
+      
+To use this controller, you'll need to include its JavaScript file
+in the main application's page and add the ng-controller directive to your view.
+Start by changing your app/views/index.ejs as follows:
+      <!DOCTYPE html>
+      <html xmlns:ng="http://angularjs.org">
+      <head>
+            <title><%= title %></title>
+      </head>
+      <body>
+            <% if (userFullName) { %>
+                  <h2>Hello <%=userFullName%> </h2>
+                  <a href="/signout">Sign out</a>
+            <% } else { %>
+                  <a href="/signup">Signup</a>
+                  <a href="/signin">Signin</a>
+            <% } %>
+            <section ng-include="'example/views/example.client.view.html'"></section>
+            <script type="text/javascript" src="/lib/angular/angular.js"></script>
+            <script type="text/javascript" src="/example/example.client.module.js"></script>
+            <script type="text/javascript" src="/example/controllers/example.client.controller.js"></script>
+            <script type="text/javascript" src="/application.js"></script>
+      </body>
+      </html>
+Now change your public/example/views/example.client.view.html file
+as follows:
+      <section ng-controller=ExampleController>
+            <input type=text id=text1 ng-model=name>
+            <input type=text id=text2 ng-model=name>
+      </section>
+
+AngularJS routing
+the AngularJS team developed the ngRoute module that allows you to define URL 
+paths and their corresponding templates,which will be rendered whenever the
+user navigates to those paths.
+edit your app/views/index.ejs file as follows:
+      <script type="text/javascript" src="/lib/angular-route/angular-route.js"></script>
+
+Finally, you will need to add the ngRoute module as a dependency for your main
+application's module, so change your public/application.js file as follows:
+      var mainApplicationModuleName = 'mean';
+      var mainApplicationModule = angular.module(mainApplicationModuleName,
+      ['ngRoute', 'example']);
+      angular.element(document).ready(function() {
+            angular.bootstrap(document, [mainApplicationModuleName]);
+      });
+      
