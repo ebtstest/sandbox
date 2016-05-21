@@ -24,16 +24,28 @@ services but the Swift documentation calls them servers. To be consistent, we wi
 call them servers too:
 •	Proxy server
 •	Account server
-•	Container server
-•	Object server
+•	Container server --this server is very similar to the account server, except that
+                         it deals with object names in a particular container
+•	Object server -- Object servers simply store objects.
+Unless you need performance, the account, container, and object servers are often
+put into one physical server and are called a Storage server (or node).
 
 the ring (also called the ring builder, or simply the builder file) contains information 
 required to map the user API request information on the physical location of the account, 
 container, or object.
 
+Swift allows objects in different containers to reside on different sets of hardware
+while still being in the same cluster. This is very useful, since administrators can
+create policies for data placement based on characteristics such as these:
+•	 Durability: Dual replication, triple replication, and so on
+•	 Hardware type: Spinning disks, SSD, and so on
+•	 Geography: Spread across multiple regions, locked to a specific geography, and so on 
+Administrators can name these policies as something meaningful for users.
 
-
-
+Large object support
+Swift places a limit on the size of a single uploaded object (the default is 5 GB), yet
+allows storage and downloading of virtually unlimited-size objects. The technique
+used is segmentation.
 
 Server setup and network configuration
 All the servers are installed with the Ubuntu server operating system (64-bit LTS
@@ -52,6 +64,25 @@ connect to it. All replication-related communication between storage servers
 takes place within this network. In our configuration, the IP addresses assigned
 in this network are 172.168.9.0 and 172.168.9.99 . This network is optional,
 and if it is set up, the traffic on it needs to be monitored closely.
+
+Formatting and mounting hard disks
+1.	 Carry out the partitioning for sdb and create the filesystem using
+this command:
+# fdisk /dev/sdb
+# mkfs.xfs /dev/sdb1
+2.	 Then let's create a directory in /srv/node/sdb1 that will be used to mount
+the filesystem. Give the permission to the swift user to access this directory.
+These operations can be performed using the following commands:
+# mkdir –p /srv/node/sdb1
+# chown –R swift:swift /srv/node/sdb1
+3.	 We set up an entry in fstab for the sdb1 partition in the sdb hard disk,
+as follows. This will automatically mount sdb1 on /srv/node/sdb1 upon
+every boot. Add the following command line to the /etc/fstab file:
+/dev/sdb1 /srv/node/sdb1 xfs
+noatime,nodiratime,nobarrier,logbufs=8 0 2
+4.	 Mount sdb1 on /srv/node/sdb1 using the following command:
+# mount /srv/node/sdb1
+
 
 
 
@@ -153,3 +184,22 @@ Download the swift-storage image using the following command:
 
 The following command is used to install the XFS filesystem:
 # apt-get install xfsprogs
+
+Perform the partitioning for sdb and create the filesystem on this partition. We also
+have to add a line in fstab for this partition.
+
+Setting up a Swift cluster using a Dockerfile
+git clone https://github.com/vedams-docker/swift-with-docker.git
+
+Creating a proxy container using a Dockerfile
+
+
+
+
+
+
+
+
+
+
+
