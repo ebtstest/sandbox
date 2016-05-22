@@ -14,3 +14,76 @@ that web browsers use to retrieve web pages and to send data to remote servers.
 REST systems interface with external systems as web resources identified by 
 Uniform Resource Identifiers (URIs), for example /people/tom, which can be 
 operated upon using standard verbs such as GET /people/tom.
+
+HDD are essentially metal platters with a magnetic coating
+SSD data is stored on interconnected flash memory chips
+
+Fragmentation: Because of their rotary recording surfaces, HDD surfaces work best with 
+larger files that are laid down in contiguous blocks. That way, the drive head can start 
+and end its read in one continuous motion. When hard drives start to fill up, large files 
+can become scattered around the disk platter, which is otherwise known as fragmentation. 
+While read/write algorithms have improved to the point that the effect is minimized, the 
+fact of the matter is that HDDs can become fragmented, while SSDs don't care where the 
+data is stored on its chips, since there's no physical read head. Thus, SSDs are inherently 
+faster.
+
+
+
+SATA I (revision 1.x) interface, formally known as SATA 1.5Gb/s, is the first generation 
+SATA interface running at 1.5 Gb/s. The bandwidth throughput, which is supported by the 
+interface, is up to 150MB/s.
+
+SATA II (revision 2.x) interface, formally known as SATA 3Gb/s, is a second generation 
+SATA interface running at 3.0 Gb/s. The bandwidth throughput, which is supported by the 
+interface, is up to 300MB/s.
+
+SATA III (revision 3.x) interface, formally known as SATA 6Gb/s, is a third generation 
+SATA interface running at 6.0Gb/s. The bandwidth throughput, which is supported by the 
+interface, is up to 600MB/s. This interface is backwards compatible with SATA 3 Gb/s 
+interface.
+
+SATA II specifications provide backward compatibility to function on SATA I ports. 
+SATA III specifications provide backward compatibility to function on SATA I and SATA II 
+ports. However, the maximum speed of the drive will be slower due to the lower speed 
+limitations of the port.
+
+Example: SanDisk Extreme SSD, which supports SATA 6Gb/s interface and when connected to 
+SATA 6Gb/s port, can reach up to 550/520MB/s sequential read and sequential write speed 
+rates respectively. However, when the drive is connected to SATA 3 Gb/s port, it can 
+reach up to 285/275MB/s sequential read and sequential write speed rates respectively.
+
+SCSI:
+Short for small computer system interface, a parallel interface standard used
+for attaching peripheral devices to computers.  such as disk drives and printers.
+
+ATA:
+(Also known as IDE) is a disk drive implementation that integrates the controller on 
+the disk drive itself. ATA is used to connect hard disk drives, CD-ROM drives and 
+similar peripherals and supports 8/16-bit interface that transfer up to 8.3MB/s for 
+ATA-2 and up to 100MB/s (ATA-6).
+
+SAS (Serial Attached SCSI) and SATA (Serial ATA)
+Serial Attached SCSI (SAS)
+Abbreviated as SAS, Serial Attached SCSI, an evolution of parallel SCSI into a point-to-point 
+serial peripheral interface in which controllers are linked directly to disk drives. SAS is a 
+performance improvement over traditional SCSI because SAS enables multiple devices (up to 128) 
+of different sizes and types to be connected simultaneously with thinner and longer cables; its
+full-duplex signal transmission supports 3.0Gb/s. In addition, SAS drives can be hot-plugged.
+
+Serial ATA (SATA)
+Often abbreviated as SATA, Serial ATA is an evolution of the Parallel ATA physical storage 
+interface. Serial ATA is a serial link — a single cable with a minimum of four wires creates 
+a point-to-point connection between devices. Transfer rates for Serial ATA begin at 150MB/s.
+
+Starting with SATA, it extends the capabilities of ATA and offers transfer rates starting at 
+150MB/s and, after years of development, has moved to the mainstream of disk interfaces. The 
+successor the SCSI interface is SAS at speeds of up to 3Gb/s. Additionally, it also addresses 
+parallel interface issues such as drive addressability and limitations on the number of device
+per port connection.
+
+SAS devices can communicate with both SATA and SCSI devices (the backplanes of SAS devices are
+identical to SATA devices). A key difference between SCSI and SAS devices is the addition in 
+SAS devices of two data ports, each of which resides in a different SAS domain. This enables 
+complete failover redundancy. If one path fails, there is still communication along a separate
+and independent path.
+
