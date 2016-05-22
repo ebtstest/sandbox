@@ -141,5 +141,5 @@ and a is referred to as a primitive element of the field.
 
         Example: Generator for RS(255,249)
 
-        reed_solomon_generator_polynomial.gif (4282 bytes)
+        g(x)=
 
