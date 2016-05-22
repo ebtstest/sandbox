@@ -87,3 +87,59 @@ SAS devices of two data ports, each of which resides in a different SAS domain. 
 complete failover redundancy. If one path fails, there is still communication along a separate
 and independent path.
 
+
+
+a user device 12 and/or a user device 14, a distributed storage and/or task (DST) processing 
+unit 16, a distributed storage and/or task network (DSTN) managing unit 18, a DST integrity 
+processing unit 20, and a distributed storage and/or task network (DSTN) module 22. 
+The components of the distributed computing system 10 are coupled via a network 24, which 
+may include one or more wireless and/or wire lined communication systems; one or more private 
+intranet systems and/or public internet systems; and/or one or more local area networks (LAN) 
+and/or wide area networks (WAN).
+
+Reed-Soloman
+It is able to detect and correct multiple symbol errors. By adding t check symbols to the data, 
+a Reed–Solomon code can detect any combination of up to t erroneous symbols, or correct up to 
+⌊t/2⌋ symbols. As an erasure code, it can correct up to t known erasures, or it can detect and 
+correct combinations of errors and erasures.
+
+Reed Solomon codes are a subset of BCH codes (precise control over the number of symbol errors 
+correctable by the code) and are linear block codes. A Reed-Solomon code is specified as RS(n,k) 
+with s-bit symbols.
+
+This means that the encoder takes k data symbols of s bits each and adds parity symbols to make 
+an n symbol codeword. There are n-k parity symbols of s bits each. A Reed-Solomon decoder can 
+correct up to t symbols that contain errors in a codeword, where 2t = n-k.
+
+
+        Example: A popular Reed-Solomon code is RS(255,223) with 8-bit symbols. Each codeword 
+        contains 255 code word bytes, of which 223 bytes are data and 32 bytes are parity. 
+        For this code:
+
+        n = 255, k = 223, s = 8
+
+        2t = 32, t = 16
+
+        The decoder can correct any 16 symbol errors in the code word: i.e. errors in up to 
+        16 bytes anywhere in the codeword can be automatically corrected.
+
+Given a symbol size s, the maximum codeword length (n) for a Reed-Solomon code is n = 2s – 1
+
+For example, the maximum length of a code with 8-bit symbols (s=8) is 255 bytes.
+
+Generator Polynomial
+
+A Reed-Solomon codeword is generated using a special polynomial. All valid codewords are exactly
+divisible by the generator polynomial. The general form of the generator polynomial is:
+
+and the codeword is constructed using:
+
+        c(x) = g(x).i(x)
+
+where g(x) is the generator polynomial, i(x) is the information block, c(x) is a valid codeword 
+and a is referred to as a primitive element of the field.
+
+        Example: Generator for RS(255,249)
+
+        reed_solomon_generator_polynomial.gif (4282 bytes)
+
