@@ -1,0 +1,1434 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]> <html lang="en-US" class="no-js ie6"> <![endif]-->
+<!--[if IE 7 ]>    <html lang="en-US" class="no-js ie7"> <![endif]-->
+<!--[if IE 8 ]>    <html lang="en-US" class="no-js ie8"> <![endif]-->
+<!--[if IE 9 ]>    <html lang="en-US" class="no-js ie9"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!-->
+<html class=" js flexbox canvas canvastext webgl no-touch geolocation postmessage no-websqldatabase no-indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients no-cssreflections csstransforms no-csstransforms3d csstransitions fontface video audio localstorage sessionstorage webworkers applicationcache svg inlinesvg smil svgclippaths" lang="en-US"><!--<![endif]--><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8"><style type="text/css"></style>
+<meta charset="UTF-8">
+<script src="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/ca-pub-3018011865981043.js"></script><script src="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/modernizr-1.js"></script>
+<title>RAID level 0, 1, 5, 6 and 10 | Advantage, disadvantage, use</title>
+<link rel="author" href="https://plus.google.com/107216845903231667154/posts">
+<link rel="stylesheet" media="all" href="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/style.css">
+ 
+<meta name="description" content="Short tutorial on RAID levels 0, 1, 5, 6 and 10, the advantages of striping, mirroring and parity for performance &amp; security plus their use for prepress storage">
+<meta name="keywords" content="raid,level,0,1,0+1,3,5,10,storage,disk,disks,striping,mirroring,security,performance,usage,prepress,graphic,arts">
+<link rel="canonical" href="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/raid_002.htm">
+ 
+<link rel="alternate" type="application/rss+xml" title="Prepressure » RAID Comments Feed" href="http://www.prepressure.com/library/technology/raid/feed">
+<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/72x72\/","ext":".png","source":{"concatemoji":"http:\/\/www.prepressure.com\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.4.2"}};
+			!function(a,b,c){function d(a){var c,d=b.createElement("canvas"),e=d.getContext&&d.getContext("2d"),f=String.fromCharCode;return e&&e.fillText?(e.textBaseline="top",e.font="600 32px Arial","flag"===a?(e.fillText(f(55356,56806,55356,56826),0,0),d.toDataURL().length>3e3):"diversity"===a?(e.fillText(f(55356,57221),0,0),c=e.getImageData(16,16,1,1).data.toString(),e.fillText(f(55356,57221,55356,57343),0,0),c!==e.getImageData(16,16,1,1).data.toString()):("simple"===a?e.fillText(f(55357,56835),0,0):e.fillText(f(55356,57135),0,0),0!==e.getImageData(16,16,1,1).data[0])):!1}function e(a){var c=b.createElement("script");c.src=a,c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g;c.supports={simple:d("simple"),flag:d("flag"),unicode8:d("unicode8"),diversity:d("diversity")},c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.simple&&c.supports.flag&&c.supports.unicode8&&c.supports.diversity||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&&f.twemoji&&(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script><script type="text/javascript" src="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/wp-emoji-release.js"></script>
+<style type="text/css">img.wp-smiley,img.emoji{display:inline!important;border:none!important;box-shadow:none!important;height:1em!important;width:1em!important;margin:0 .07em!important;vertical-align:-0.1em!important;background:none!important;padding:0!important;}</style>
+<link rel="stylesheet" id="cptch_stylesheet-css" href="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/style_002.css" type="text/css" media="all">
+<link rel="stylesheet" id="dashicons-css" href="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/dashicons.css" type="text/css" media="all">
+<link rel="stylesheet" id="cptch_desktop_style-css" href="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/desktop_style.css" type="text/css" media="all">
+<link rel="stylesheet" id="cookie-notice-front-css" href="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/front.css" type="text/css" media="all">
+<link rel="stylesheet" id="wp-polls-css" href="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/polls-css.css" type="text/css" media="all">
+<style id="wp-polls-inline-css" type="text/css">.wp-polls .pollbar{margin:1px;font-size:6px;line-height:8px;height:8px;background-image:url('http://www.prepressure.com/wp-content/plugins/wp-polls/images/default/pollbg.gif');border:1px solid #c8c8c8;}</style>
+<link rel="stylesheet" id="jetpack_css-css" href="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/jetpack.css" type="text/css" media="all">
+<script type="text/javascript" src="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/jquery.js"></script>
+<script type="text/javascript" src="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/jquery-migrate.js"></script>
+<script type="text/javascript">
+/* <![CDATA[ */
+var cptch_vars = {"nonce":"9638a3c27a","ajaxurl":"http:\/\/www.prepressure.com\/wp-admin\/admin-ajax.php","enlarge":"0"};
+/* ]]> */
+</script>
+<script type="text/javascript" src="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/front_end_script.js"></script>
+<script type="text/javascript">
+/* <![CDATA[ */
+var cnArgs = {"ajaxurl":"http:\/\/www.prepressure.com\/wp-admin\/admin-ajax.php","hideEffect":"fade","onScroll":"","onScrollOffset":"100","cookieName":"cookie_notice_accepted","cookieValue":"TRUE","cookieTime":"31337313373","cookiePath":"\/","cookieDomain":""};
+/* ]]> */
+</script>
+<script type="text/javascript" src="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/front.js"></script>
+<link rel="https://api.w.org/" href="http://www.prepressure.com/wp-json/">
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://www.prepressure.com/xmlrpc.php?rsd">
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://www.prepressure.com/wp-includes/wlwmanifest.xml">
+<link rel="shortlink" href="http://wp.me/P9HDG-47">
+<link rel="alternate" type="application/json+oembed" href="http://www.prepressure.com/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fwww.prepressure.com%2Flibrary%2Ftechnology%2Fraid">
+<link rel="alternate" type="text/xml+oembed" href="http://www.prepressure.com/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fwww.prepressure.com%2Flibrary%2Ftechnology%2Fraid&amp;format=xml">
+<style type="text/css">img#wpstats{display:none}</style><style type="text/css">.broken_link,a.broken_link{text-decoration:line-through;}</style></head>
+<body class="cookies-not-accepted">
+<!--[if lte IE 8 ]>
+<noscript><strong>JavaScript is required for this website to be displayed correctly. Please enable JavaScript before continuing...</strong></noscript>
+<![endif]-->
+<div id="container">
+<div id="header">
+<nav>
+<div id="crumb">
+ 
+<a title="Go to Prepressure." href="http://www.prepressure.com/" class="home">Prepressure</a> &gt; <a title="Go to Library." href="http://www.prepressure.com/library" class="post post-page">Library</a> &gt; <a title="Go to Technology." href="http://www.prepressure.com/library/technology" class="post post-page">Technology</a> &gt; <a title="Go to RAID." href="http://www.prepressure.com/library/technology/raid" class="post post-page current-item">RAID</a> </div>
+<div id="searchbox">
+<form method="get" id="searchform" action="http://www.prepressure.com/">
+<div><input name="s" id="s" type="text">
+<input id="searchsubmit" value="Search" type="submit">
+</div>
+</form>
+</div>
+</nav>
+</div>
+<div id="container2">
+<div id="container3">
+<div id="content">
+<article>
+<div class="post" id="post-255">
+<header><h1><a href="http://www.prepressure.com/library/technology/raid" rel="bookmark" title="Permanent Link to RAID">RAID</a></h1></header>
+<div class="entry">
+<p>RAID is a technology that is used to increase the performance and/or reliability of data storage. The abbreviation stands for <em>Redundant Array of Inexpensive Disks</em>.
+ A RAID system consists of two or more drives working in parallel. These
+ disks can be hard discs, but there is a trend to also use the 
+technology for SSD (solid state drives). There are different RAID 
+levels, each optimized for a specific situation. These are not 
+standardized by an industry group or standardization committee. This 
+explains why companies sometimes come up with their own unique numbers 
+and implementations. This article covers the following RAID levels:</p>
+<ul>
+<li><a href="#raid-0">RAID 0</a> – striping</li>
+<li><a href="#raid-1">RAID 1</a> – mirroring</li>
+<li><a href="#raid-5">RAID 5</a> – striping with parity</li>
+<li><a href="#raid-6">RAID 6</a> – striping with double parity</li>
+<li><a href="#raid-10">RAID 10</a> – combining mirroring and striping</li>
+</ul>
+<p>The software to perform the RAID-functionality and control the drives
+ can either be located on a separate controller card (a hardware RAID 
+controller) or it can simply be a driver. Some versions of Windows, such
+ as Windows Server 2012 as well as Mac OS X, include software RAID 
+functionality. Hardware RAID controllers cost more than pure software, 
+but they also offer better performance, especially with RAID 5 and 6.</p>
+<p>RAID-systems can be used with a number of interfaces, including SCSI,
+ IDE, SATA or FC (fibre channel.) There are systems that use SATA disks 
+internally, but that have a FireWire or SCSI-interface for the host 
+system.</p>
+<p>Sometimes disks in a storage system are defined as JBOD, which stands for <em>‘Just a Bunch Of Disks’</em>.
+ This means that those disks do not use a specific RAID level and acts 
+as stand-alone disks. This is often done for drives that contain swap 
+files or spooling data.</p>
+<p>Below is an overview of the most popular RAID levels:</p>
+<h2><a name="raid-0"></a>RAID level 0 – Striping</h2>
+<p>In a RAID 0 system data are split up in blocks that get written 
+across all the drives in the array. By using multiple disks (at least 2)
+ at the same time, this offers superior I/O performance. This 
+performance can be enhanced further by using multiple controllers, 
+ideally one controller per disk.</p>
+<p style="text-align: center;"><img src="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/raid-level-0-striping.svg" alt="Disk storage using RAID 0 striping" width="450px"></p>
+<h3>Advantages</h3>
+<ul>
+<li>RAID 0 offers great performance, both in read and write operations. There is no overhead caused by parity controls.</li>
+<li>All storage capacity is used, there is no overhead.</li>
+<li>The technology is easy to implement.</li>
+</ul>
+<h3>Disadvantages</h3>
+<ul>
+<li>RAID 0 is not fault-tolerant. If one drive fails, all data in the 
+RAID 0 array are lost. It should not be used for mission-critical 
+systems.</li>
+</ul>
+<h3>Ideal use</h3>
+<p>RAID 0 is ideal for non-critical storage of data that have to be 
+read/written at a high speed, such as on an image retouching or video 
+editing station.</p>
+<p>If you want to use RAID 0 purely to combine the storage capacity of 
+twee drives in a single volume, consider mounting one drive in the 
+folder path of the other drive. This is supported in Linux, OS X as well
+ as Windows and has the advantage that a single drive failure has no 
+impact on the data of the second disk or SSD drive.</p>
+<h2><a name="raid-1"></a>RAID level 1 – Mirroring</h2>
+<p>Data are stored twice by writing them to both the data drive (or set 
+of data drives) and a mirror drive (or set of drives) . If a drive 
+fails, the controller uses either the data drive or the mirror drive for
+ data recovery and continues operation. You need at least 2 drives for a
+ RAID 1 array.</p>
+<p style="text-align: center;"><img src="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/raid-level-1-mirroring.svg" alt="Disk storage using RAID 0 striping" width="450px"></p>
+<h3>Advantages</h3>
+<ul>
+<li>RAID 1 offers excellent read speed and a write-speed that is comparable to that of a single drive.</li>
+<li>In case a drive fails, data do not have to be rebuild, they just have to be copied to the replacement drive.</li>
+<li>RAID 1 is a very simple technology.</li>
+</ul>
+<h3>Disadvantages</h3>
+<ul>
+<li>The main disadvantage is that the effective storage capacity is only
+ half of the total drive capacity because all data get written twice.</li>
+<li>Software RAID 1 solutions do not always allow a hot swap of a failed
+ drive. That means the failed drive can only be replaced after powering 
+down the computer it is attached to. For servers that are used 
+simultaneously by many people, this may not be acceptable. Such systems 
+typically use hardware controllers that do support hot swapping.</li>
+</ul>
+<h3>Ideal use</h3>
+<p>RAID-1 is ideal for mission critical storage, for instance for 
+accounting systems. It is also suitable for small servers in which only 
+two data drives will be used.</p>
+<h2><a name="raid-5"></a>RAID level 5</h2>
+<p>RAID 5 is the most common secure RAID level. It requires at least 3 
+drives but can work with up to 16. Data blocks are striped across the 
+drives and on one drive a parity checksum of all the block data is 
+written. The parity data are not written to a fixed drive, they are 
+spread across all drives, as the drawing below shows. Using the parity 
+data, the computer can recalculate the data of one of the other data 
+blocks, should those data no longer be available. That means a RAID 5 
+array can withstand a single drive failure without losing data or access
+ to data. Although RAID 5 can be achieved in software, a hardware 
+controller is recommended. Often extra cache memory is used on these 
+controllers to improve the write performance.</p>
+<p style="text-align: center;"><img src="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/raid-level-5-striping-with-parity.svg" alt="Disk storage using RAID 5 striping with parity across drives" width="450px"></p>
+<h3>Advantages</h3>
+<ul>
+<li>Read data transactions are very fast while write data transactions 
+are somewhat slower (due to the parity that has to be calculated).</li>
+<li>If a drive fails, you still have access to all data, even while the 
+failed drive is being replaced and the storage controller rebuilds the 
+data on the new drive.</li>
+</ul>
+<h3>Disadvantages</h3>
+<ul>
+<li>Drive failures have an effect on throughput, although this is still acceptable.</li>
+<li>This is complex technology. If one of the disks in an array using 
+4TB disks fails and is replaced, restoring the data (the rebuild time) 
+may take a day or longer, depending on the load on the array and the 
+speed of the controller. If another disk goes bad during that time, data
+ are lost forever.</li>
+</ul>
+<h3>Ideal use</h3>
+<p>RAID 5 is a good all-round system that combines efficient storage 
+with excellent security and decent performance. It is ideal for file and
+ application servers that have a limited number of data drives.</p>
+<h2><a name="raid-6"></a>RAID level 6 – Striping with double parity</h2>
+<p>RAID 6 is like RAID 5, but the parity data are written to two drives.
+ That means it requires at least 4 drives and can withstand 2 drives 
+dying simultaneously. The chances that two drives break down at exactly 
+the same moment are of course very small. However, if a drive in a RAID 5
+ systems dies and is replaced by a new drive, it takes hours to rebuild 
+the swapped drive. If another drive dies during that time, you still 
+lose all of your data. With RAID 6, the RAID array will even survive 
+that second failure.</p>
+<p style="text-align: center;"><img src="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/raid-level-6-striping-with-dual-parity.svg" alt="Disk storage using RAID 6 stripingwith double parity across drives" width="450px"></p>
+<h3>Advantages</h3>
+<ul>
+<li>Like with RAID 5, read data transactions are very fast.</li>
+<li>If two drives fail, you still have access to all data, even while 
+the failed drives are being replaced. So RAID 6 is more secure than RAID
+ 5.</li>
+</ul>
+<h3>Disadvantages</h3>
+<ul>
+<li>Write data transactions are slowed down due to the parity that has to be calculated.</li>
+<li>Drive failures have an effect on throughput, although this is still acceptable.</li>
+<li>This is complex technology. Rebuilding an array in which one drive failed can take a long time.</li>
+</ul>
+<h3>Ideal use</h3>
+<p>RAID 6 is a good all-round system that combines efficient storage 
+with excellent security and decent performance. It is preferable over 
+RAID 5 in file and application servers that use many large drives for 
+data storage.</p>
+<h2><a name="raid-10"></a>RAID level 10 – combining RAID 1 &amp; RAID 0</h2>
+<p>It is possible to combine the advantages (and disadvantages) of RAID 0
+ and RAID 1 in one single system. This is a nested or hybrid RAID 
+configuration. It provides security by mirroring all data on secondary 
+drives while using striping across each set of drives to speed up data 
+transfers.</p>
+<p style="text-align: center;"><img src="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/raid-level-1-and-0-striping-mirroring.svg" alt="Disk storage using RAID 1 + 0, combining spriping with mirroring" width="450px"></p>
+<h3>Advantages</h3>
+<ul>
+<li>If something goes wrong with one of the disks in a RAID 10 
+configuration, the rebuild time is very fast since all that is needed is
+ copying all the data from the surviving mirror to a new drive. This can
+ take as little as 30 minutes for drives of&nbsp; 1 TB.</li>
+</ul>
+<h3>Disadvantages</h3>
+<ul>
+<li>Half of the storage capacity goes to mirroring, so compared to large
+ RAID 5&nbsp; or RAID 6 arrays, this is an expensive way to have 
+redundancy.</li>
+</ul>
+<h2>What about RAID levels 2, 3, 4 and 7?</h2>
+<p>These levels do exist but are not that common (RAID 3 is essentially 
+like RAID 5 but with the parity data always written to the same drive). 
+This is just a simple introduction to RAID-systems. You can find more 
+in-depth information on the pages of <a onclick="javascript:pageTracker._trackPageview('/outgoing/en.wikipedia.org/wiki/RAID');" title="The Wikipedia page on RAID" href="http://en.wikipedia.org/wiki/RAID">wikipedia</a> or <a onclick="javascript:pageTracker._trackPageview('/outgoing/acnc.com/raid');" title="A visual tool to discover how RAID storage works" href="http://acnc.com/raid">ACNC</a>.</p>
+<h2>RAID is no substitute for back-up!</h2>
+<p>All RAID levels except RAID 0 offer protection from a single drive 
+failure. A RAID 6 system even survives 2 disks dying simultaneously. For
+ complete security you do still need to back-up the data from a RAID 
+system.</p>
+<ul>
+<li>That back-up will come in handy if all drives fail simultaneously because of a power spike.</li>
+<li>It is a safeguard when the storage system gets stolen.</li>
+<li>Back-ups can be kept off-site at a different location. This can come
+ in handy if a natural disaster or fire destroys your workplace.</li>
+<li>The most important reason to back-up multiple generations of data is
+ user error. If someone accidentally deletes some important data and 
+this goes unnoticed for several hours, days or weeks, a good set of 
+back-ups ensure you can still retrieve those files.</li>
+</ul>
+<div class="moddate">1 June 2015</div>
+</div>
+ 
+<div style="height: 5px;"></div>
+<script async="" src="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/adsbygoogle.js"></script>
+ 
+<ins data-adsbygoogle-status="done" class="adsbygoogle" style="display:inline-block;width:468px;height:60px" data-ad-client="ca-pub-3018011865981043" data-ad-slot="2936141775"><ins id="aswift_0_expand" style="display:inline-table;border:none;height:60px;margin:0;padding:0;position:relative;visibility:visible;width:468px;background-color:transparent"><ins id="aswift_0_anchor" style="display:block;border:none;height:60px;margin:0;padding:0;position:relative;visibility:visible;width:468px;background-color:transparent"><iframe marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" scrolling="no" allowfullscreen="true" onload="var i=this.id,s=window.google_iframe_oncopy,H=s&amp;&amp;s.handlers,h=H&amp;&amp;H[i],w=this.contentWindow,d;try{d=w.document}catch(e){}if(h&amp;&amp;d&amp;&amp;(!d.body||!d.body.firstChild)){if(h.call){setTimeout(h,0)}else if(h.match){try{h=s.upd(h,i)}catch(e){}w.location.replace(h)}}" id="aswift_0" name="aswift_0" style="left:0;position:absolute;top:0;" frameborder="0" height="60" width="468"></iframe></ins></ins></ins>
+<script>
+					(adsbygoogle = window.adsbygoogle || []).push({});
+				</script>
+<div style="height: 8px;"></div>
+<p class="postmetadata"><a href="http://www.prepressure.com/library/technology/raid#comments">70 Comments »</a></p>
+</div>
+<div class="navigation">
+<div class="alignleft"></div>
+<div class="alignright"></div>
+</div>
+<div class="post">
+ 
+<h3 id="comments">
+70 responses to “RAID” </h3>
+<div class="navigation">
+<div class="alignleft"></div>
+<div class="alignright"></div>
+</div>
+<ol class="commentlist">
+<li class="comment even thread-even depth-1" id="comment-446939">
+<div id="div-comment-446939" class="comment-body">
+<div class="comment-author vcard">
+<img alt="" src="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/3244638175e2fa1792e1149f6db6194c.jpg" srcset="http://0.gravatar.com/avatar/3244638175e2fa1792e1149f6db6194c?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32"> <cite class="fn">Aftab Alam</cite> <span class="says">says:</span> </div>
+<div class="comment-meta commentmetadata"><a href="http://www.prepressure.com/library/technology/raid#comment-446939">
+April 5, 2016 at 7:42 am</a> </div>
+<p>What an excellent explanation of RAID….. its amazing, easy language and can any body understand.Thank you so much</p>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="http://www.prepressure.com/library/technology/raid?replytocom=446939#respond" onclick='return addComment.moveForm( "div-comment-446939", "446939", "respond", "255" )' aria-label="Reply to Aftab Alam">Reply</a></div>
+</div>
+</li> 
+<li class="comment odd alt thread-odd thread-alt depth-1" id="comment-446910">
+<div id="div-comment-446910" class="comment-body">
+<div class="comment-author vcard">
+<img alt="" src="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/3c2ddfa4253bcff327ae0dd84ed6311b.jpg" srcset="http://0.gravatar.com/avatar/3c2ddfa4253bcff327ae0dd84ed6311b?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32"> <cite class="fn">kader khan</cite> <span class="says">says:</span> </div>
+<div class="comment-meta commentmetadata"><a href="http://www.prepressure.com/library/technology/raid#comment-446910">
+March 16, 2016 at 6:09 pm</a> </div>
+<p>thank you sir.<br>
+for this valuable information.</p>
+<p>the language used is very easy and understandable.</p>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="http://www.prepressure.com/library/technology/raid?replytocom=446910#respond" onclick='return addComment.moveForm( "div-comment-446910", "446910", "respond", "255" )' aria-label="Reply to kader khan">Reply</a></div>
+</div>
+</li> 
+<li class="comment even thread-even depth-1 parent" id="comment-446884">
+<div id="div-comment-446884" class="comment-body">
+<div class="comment-author vcard">
+<img alt="" src="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/7f76ff0d344f5aaf9c06fe36e17c5845.jpg" srcset="http://1.gravatar.com/avatar/7f76ff0d344f5aaf9c06fe36e17c5845?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32"> <cite class="fn">Midhun</cite> <span class="says">says:</span> </div>
+<div class="comment-meta commentmetadata"><a href="http://www.prepressure.com/library/technology/raid#comment-446884">
+February 14, 2016 at 5:10 pm</a> </div>
+<p>Hi, I have read your explanations about RAID configuration and it is 
+very much informative with pictures. I have a doubt that in RAID 5 or in
+ RAID 6, how much space will al1ocate for a parity drive if it is a 1TB 
+drive.<br>
+Another doubt I have that, even though it is not relating to this topic,
+ what is mean by SATA3 6GB/s interface? Is it a 6GB/s transfer speed or 
+any other? My HDD occupied with the same SATA3 interface and I have been
+ getting not more than 50MB/s while copied a file from one logical drive
+ to another since the date of I assembled the PC.</p>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="http://www.prepressure.com/library/technology/raid?replytocom=446884#respond" onclick='return addComment.moveForm( "div-comment-446884", "446884", "respond", "255" )' aria-label="Reply to Midhun">Reply</a></div>
+</div>
+<ul class="children">
+<li class="comment byuser comment-author-admin bypostauthor odd alt depth-2" id="comment-446886">
+<div id="div-comment-446886" class="comment-body">
+<div class="comment-author vcard">
+<img alt="" src="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/362e84fb52247fc0cf504f5b2a5de5ae.png" srcset="http://0.gravatar.com/avatar/362e84fb52247fc0cf504f5b2a5de5ae?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32"> <cite class="fn">Laurens</cite> <span class="says">says:</span> </div>
+<div class="comment-meta commentmetadata"><a href="http://www.prepressure.com/library/technology/raid#comment-446886">
+February 17, 2016 at 10:40 pm</a> </div>
+<p>If I understand your first question correctly, you are wondering if 
+you can use a smaller drive for parity compared to the other drives in 
+the RAID set. The hardware or software RAID controller determines if you
+ can mix different sizes and types of drives. Many require all drives to
+ have the same capacity. Alternatively they use the capacity of the 
+smallest drive across all of them. That means a mix of several 2 TB 
+drives and a single 1 TB leads to all disks only using 1 TB of storage 
+capacity.</p>
+<p>For SATA3, the 6 Gb/s indeed refers to the transfer speed. Please 
+note that it is 6 gigabit per second, not 6 gigabyte per second. It is 
+Gb/s, not GB/s. There is some overhead which means the fastest real 
+transfer speed is around 600 megabyte per second. A hard disk cannot 
+reach that maximum speed, only SSDs are capable of doing that. You 
+should also keep in mind that if you copy files from one logical drive 
+to another on the same HDD, your computer is reading from and writing to
+ the same drive simultaneously. That also slows down the data transfer.</p>
+</div>
+</li> 
+</ul> 
+</li> 
+<li class="comment even thread-odd thread-alt depth-1 parent" id="comment-446869">
+<div id="div-comment-446869" class="comment-body">
+<div class="comment-author vcard">
+<img alt="" src="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/7233a1d4c2c4bcc2df21155f344dda35.jpg" srcset="http://1.gravatar.com/avatar/7233a1d4c2c4bcc2df21155f344dda35?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32"> <cite class="fn">Kamal</cite> <span class="says">says:</span> </div>
+<div class="comment-meta commentmetadata"><a href="http://www.prepressure.com/library/technology/raid#comment-446869">
+January 22, 2016 at 6:09 am</a> </div>
+<p>Hi,</p>
+<p>Can you please tell me what is the maximum size for one virtual disk under RAID 1. (virtual disk size limit)</p>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="http://www.prepressure.com/library/technology/raid?replytocom=446869#respond" onclick='return addComment.moveForm( "div-comment-446869", "446869", "respond", "255" )' aria-label="Reply to Kamal">Reply</a></div>
+</div>
+<ul class="children">
+<li class="comment byuser comment-author-admin bypostauthor odd alt depth-2" id="comment-446873">
+<div id="div-comment-446873" class="comment-body">
+<div class="comment-author vcard">
+<img alt="" src="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/362e84fb52247fc0cf504f5b2a5de5ae.png" srcset="http://0.gravatar.com/avatar/362e84fb52247fc0cf504f5b2a5de5ae?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32"> <cite class="fn">Laurens</cite> <span class="says">says:</span> </div>
+<div class="comment-meta commentmetadata"><a href="http://www.prepressure.com/library/technology/raid#comment-446873">
+January 26, 2016 at 7:43 am</a> </div>
+<p>That depends on the RAID controller that you’ll be using. What is the largest disk size it supports?</p>
+</div>
+</li> 
+</ul> 
+</li> 
+<li class="comment even thread-even depth-1" id="comment-446843">
+<div id="div-comment-446843" class="comment-body">
+<div class="comment-author vcard">
+<img alt="" src="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/721fa66d6eac6b857f8164a172c31d2e.jpg" srcset="http://1.gravatar.com/avatar/721fa66d6eac6b857f8164a172c31d2e?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32"> <cite class="fn">vino</cite> <span class="says">says:</span> </div>
+<div class="comment-meta commentmetadata"><a href="http://www.prepressure.com/library/technology/raid#comment-446843">
+December 9, 2015 at 1:45 pm</a> </div>
+<p>Thanks for the great post !!</p>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="http://www.prepressure.com/library/technology/raid?replytocom=446843#respond" onclick='return addComment.moveForm( "div-comment-446843", "446843", "respond", "255" )' aria-label="Reply to vino">Reply</a></div>
+</div>
+</li> 
+<li class="comment odd alt thread-odd thread-alt depth-1 parent" id="comment-446092">
+<div id="div-comment-446092" class="comment-body">
+<div class="comment-author vcard">
+<img alt="" src="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/438cebbcc977cb1479b8ba4b6006606c.jpg" srcset="http://1.gravatar.com/avatar/438cebbcc977cb1479b8ba4b6006606c?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32"> <cite class="fn">Madison</cite> <span class="says">says:</span> </div>
+<div class="comment-meta commentmetadata"><a href="http://www.prepressure.com/library/technology/raid#comment-446092">
+September 22, 2015 at 5:54 pm</a> </div>
+<p>I have a 160Gb and a 750gb drives If i RAID 0 with them will I get 
+910gb of space under one drive or will it be limit to 160gb being to 
+lowest size of the two?</p>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="http://www.prepressure.com/library/technology/raid?replytocom=446092#respond" onclick='return addComment.moveForm( "div-comment-446092", "446092", "respond", "255" )' aria-label="Reply to Madison">Reply</a></div>
+</div>
+<ul class="children">
+<li class="comment byuser comment-author-admin bypostauthor even depth-2" id="comment-446871">
+<div id="div-comment-446871" class="comment-body">
+<div class="comment-author vcard">
+<img alt="" src="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/362e84fb52247fc0cf504f5b2a5de5ae.png" srcset="http://0.gravatar.com/avatar/362e84fb52247fc0cf504f5b2a5de5ae?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32"> <cite class="fn">Laurens</cite> <span class="says">says:</span> </div>
+<div class="comment-meta commentmetadata"><a href="http://www.prepressure.com/library/technology/raid#comment-446871">
+January 25, 2016 at 11:13 pm</a> </div>
+<p>The storage space added to the array by each disk is limited to the 
+size of the smallest one, which means this would be very unefficient.</p>
+</div>
+</li> 
+</ul> 
+</li> 
+<li class="comment odd alt thread-even depth-1" id="comment-445973">
+<div id="div-comment-445973" class="comment-body">
+<div class="comment-author vcard">
+<img alt="" src="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/1f90c2dc315c76e80d61a1504927c7ca.jpg" srcset="http://1.gravatar.com/avatar/1f90c2dc315c76e80d61a1504927c7ca?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32"> <cite class="fn">Chan</cite> <span class="says">says:</span> </div>
+<div class="comment-meta commentmetadata"><a href="http://www.prepressure.com/library/technology/raid#comment-445973">
+September 16, 2015 at 2:36 pm</a> </div>
+<p>Thank you. Its a well written explanation regarding the RAID function.</p>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="http://www.prepressure.com/library/technology/raid?replytocom=445973#respond" onclick='return addComment.moveForm( "div-comment-445973", "445973", "respond", "255" )' aria-label="Reply to Chan">Reply</a></div>
+</div>
+</li> 
+<li class="comment even thread-odd thread-alt depth-1" id="comment-445844">
+<div id="div-comment-445844" class="comment-body">
+<div class="comment-author vcard">
+<img alt="" src="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/298db18802a4fd19fd51fb0fe34dd518.jpg" srcset="http://2.gravatar.com/avatar/298db18802a4fd19fd51fb0fe34dd518?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32"> <cite class="fn">Ketki</cite> <span class="says">says:</span> </div>
+<div class="comment-meta commentmetadata"><a href="http://www.prepressure.com/library/technology/raid#comment-445844">
+September 10, 2015 at 10:41 am</a> </div>
+<p>Excellent Doc</p>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="http://www.prepressure.com/library/technology/raid?replytocom=445844#respond" onclick='return addComment.moveForm( "div-comment-445844", "445844", "respond", "255" )' aria-label="Reply to Ketki">Reply</a></div>
+</div>
+</li> 
+<li class="comment odd alt thread-even depth-1" id="comment-445286">
+<div id="div-comment-445286" class="comment-body">
+<div class="comment-author vcard">
+<img alt="" src="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/a5f6222af810f9557acd0edddadfb383.jpg" srcset="http://1.gravatar.com/avatar/a5f6222af810f9557acd0edddadfb383?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32"> <cite class="fn">MyRobot</cite> <span class="says">says:</span> </div>
+<div class="comment-meta commentmetadata"><a href="http://www.prepressure.com/library/technology/raid#comment-445286">
+August 10, 2015 at 7:01 am</a> </div>
+<p> The other disadvantage is that you cannot go back in time and recover a file you accidentally deleted two days ago.</p>
+<p><a onclick="javascript:pageTracker._trackPageview('/outgoing/windows.microsoft.com/en-au/windows/previous-versions-files-faq');" href="http://windows.microsoft.com/en-au/windows/previous-versions-files-faq" rel="nofollow">Previous Versions</a></p>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="http://www.prepressure.com/library/technology/raid?replytocom=445286#respond" onclick='return addComment.moveForm( "div-comment-445286", "445286", "respond", "255" )' aria-label="Reply to MyRobot">Reply</a></div>
+</div>
+</li> 
+<li class="comment even thread-odd thread-alt depth-1 parent" id="comment-444482">
+<div id="div-comment-444482" class="comment-body">
+<div class="comment-author vcard">
+<img alt="" src="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/7bc7cc6588755a0c834175a24de37691.jpg" srcset="http://1.gravatar.com/avatar/7bc7cc6588755a0c834175a24de37691?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32"> <cite class="fn">Charbel Seif</cite> <span class="says">says:</span> </div>
+<div class="comment-meta commentmetadata"><a href="http://www.prepressure.com/library/technology/raid#comment-444482">
+June 24, 2015 at 1:57 pm</a> </div>
+<p>i have 4*2tb hdd mounted in raid 0 need for performance i need to 
+mirror or secure these data how to do ? RAID 0+1 ? do you recommend ?</p>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="http://www.prepressure.com/library/technology/raid?replytocom=444482#respond" onclick='return addComment.moveForm( "div-comment-444482", "444482", "respond", "255" )' aria-label="Reply to Charbel Seif">Reply</a></div>
+</div>
+<ul class="children">
+<li class="comment byuser comment-author-admin bypostauthor odd alt depth-2" id="comment-444492">
+<div id="div-comment-444492" class="comment-body">
+<div class="comment-author vcard">
+<img alt="" src="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/362e84fb52247fc0cf504f5b2a5de5ae.png" srcset="http://0.gravatar.com/avatar/362e84fb52247fc0cf504f5b2a5de5ae?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32"> <cite class="fn">Laurens</cite> <span class="says">says:</span> </div>
+<div class="comment-meta commentmetadata"><a href="http://www.prepressure.com/library/technology/raid#comment-444492">
+June 25, 2015 at 6:56 am</a> </div>
+<p>I personally have two external disk enclosures and alternate back-ups
+ of all data on these enclosures. One of them is stored at my parents 
+house and during each visit I swap them out so I always have an off-site
+ backup. There are two disadvantages of just mirroring your data on 
+additional internal disks: your backup is physically in the same 
+location so if the PC gets stolen or there is a fire everything is gone.
+ The other disadvantage is that you cannot go back in time and recover a
+ file you accidentally deleted two days ago.</p>
+</div>
+</li> 
+</ul> 
+</li> 
+<li class="comment even thread-even depth-1 parent" id="comment-444168">
+<div id="div-comment-444168" class="comment-body">
+<div class="comment-author vcard">
+<img alt="" src="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/c3269d63ddbf82798a13f6fe4078604b.jpg" srcset="http://0.gravatar.com/avatar/c3269d63ddbf82798a13f6fe4078604b?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32"> <cite class="fn">Br</cite> <span class="says">says:</span> </div>
+<div class="comment-meta commentmetadata"><a href="http://www.prepressure.com/library/technology/raid#comment-444168">
+May 31, 2015 at 7:31 pm</a> </div>
+<p>In addition, I don’t understand using Raid 1 and “a hardware controller.” Please explain.<br>
+And…”cannot be replaced while server is running?<br>
+thanks..</p>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="http://www.prepressure.com/library/technology/raid?replytocom=444168#respond" onclick='return addComment.moveForm( "div-comment-444168", "444168", "respond", "255" )' aria-label="Reply to Br">Reply</a></div>
+</div>
+<ul class="children">
+<li class="comment byuser comment-author-admin bypostauthor odd alt depth-2" id="comment-444176">
+<div id="div-comment-444176" class="comment-body">
+<div class="comment-author vcard">
+<img alt="" src="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/362e84fb52247fc0cf504f5b2a5de5ae.png" srcset="http://0.gravatar.com/avatar/362e84fb52247fc0cf504f5b2a5de5ae?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32"> <cite class="fn">Laurens</cite> <span class="says">says:</span> </div>
+<div class="comment-meta commentmetadata"><a href="http://www.prepressure.com/library/technology/raid#comment-444176">
+June 1, 2015 at 7:10 am</a> </div>
+<p>In the past RAID systems were typically used in servers, not with 
+stand-alone PCs or Macs. That is no longer true so I’ve updated the 
+text. If you attach a separate box containing two or more drives to a 
+computer and those drives are running in a RAID configuration, there is a
+ circuit board in that box that handles the distribution of the data 
+across the drives. That board has its own CPU: it is effectively a mini 
+computer but it typically is called a hardware controller.</p>
+</div>
+</li> 
+</ul> 
+</li> 
+<li class="comment even thread-odd thread-alt depth-1 parent" id="comment-444167">
+<div id="div-comment-444167" class="comment-body">
+<div class="comment-author vcard">
+<img alt="" src="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/c3269d63ddbf82798a13f6fe4078604b.jpg" srcset="http://0.gravatar.com/avatar/c3269d63ddbf82798a13f6fe4078604b?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32"> <cite class="fn">Br</cite> <span class="says">says:</span> </div>
+<div class="comment-meta commentmetadata"><a href="http://www.prepressure.com/library/technology/raid#comment-444167">
+May 31, 2015 at 7:28 pm</a> </div>
+<p>Hello, I have 4TB of photo images on a glyph drive that is just short
+ of 20% full. (each image between 300 and 500mg.) Most of it is in an 
+alternate location (3tb) and that is also spent so another external 
+drive without a backup is being used.<br>
+I am wondering if a mirrored 12 or 16 gb raid 1 drive is a good idea (my
+ current 4tb can be moved to the other locale giving me 7tb. Or if 
+that’s just too big and if one drive fails due to corruption they both 
+fail as they’re mirrored.<br>
+Are the removable mirrored drives (CRU and G Tech) a good solution to 
+this issue. I anticipate using at least 1TB in the next year and 
+possibly more. Thanks..</p>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="http://www.prepressure.com/library/technology/raid?replytocom=444167#respond" onclick='return addComment.moveForm( "div-comment-444167", "444167", "respond", "255" )' aria-label="Reply to Br">Reply</a></div>
+</div>
+<ul class="children">
+<li class="comment byuser comment-author-admin bypostauthor odd alt depth-2" id="comment-444175">
+<div id="div-comment-444175" class="comment-body">
+<div class="comment-author vcard">
+<img alt="" src="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/362e84fb52247fc0cf504f5b2a5de5ae.png" srcset="http://0.gravatar.com/avatar/362e84fb52247fc0cf504f5b2a5de5ae?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32"> <cite class="fn">Laurens</cite> <span class="says">says:</span> </div>
+<div class="comment-meta commentmetadata"><a href="http://www.prepressure.com/library/technology/raid#comment-444175">
+June 1, 2015 at 6:53 am</a> </div>
+<p>If I understand it correctly you currently have around 6 TB of data 
+and you expect to add at least 1 TB each year. A mirrored 16 TB RAID 1 
+system gives you 8 TB of effective capacity, which means you’ll run out 
+of space again pretty soon. Assuming you go for a 4×4 TB disk setup, it 
+would make more sense to choose RAID 5 since that gives you 12 GB of 
+effective space. I am not familiar with the brands you mention. Have a 
+look at Drobo as well – their RAID boxes seem to be pretty popular but 
+there are dozens of alternatives on the market.</p>
+</div>
+</li> 
+</ul> 
+</li> 
+<li class="comment even thread-even depth-1" id="comment-444164">
+<div id="div-comment-444164" class="comment-body">
+<div class="comment-author vcard">
+<img alt="" src="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/7ec5bbacaf4b37c0370b0311f6837d58.jpg" srcset="http://1.gravatar.com/avatar/7ec5bbacaf4b37c0370b0311f6837d58?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32"> <cite class="fn">Vijitha Ivor</cite> <span class="says">says:</span> </div>
+<div class="comment-meta commentmetadata"><a href="http://www.prepressure.com/library/technology/raid#comment-444164">
+May 31, 2015 at 11:30 am</a> </div>
+<p>EXCELLENT – A WELL EXPLAINED RAID FOUND IN WWW.<br>
+100% Kudos to the Author.. You are a true Technically experienced genius
+ unlike to most Book Worms and High Shouts in IT Blogs… WELL DONE !!</p>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="http://www.prepressure.com/library/technology/raid?replytocom=444164#respond" onclick='return addComment.moveForm( "div-comment-444164", "444164", "respond", "255" )' aria-label="Reply to Vijitha Ivor">Reply</a></div>
+</div>
+</li> 
+<li class="comment odd alt thread-odd thread-alt depth-1" id="comment-444133">
+<div id="div-comment-444133" class="comment-body">
+<div class="comment-author vcard">
+<img alt="" src="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/77038bc622f7175bddcee1ba553ed562.jpg" srcset="http://1.gravatar.com/avatar/77038bc622f7175bddcee1ba553ed562?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32"> <cite class="fn">GimmeAnESP</cite> <span class="says">says:</span> </div>
+<div class="comment-meta commentmetadata"><a href="http://www.prepressure.com/library/technology/raid#comment-444133">
+May 29, 2015 at 5:11 am</a> </div>
+<p>So, if one had two 500gb HDs and a 1tb WD My book along with a 2th My
+ passport ultra, what would be the most essential and productive RAID 
+setup to go with?</p>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="http://www.prepressure.com/library/technology/raid?replytocom=444133#respond" onclick='return addComment.moveForm( "div-comment-444133", "444133", "respond", "255" )' aria-label="Reply to GimmeAnESP">Reply</a></div>
+</div>
+</li> 
+<li class="comment even thread-even depth-1 parent" id="comment-444132">
+<div id="div-comment-444132" class="comment-body">
+<div class="comment-author vcard">
+<img alt="" src="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/77038bc622f7175bddcee1ba553ed562.jpg" srcset="http://1.gravatar.com/avatar/77038bc622f7175bddcee1ba553ed562?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32"> <cite class="fn">Ryan</cite> <span class="says">says:</span> </div>
+<div class="comment-meta commentmetadata"><a href="http://www.prepressure.com/library/technology/raid#comment-444132">
+May 29, 2015 at 5:09 am</a> </div>
+<p>So, if I’m setting up a server running Windows Server 2011 (for home 
+use), which will be installed on a 500gb seagate IDE HD and there will 
+be a spare 500gb WD HD plus a 2tb WD My passport ultra and 1tb My book, 
+how in the hell would you setup the RAID software for that and what 
+would be the best setup for a home server? I’m familiar with networking,
+ I’ve just never bothered with RAID.</p>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="http://www.prepressure.com/library/technology/raid?replytocom=444132#respond" onclick='return addComment.moveForm( "div-comment-444132", "444132", "respond", "255" )' aria-label="Reply to Ryan">Reply</a></div>
+</div>
+<ul class="children">
+<li class="comment byuser comment-author-admin bypostauthor odd alt depth-2" id="comment-444134">
+<div id="div-comment-444134" class="comment-body">
+<div class="comment-author vcard">
+<img alt="" src="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/362e84fb52247fc0cf504f5b2a5de5ae.png" srcset="http://0.gravatar.com/avatar/362e84fb52247fc0cf504f5b2a5de5ae?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32"> <cite class="fn">Laurens</cite> <span class="says">says:</span> </div>
+<div class="comment-meta commentmetadata"><a href="http://www.prepressure.com/library/technology/raid#comment-444134">
+May 29, 2015 at 6:45 am</a> </div>
+<p>I would stay away from RAID with such a setup. RAID works best for 
+drives with the same capacity and using the same (type of) controller. 
+If you want higher throughput remove the big drives from their external 
+enclosure and put them internally on SATA 6. That is faster than most 
+USB3 controllers. You could mirror both 500 GB drives if redundancy is 
+what you are after but I’d rather have redundancy on my data than on my 
+software.</p>
+</div>
+</li> 
+</ul> 
+</li> 
+<li class="comment even thread-odd thread-alt depth-1 parent" id="comment-443697">
+<div id="div-comment-443697" class="comment-body">
+<div class="comment-author vcard">
+<img alt="" src="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/aefd0f1057114198712a2caae312a699.jpg" srcset="http://1.gravatar.com/avatar/aefd0f1057114198712a2caae312a699?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32"> <cite class="fn">Dawn Dubke</cite> <span class="says">says:</span> </div>
+<div class="comment-meta commentmetadata"><a href="http://www.prepressure.com/library/technology/raid#comment-443697">
+January 26, 2015 at 6:23 pm</a> </div>
+<p>Is it possible you can explain to me how to do the following or 
+direct me to a tutorial? I have a 4 drive NAS system that uses EXFAT 
+(FAT64) and was considering RAID 1+0 but really didn’t want to lose all 
+that storage. On the other hand, I have lost many hard drives and all 
+the information from crashes. So I’ve learned it’s not IF your drive 
+crashes but WHEN. I’d love to use the full capacity of the drives while 
+still being able to recover from a crash.<br>
+“If you want to use RAID 0 purely to combine the storage capacity of 
+twee drives in a single volume, consider mounting one drive in the 
+folder path of the other drive. This is supported in Linux, OS X as well
+ as Windows and has the advantage that a single drive failure has no 
+impact on the data of the second disk or SSD drive.”</p>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="http://www.prepressure.com/library/technology/raid?replytocom=443697#respond" onclick='return addComment.moveForm( "div-comment-443697", "443697", "respond", "255" )' aria-label="Reply to Dawn Dubke">Reply</a></div>
+</div>
+<ul class="children">
+<li class="comment byuser comment-author-admin bypostauthor odd alt depth-2" id="comment-443709">
+<div id="div-comment-443709" class="comment-body">
+<div class="comment-author vcard">
+<img alt="" src="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/362e84fb52247fc0cf504f5b2a5de5ae.png" srcset="http://0.gravatar.com/avatar/362e84fb52247fc0cf504f5b2a5de5ae?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32"> <cite class="fn">Laurens</cite> <span class="says">says:</span> </div>
+<div class="comment-meta commentmetadata"><a href="http://www.prepressure.com/library/technology/raid#comment-443709">
+January 27, 2015 at 10:57 pm</a> </div>
+<p>You don’t get any redundancy with mounting drives into the file 
+system. If that is your goal, you’ll need to stick to RAID or a 
+real-time backup solution. Mounting drives on Windows 7 is explained on 
+this <a onclick="javascript:pageTracker._trackPageview('/outgoing/windows.microsoft.com/en-us/windows/mount-dismount-drive#1TC=windows-7');" href="http://windows.microsoft.com/en-us/windows/mount-dismount-drive#1TC=windows-7" target="_blank" rel="nofollow">Microsoft page</a>.</p>
+</div>
+</li> 
+</ul> 
+</li> 
+<li class="comment even thread-even depth-1 parent" id="comment-443643">
+<div id="div-comment-443643" class="comment-body">
+<div class="comment-author vcard">
+<img alt="" src="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/9c44495d401963987c16de868d27bf63.jpg" srcset="http://0.gravatar.com/avatar/9c44495d401963987c16de868d27bf63?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32"> <cite class="fn"><a onclick="javascript:pageTracker._trackPageview('/outgoing/www.utb.ac.rw');" href="http://www.utb.ac.rw/" rel="external nofollow" class="url">JB</a></cite> <span class="says">says:</span> </div>
+<div class="comment-meta commentmetadata"><a href="http://www.prepressure.com/library/technology/raid#comment-443643">
+January 12, 2015 at 11:38 am</a> </div>
+<p>Kindly can have the way forward to configure Mirroring RAID?</p>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="http://www.prepressure.com/library/technology/raid?replytocom=443643#respond" onclick='return addComment.moveForm( "div-comment-443643", "443643", "respond", "255" )' aria-label="Reply to JB">Reply</a></div>
+</div>
+<ul class="children">
+<li class="comment byuser comment-author-admin bypostauthor odd alt depth-2" id="comment-443644">
+<div id="div-comment-443644" class="comment-body">
+<div class="comment-author vcard">
+<img alt="" src="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/362e84fb52247fc0cf504f5b2a5de5ae.png" srcset="http://0.gravatar.com/avatar/362e84fb52247fc0cf504f5b2a5de5ae?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32"> <cite class="fn">Laurens</cite> <span class="says">says:</span> </div>
+<div class="comment-meta commentmetadata"><a href="http://www.prepressure.com/library/technology/raid#comment-443644">
+January 12, 2015 at 11:07 pm</a> </div>
+<p>I cannot give you a short and relevant description of how to do this,
+ especially not without any knowledge of your setup. The way RAID needs 
+to be configured in a NAS or SAN system is completely different from 
+doing so on a PC or Mac. If you are a PC user, you typically need to go 
+to the BIOS before the system has the chance to boot and in the BIOS you
+ can then configure which disks should be part of the RAID system. Once 
+that is done, the RAID volume can be partionned and formatted from 
+within the operating system.</p>
+</div>
+</li> 
+</ul> 
+</li> 
+<li class="comment even thread-odd thread-alt depth-1 parent" id="comment-440274">
+<div id="div-comment-440274" class="comment-body">
+<div class="comment-author vcard">
+<img alt="" src="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/a41e5154a542ac1d162ad1cf47b064ec.jpg" srcset="http://1.gravatar.com/avatar/a41e5154a542ac1d162ad1cf47b064ec?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32"> <cite class="fn"><a onclick="javascript:pageTracker._trackPageview('/outgoing/google.com');" href="http://google.com/" rel="external nofollow" class="url">Mohammad naseer khan</a></cite> <span class="says">says:</span> </div>
+<div class="comment-meta commentmetadata"><a href="http://www.prepressure.com/library/technology/raid#comment-440274">
+May 22, 2013 at 6:52 am</a> </div>
+<p>sir please explain me, which RAID is most important in all the RAID category?</p>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="http://www.prepressure.com/library/technology/raid?replytocom=440274#respond" onclick='return addComment.moveForm( "div-comment-440274", "440274", "respond", "255" )' aria-label="Reply to Mohammad naseer khan">Reply</a></div>
+</div>
+<ul class="children">
+<li class="comment byuser comment-author-admin bypostauthor odd alt depth-2" id="comment-443562">
+<div id="div-comment-443562" class="comment-body">
+<div class="comment-author vcard">
+<img alt="" src="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/362e84fb52247fc0cf504f5b2a5de5ae.png" srcset="http://0.gravatar.com/avatar/362e84fb52247fc0cf504f5b2a5de5ae?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32"> <cite class="fn">Laurens</cite> <span class="says">says:</span> </div>
+<div class="comment-meta commentmetadata"><a href="http://www.prepressure.com/library/technology/raid#comment-443562">
+May 25, 2013 at 7:10 pm</a> </div>
+<p>That depends on your definition of important. For home usage, RAID 0 
+is interesting if you are after speed or RAID 1 if you want security. 
+For company servers, RAID 6 is probably the way to go right now.</p>
+</div>
+</li> 
+</ul> 
+</li> 
+<li class="comment even thread-even depth-1" id="comment-437784">
+<div id="div-comment-437784" class="comment-body">
+<div class="comment-author vcard">
+<img alt="" src="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/fc98a7cee6de2be68c09fe6d44f9d95e.jpg" srcset="http://0.gravatar.com/avatar/fc98a7cee6de2be68c09fe6d44f9d95e?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32"> <cite class="fn">mudd</cite> <span class="says">says:</span> </div>
+<div class="comment-meta commentmetadata"><a href="http://www.prepressure.com/library/technology/raid#comment-437784">
+February 26, 2013 at 8:57 am</a> </div>
+<p>Hi, just want to check if i understand.<br>
+So for example..<br>
+A storage box consists of an array of 6 disks, 1 TB each and the effective storage capacity, based on the RAID level used is.</p>
+<p>RAID 1: Not sure.<br>
+RAID 5: 6-1=5TB<br>
+RAID-DP: 6-2=4TB<br>
+RAID 0+1: Not sure.<br>
+RAID 1+0: Not sure.</p>
+<p>Is it correct?</p>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="http://www.prepressure.com/library/technology/raid?replytocom=437784#respond" onclick='return addComment.moveForm( "div-comment-437784", "437784", "respond", "255" )' aria-label="Reply to mudd">Reply</a></div>
+</div>
+</li> 
+<li class="comment odd alt thread-odd thread-alt depth-1 parent" id="comment-402639">
+<div id="div-comment-402639" class="comment-body">
+<div class="comment-author vcard">
+<img alt="" src="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/816aba0aab51fc477e4d8f8233d6a57a.jpg" srcset="http://2.gravatar.com/avatar/816aba0aab51fc477e4d8f8233d6a57a?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32"> <cite class="fn">Aryan</cite> <span class="says">says:</span> </div>
+<div class="comment-meta commentmetadata"><a href="http://www.prepressure.com/library/technology/raid#comment-402639">
+October 27, 2012 at 9:36 pm</a> </div>
+<p>The way you have explained using simple terms I really liked it. But 
+what I feel is you should have included RAID 6 as it can withstand 
+failure of more than one disk. Its interesting to learn something that 
+is quite different from that of others.</p>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="http://www.prepressure.com/library/technology/raid?replytocom=402639#respond" onclick='return addComment.moveForm( "div-comment-402639", "402639", "respond", "255" )' aria-label="Reply to Aryan">Reply</a></div>
+</div>
+<ul class="children">
+<li class="comment byuser comment-author-admin bypostauthor even depth-2" id="comment-443561">
+<div id="div-comment-443561" class="comment-body">
+<div class="comment-author vcard">
+<img alt="" src="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/362e84fb52247fc0cf504f5b2a5de5ae.png" srcset="http://0.gravatar.com/avatar/362e84fb52247fc0cf504f5b2a5de5ae?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32"> <cite class="fn">Laurens</cite> <span class="says">says:</span> </div>
+<div class="comment-meta commentmetadata"><a href="http://www.prepressure.com/library/technology/raid#comment-443561">
+December 24, 2014 at 11:05 am</a> </div>
+<p>I finally got around to it. Apparently it is pretty popular nowadays.</p>
+</div>
+</li> 
+</ul> 
+</li> 
+<li class="comment odd alt thread-even depth-1 parent" id="comment-350184">
+<div id="div-comment-350184" class="comment-body">
+<div class="comment-author vcard">
+<img alt="" src="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/3c6f1ea5b2b52e2e386080f494ea3fc3.jpg" srcset="http://0.gravatar.com/avatar/3c6f1ea5b2b52e2e386080f494ea3fc3?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32"> <cite class="fn">vaporus</cite> <span class="says">says:</span> </div>
+<div class="comment-meta commentmetadata"><a href="http://www.prepressure.com/library/technology/raid#comment-350184">
+September 18, 2012 at 12:55 am</a> </div>
+<p>if you were to set up raid 0 on SSD’s would that increase speed any?</p>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="http://www.prepressure.com/library/technology/raid?replytocom=350184#respond" onclick='return addComment.moveForm( "div-comment-350184", "350184", "respond", "255" )' aria-label="Reply to vaporus">Reply</a></div>
+</div>
+<ul class="children">
+<li class="comment byuser comment-author-admin bypostauthor even depth-2" id="comment-443563">
+<div id="div-comment-443563" class="comment-body">
+<div class="comment-author vcard">
+<img alt="" src="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/362e84fb52247fc0cf504f5b2a5de5ae.png" srcset="http://0.gravatar.com/avatar/362e84fb52247fc0cf504f5b2a5de5ae?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32"> <cite class="fn">Laurens</cite> <span class="says">says:</span> </div>
+<div class="comment-meta commentmetadata"><a href="http://www.prepressure.com/library/technology/raid#comment-443563">
+September 19, 2014 at 10:52 am</a> </div>
+<p>There are lots of heated discussions about that on the web. If you 
+run benchmark software to measure the performance of striped SSD drives,
+ there is a significant speed increase. Many claim however that in real 
+world usage, the advantage is insignificant and doesn’t justify the data
+ security risk.</p>
+</div>
+</li> 
+</ul> 
+</li> 
+<li class="comment odd alt thread-odd thread-alt depth-1" id="comment-324223">
+<div id="div-comment-324223" class="comment-body">
+<div class="comment-author vcard">
+<img alt="" src="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/91c84ab32283362a95761fdd3c76f781.jpg" srcset="http://0.gravatar.com/avatar/91c84ab32283362a95761fdd3c76f781?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32"> <cite class="fn">miguel</cite> <span class="says">says:</span> </div>
+<div class="comment-meta commentmetadata"><a href="http://www.prepressure.com/library/technology/raid#comment-324223">
+August 17, 2012 at 3:19 pm</a> </div>
+<p>hello i have 4 hd 2 are 1t and 2 are 1.5t whats the best raid setup i should use</p>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="http://www.prepressure.com/library/technology/raid?replytocom=324223#respond" onclick='return addComment.moveForm( "div-comment-324223", "324223", "respond", "255" )' aria-label="Reply to miguel">Reply</a></div>
+</div>
+</li> 
+<li class="comment even thread-even depth-1 parent" id="comment-305200">
+<div id="div-comment-305200" class="comment-body">
+<div class="comment-author vcard">
+<img alt="" src="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/936cb4ad313dfa151d9177a33281831a.jpg" srcset="http://0.gravatar.com/avatar/936cb4ad313dfa151d9177a33281831a?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32"> <cite class="fn">Loz</cite> <span class="says">says:</span> </div>
+<div class="comment-meta commentmetadata"><a href="http://www.prepressure.com/library/technology/raid#comment-305200">
+July 26, 2012 at 5:33 pm</a> </div>
+<p>Your RAID5 diagram looks wrong to me, but it’s not helped by being 
+unclear which blocks constitute a full stripe-set, (eg is it 1a 1b 1c 
+etc) and by labelling a number of blocks with just the word “parity”. 
+Wikipedia is clearer!</p>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="http://www.prepressure.com/library/technology/raid?replytocom=305200#respond" onclick='return addComment.moveForm( "div-comment-305200", "305200", "respond", "255" )' aria-label="Reply to Loz">Reply</a></div>
+</div>
+<ul class="children">
+<li class="comment byuser comment-author-admin bypostauthor odd alt depth-2" id="comment-443564">
+<div id="div-comment-443564" class="comment-body">
+<div class="comment-author vcard">
+<img alt="" src="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/362e84fb52247fc0cf504f5b2a5de5ae.png" srcset="http://0.gravatar.com/avatar/362e84fb52247fc0cf504f5b2a5de5ae?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32"> <cite class="fn">Laurens</cite> <span class="says">says:</span> </div>
+<div class="comment-meta commentmetadata"><a href="http://www.prepressure.com/library/technology/raid#comment-443564">
+December 24, 2014 at 11:20 am</a> </div>
+<p>I redid all drawings and hope they are now clearer as well as better looking.</p>
+</div>
+</li> 
+</ul> 
+</li> 
+<li class="comment even thread-odd thread-alt depth-1" id="comment-280764">
+<div id="div-comment-280764" class="comment-body">
+<div class="comment-author vcard">
+<img alt="" src="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/4f3123576b96dfc0df92c81304454e85.png" srcset="http://1.gravatar.com/avatar/4f3123576b96dfc0df92c81304454e85?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32"> <cite class="fn"><a onclick="javascript:pageTracker._trackPageview('/outgoing/www.biography-profile.com/');" href="http://www.biography-profile.com/" rel="external nofollow" class="url">boykalbo</a></cite> <span class="says">says:</span> </div>
+<div class="comment-meta commentmetadata"><a href="http://www.prepressure.com/library/technology/raid#comment-280764">
+July 2, 2012 at 10:07 am</a> </div>
+<p>Im thinking of using the Raid 5 for my server for our business, thanks for the infor</p>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="http://www.prepressure.com/library/technology/raid?replytocom=280764#respond" onclick='return addComment.moveForm( "div-comment-280764", "280764", "respond", "255" )' aria-label="Reply to boykalbo">Reply</a></div>
+</div>
+</li> 
+<li class="comment odd alt thread-even depth-1" id="comment-274316">
+<div id="div-comment-274316" class="comment-body">
+<div class="comment-author vcard">
+<img alt="" src="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/0eb581c9daff4a8f9bb374e233714620.jpg" srcset="http://0.gravatar.com/avatar/0eb581c9daff4a8f9bb374e233714620?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32"> <cite class="fn">Sonia</cite> <span class="says">says:</span> </div>
+<div class="comment-meta commentmetadata"><a href="http://www.prepressure.com/library/technology/raid#comment-274316">
+June 26, 2012 at 4:08 pm</a> </div>
+<p>How can i calculate the effective space if i have 3 hard disk of 600 GB and i want to setup a RAD-5?</p>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="http://www.prepressure.com/library/technology/raid?replytocom=274316#respond" onclick='return addComment.moveForm( "div-comment-274316", "274316", "respond", "255" )' aria-label="Reply to Sonia">Reply</a></div>
+</div>
+</li> 
+<li class="comment even thread-odd thread-alt depth-1" id="comment-217318">
+<div id="div-comment-217318" class="comment-body">
+<div class="comment-author vcard">
+<img alt="" src="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/32b1e06d89fa39cd16125e464d96dd90.jpg" srcset="http://0.gravatar.com/avatar/32b1e06d89fa39cd16125e464d96dd90?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32"> <cite class="fn">jose luis barquin guerola</cite> <span class="says">says:</span> </div>
+<div class="comment-meta commentmetadata"><a href="http://www.prepressure.com/library/technology/raid#comment-217318">
+May 4, 2012 at 11:05 am</a> </div>
+<p>Please, review the RAID10 definition, it’s worng.</p>
+<p>RAID10=(mirrors in stripe mode), and the advantage is that if a disk 
+fails you only need to recover the mirror wich is on degraded mode. In a
+ RAID01 you need to recover the full mirror (like in RAID01 mode).</p>
+<p>Thanks.</p>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="http://www.prepressure.com/library/technology/raid?replytocom=217318#respond" onclick='return addComment.moveForm( "div-comment-217318", "217318", "respond", "255" )' aria-label="Reply to jose luis barquin guerola">Reply</a></div>
+</div>
+</li> 
+<li class="comment odd alt thread-even depth-1" id="comment-216609">
+<div id="div-comment-216609" class="comment-body">
+<div class="comment-author vcard">
+<img alt="" src="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/fde61ad2547805f958b620b151f8a11b.jpg" srcset="http://0.gravatar.com/avatar/fde61ad2547805f958b620b151f8a11b?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32"> <cite class="fn">Fred</cite> <span class="says">says:</span> </div>
+<div class="comment-meta commentmetadata"><a href="http://www.prepressure.com/library/technology/raid#comment-216609">
+May 3, 2012 at 8:52 am</a> </div>
+<p>Hi, there is a mistake. RAID 0+1 ain’t RAID10. RAID 1+0 is commonly named RAID10.</p>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="http://www.prepressure.com/library/technology/raid?replytocom=216609#respond" onclick='return addComment.moveForm( "div-comment-216609", "216609", "respond", "255" )' aria-label="Reply to Fred">Reply</a></div>
+</div>
+</li> 
+<li class="comment even thread-odd thread-alt depth-1 parent" id="comment-130709">
+<div id="div-comment-130709" class="comment-body">
+<div class="comment-author vcard">
+<img alt="" src="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/d24a7d3b1d7cc7387291e3ff9b36c6a6.jpg" srcset="http://1.gravatar.com/avatar/d24a7d3b1d7cc7387291e3ff9b36c6a6?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32"> <cite class="fn">Geekthinker</cite> <span class="says">says:</span> </div>
+<div class="comment-meta commentmetadata"><a href="http://www.prepressure.com/library/technology/raid#comment-130709">
+January 6, 2012 at 7:57 am</a> </div>
+<p>It is a safeguard WHEN the storage system gets stolen</p>
+<p>what are you implying…</p>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="http://www.prepressure.com/library/technology/raid?replytocom=130709#respond" onclick='return addComment.moveForm( "div-comment-130709", "130709", "respond", "255" )' aria-label="Reply to Geekthinker">Reply</a></div>
+</div>
+<ul class="children">
+<li class="comment byuser comment-author-admin bypostauthor odd alt depth-2" id="comment-443565">
+<div id="div-comment-443565" class="comment-body">
+<div class="comment-author vcard">
+<img alt="" src="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/362e84fb52247fc0cf504f5b2a5de5ae.png" srcset="http://0.gravatar.com/avatar/362e84fb52247fc0cf504f5b2a5de5ae?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32"> <cite class="fn">Laurens</cite> <span class="says">says:</span> </div>
+<div class="comment-meta commentmetadata"><a href="http://www.prepressure.com/library/technology/raid#comment-443565">
+December 24, 2014 at 11:26 am</a> </div>
+<p>Fixed – Fine nuances like that are difficult to grasp for me since English is not my native language.</p>
+</div>
+</li> 
+</ul> 
+</li> 
+<li class="comment even thread-even depth-1" id="comment-118658">
+<div id="div-comment-118658" class="comment-body">
+<div class="comment-author vcard">
+<img alt="" src="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/653ca668d958ba496e7c815da841f724.jpg" srcset="http://0.gravatar.com/avatar/653ca668d958ba496e7c815da841f724?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32"> <cite class="fn">Ray Clancy</cite> <span class="says">says:</span> </div>
+<div class="comment-meta commentmetadata"><a href="http://www.prepressure.com/library/technology/raid#comment-118658">
+December 8, 2011 at 3:50 am</a> </div>
+<p>Running raid0 bootable, partitioned with 2 drives, boot and root, minimum swap on cf cards.</p>
+<p>Desire to –grow to a third device.</p>
+<p>Such was possible with the following:</p>
+<p>mdadm –grow /dev/md0 –raid-devices=3 –add /dev/sdxx</p>
+<p>Error occurs: mdadm /dev/md0; could not set level to raid4…..<br>
+Normal procedure is to use raid4 to resync and then revert back to raid0.</p>
+<p>Why does this procedure fail? It used to work….</p>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="http://www.prepressure.com/library/technology/raid?replytocom=118658#respond" onclick='return addComment.moveForm( "div-comment-118658", "118658", "respond", "255" )' aria-label="Reply to Ray Clancy">Reply</a></div>
+</div>
+</li> 
+<li class="comment odd alt thread-odd thread-alt depth-1 parent" id="comment-98276">
+<div id="div-comment-98276" class="comment-body">
+<div class="comment-author vcard">
+<img alt="" src="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/d4b9df81a8a4ddd76631f5d5b405f7b3.jpg" srcset="http://1.gravatar.com/avatar/d4b9df81a8a4ddd76631f5d5b405f7b3?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32"> <cite class="fn">Joe C.</cite> <span class="says">says:</span> </div>
+<div class="comment-meta commentmetadata"><a href="http://www.prepressure.com/library/technology/raid#comment-98276">
+September 7, 2011 at 9:16 pm</a> </div>
+<p>One additional ques: I assume RAID 5 is the same as RAID 4+1? Thanks</p>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="http://www.prepressure.com/library/technology/raid?replytocom=98276#respond" onclick='return addComment.moveForm( "div-comment-98276", "98276", "respond", "255" )' aria-label="Reply to Joe C.">Reply</a></div>
+</div>
+<ul class="children">
+<li class="comment byuser comment-author-admin bypostauthor even depth-2" id="comment-98810">
+<div id="div-comment-98810" class="comment-body">
+<div class="comment-author vcard">
+<img alt="" src="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/362e84fb52247fc0cf504f5b2a5de5ae.png" srcset="http://0.gravatar.com/avatar/362e84fb52247fc0cf504f5b2a5de5ae?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32"> <cite class="fn">Laurens</cite> <span class="says">says:</span> </div>
+<div class="comment-meta commentmetadata"><a href="http://www.prepressure.com/library/technology/raid#comment-98810">
+September 11, 2011 at 8:56 am</a> </div>
+<p>No it isn’t</p>
+</div>
+</li> 
+</ul> 
+</li> 
+<li class="comment odd alt thread-even depth-1" id="comment-98274">
+<div id="div-comment-98274" class="comment-body">
+<div class="comment-author vcard">
+<img alt="" src="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/d4b9df81a8a4ddd76631f5d5b405f7b3.jpg" srcset="http://1.gravatar.com/avatar/d4b9df81a8a4ddd76631f5d5b405f7b3?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32"> <cite class="fn">Joe C.</cite> <span class="says">says:</span> </div>
+<div class="comment-meta commentmetadata"><a href="http://www.prepressure.com/library/technology/raid#comment-98274">
+September 7, 2011 at 9:15 pm</a> </div>
+<p>Hello:</p>
+<p>Can someone tell me if RAID 4+2 is the same as RAID 6?</p>
+<p>Any input is appreciated.</p>
+<p>Joe<br>
+ATT Corp<br>
+West Demoines IA</p>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="http://www.prepressure.com/library/technology/raid?replytocom=98274#respond" onclick='return addComment.moveForm( "div-comment-98274", "98274", "respond", "255" )' aria-label="Reply to Joe C.">Reply</a></div>
+</div>
+</li> 
+<li class="comment even thread-odd thread-alt depth-1" id="comment-96701">
+<div id="div-comment-96701" class="comment-body">
+<div class="comment-author vcard">
+<img alt="" src="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/c12b0c1db44a58f075cdd66f2391a861.jpg" srcset="http://0.gravatar.com/avatar/c12b0c1db44a58f075cdd66f2391a861?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32"> <cite class="fn">RAKHILESH</cite> <span class="says">says:</span> </div>
+<div class="comment-meta commentmetadata"><a href="http://www.prepressure.com/library/technology/raid#comment-96701">
+August 23, 2011 at 5:31 am</a> </div>
+<p>what is raid7?</p>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="http://www.prepressure.com/library/technology/raid?replytocom=96701#respond" onclick='return addComment.moveForm( "div-comment-96701", "96701", "respond", "255" )' aria-label="Reply to RAKHILESH">Reply</a></div>
+</div>
+</li> 
+<li class="comment odd alt thread-even depth-1" id="comment-96059">
+<div id="div-comment-96059" class="comment-body">
+<div class="comment-author vcard">
+<img alt="" src="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/f09913a32697c95b52c0c2be8853a606.jpg" srcset="http://0.gravatar.com/avatar/f09913a32697c95b52c0c2be8853a606?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32"> <cite class="fn">Vishu</cite> <span class="says">says:</span> </div>
+<div class="comment-meta commentmetadata"><a href="http://www.prepressure.com/library/technology/raid#comment-96059">
+August 16, 2011 at 1:07 pm</a> </div>
+<p>How to define RAID 5 performance for 8*600 GB? For rotating Disc.</p>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="http://www.prepressure.com/library/technology/raid?replytocom=96059#respond" onclick='return addComment.moveForm( "div-comment-96059", "96059", "respond", "255" )' aria-label="Reply to Vishu">Reply</a></div>
+</div>
+</li> 
+<li class="comment even thread-odd thread-alt depth-1" id="comment-95259">
+<div id="div-comment-95259" class="comment-body">
+<div class="comment-author vcard">
+<img alt="" src="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/10177a8e2eea07aed2f9592e07915276.jpg" srcset="http://1.gravatar.com/avatar/10177a8e2eea07aed2f9592e07915276?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32"> <cite class="fn">Guest</cite> <span class="says">says:</span> </div>
+<div class="comment-meta commentmetadata"><a href="http://www.prepressure.com/library/technology/raid#comment-95259">
+August 10, 2011 at 6:46 am</a> </div>
+<p>RAID 1+0 is *NOT* the same as 0+1</p>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="http://www.prepressure.com/library/technology/raid?replytocom=95259#respond" onclick='return addComment.moveForm( "div-comment-95259", "95259", "respond", "255" )' aria-label="Reply to Guest">Reply</a></div>
+</div>
+</li> 
+<li class="comment odd alt thread-even depth-1" id="comment-86893">
+<div id="div-comment-86893" class="comment-body">
+<div class="comment-author vcard">
+<img alt="" src="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/9ce8365445f532435b8dc6f0f6132519.jpg" srcset="http://0.gravatar.com/avatar/9ce8365445f532435b8dc6f0f6132519?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32"> <cite class="fn">durga prasad</cite> <span class="says">says:</span> </div>
+<div class="comment-meta commentmetadata"><a href="http://www.prepressure.com/library/technology/raid#comment-86893">
+June 14, 2011 at 4:47 pm</a> </div>
+<p>it excllent way of showing raid 10 in diagrams<br>
+also in clarity</p>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="http://www.prepressure.com/library/technology/raid?replytocom=86893#respond" onclick='return addComment.moveForm( "div-comment-86893", "86893", "respond", "255" )' aria-label="Reply to durga prasad">Reply</a></div>
+</div>
+</li> 
+<li class="comment even thread-odd thread-alt depth-1" id="comment-81028">
+<div id="div-comment-81028" class="comment-body">
+<div class="comment-author vcard">
+<img alt="" src="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/dde658bf133d58ea10a5a51722c1d145.jpg" srcset="http://1.gravatar.com/avatar/dde658bf133d58ea10a5a51722c1d145?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32"> <cite class="fn">joshua</cite> <span class="says">says:</span> </div>
+<div class="comment-meta commentmetadata"><a href="http://www.prepressure.com/library/technology/raid#comment-81028">
+April 20, 2011 at 7:33 pm</a> </div>
+<p>RAID is for pussies</p>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="http://www.prepressure.com/library/technology/raid?replytocom=81028#respond" onclick='return addComment.moveForm( "div-comment-81028", "81028", "respond", "255" )' aria-label="Reply to joshua">Reply</a></div>
+</div>
+</li> 
+<li class="comment odd alt thread-even depth-1" id="comment-78513">
+<div id="div-comment-78513" class="comment-body">
+<div class="comment-author vcard">
+<img alt="" src="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/d677f55f06775f2648d222950005a6ef.png" srcset="http://1.gravatar.com/avatar/d677f55f06775f2648d222950005a6ef?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32"> <cite class="fn"><a onclick="javascript:pageTracker._trackPageview('/outgoing/infotechgarage.com');" href="http://infotechgarage.com/" rel="external nofollow" class="url">Teach</a></cite> <span class="says">says:</span> </div>
+<div class="comment-meta commentmetadata"><a href="http://www.prepressure.com/library/technology/raid#comment-78513">
+March 30, 2011 at 5:18 am</a> </div>
+<p>Thanks for this information, I think Raid 5 is on my machine</p>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="http://www.prepressure.com/library/technology/raid?replytocom=78513#respond" onclick='return addComment.moveForm( "div-comment-78513", "78513", "respond", "255" )' aria-label="Reply to Teach">Reply</a></div>
+</div>
+</li> 
+<li class="comment even thread-odd thread-alt depth-1" id="comment-77200">
+<div id="div-comment-77200" class="comment-body">
+<div class="comment-author vcard">
+<img alt="" src="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/b285cba2783f8a7d1fd1878c666642c4.jpg" srcset="http://2.gravatar.com/avatar/b285cba2783f8a7d1fd1878c666642c4?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32"> <cite class="fn">ITHA</cite> <span class="says">says:</span> </div>
+<div class="comment-meta commentmetadata"><a href="http://www.prepressure.com/library/technology/raid#comment-77200">
+March 17, 2011 at 1:21 pm</a> </div>
+<p>RAID 1 + 0 through a HW controller for the first layer and mobo for 
+the second layer would technically show you as having 2 disks since the 
+RAID card would only show 2 to the motherboard which would then combine 
+those two, therefore you would only see 2 drives unless you opened up 
+the computer itself.</p>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="http://www.prepressure.com/library/technology/raid?replytocom=77200#respond" onclick='return addComment.moveForm( "div-comment-77200", "77200", "respond", "255" )' aria-label="Reply to ITHA">Reply</a></div>
+</div>
+</li> 
+<li class="comment odd alt thread-even depth-1" id="comment-75339">
+<div id="div-comment-75339" class="comment-body">
+<div class="comment-author vcard">
+<img alt="" src="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/b60af97409230615c453ca2f1b1888b2.jpg" srcset="http://2.gravatar.com/avatar/b60af97409230615c453ca2f1b1888b2?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32"> <cite class="fn">Abid Chaudhary</cite> <span class="says">says:</span> </div>
+<div class="comment-meta commentmetadata"><a href="http://www.prepressure.com/library/technology/raid#comment-75339">
+February 21, 2011 at 8:32 pm</a> </div>
+<p>Dear All,<br>
+I am having a problem with HP prolaint Ml150 G3 server its o/s windows 
+server 2003 is not booting properly it has 2 hard disk 250 GB each hot 
+swap able is it possible that I access both or any one hard disks data 
+by attatching it to some other system or if possible then through which 
+operating system.</p>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="http://www.prepressure.com/library/technology/raid?replytocom=75339#respond" onclick='return addComment.moveForm( "div-comment-75339", "75339", "respond", "255" )' aria-label="Reply to Abid Chaudhary">Reply</a></div>
+</div>
+</li> 
+<li class="comment even thread-odd thread-alt depth-1" id="comment-67443">
+<div id="div-comment-67443" class="comment-body">
+<div class="comment-author vcard">
+<img alt="" src="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/a906134481f52de0cfeccbf09f5ed9a7.jpg" srcset="http://1.gravatar.com/avatar/a906134481f52de0cfeccbf09f5ed9a7?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32"> <cite class="fn">Yousefi</cite> <span class="says">says:</span> </div>
+<div class="comment-meta commentmetadata"><a href="http://www.prepressure.com/library/technology/raid#comment-67443">
+November 29, 2010 at 5:19 am</a> </div>
+<p>RAID=Redundant Array of Independent Disks</p>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="http://www.prepressure.com/library/technology/raid?replytocom=67443#respond" onclick='return addComment.moveForm( "div-comment-67443", "67443", "respond", "255" )' aria-label="Reply to Yousefi">Reply</a></div>
+</div>
+</li> 
+<li class="comment odd alt thread-even depth-1" id="comment-62917">
+<div id="div-comment-62917" class="comment-body">
+<div class="comment-author vcard">
+<img alt="" src="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/a615330a9b02f84534f15a397b9a6edc.jpg" srcset="http://1.gravatar.com/avatar/a615330a9b02f84534f15a397b9a6edc?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32"> <cite class="fn">Raoule</cite> <span class="says">says:</span> </div>
+<div class="comment-meta commentmetadata"><a href="http://www.prepressure.com/library/technology/raid#comment-62917">
+September 17, 2010 at 4:25 am</a> </div>
+<p>you can achieve raid10 with 2 disks but it makes no sense to do that,
+ this would slow your drive down which negates the purpose of striping 
+in the first place, you will have 2 read/write operations on same disk 
+making your drive work harder than it has to which would cause failure 
+sooner.</p>
+<p>that type of setup would be great for testing purposes, (not for speed obviously), if you are lacking resources.</p>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="http://www.prepressure.com/library/technology/raid?replytocom=62917#respond" onclick='return addComment.moveForm( "div-comment-62917", "62917", "respond", "255" )' aria-label="Reply to Raoule">Reply</a></div>
+</div>
+</li> 
+<li class="comment even thread-odd thread-alt depth-1 parent" id="comment-38542">
+<div id="div-comment-38542" class="comment-body">
+<div class="comment-author vcard">
+<img alt="" src="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/c045ca76ed0d44b3e4d44bc61acc97a2.jpg" srcset="http://0.gravatar.com/avatar/c045ca76ed0d44b3e4d44bc61acc97a2?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32"> <cite class="fn">Kingsley</cite> <span class="says">says:</span> </div>
+<div class="comment-meta commentmetadata"><a href="http://www.prepressure.com/library/technology/raid#comment-38542">
+December 4, 2009 at 11:59 pm</a> </div>
+<p>I need to deal with very large data set with typical file size of 
+1-7gb, hundreds of them, in a workstation. Both read and write. I can 
+only fit 4 disks for RAID purpose, what’s the best option? Would Raid 3 
+be better than Raid10? It seems like Raid 3 can write in parallel in 
+more than 1/2 of the total number of disks and lose only 1/4 of total 
+storage.</p>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="http://www.prepressure.com/library/technology/raid?replytocom=38542#respond" onclick='return addComment.moveForm( "div-comment-38542", "38542", "respond", "255" )' aria-label="Reply to Kingsley">Reply</a></div>
+</div>
+<ul class="children">
+<li class="comment odd alt depth-2" id="comment-40030">
+<div id="div-comment-40030" class="comment-body">
+<div class="comment-author vcard">
+<img alt="" src="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/f527104bbfa6316570c6182692d8ca46.jpg" srcset="http://0.gravatar.com/avatar/f527104bbfa6316570c6182692d8ca46?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32"> <cite class="fn">Mark Davis</cite> <span class="says">says:</span> </div>
+<div class="comment-meta commentmetadata"><a href="http://www.prepressure.com/library/technology/raid#comment-40030">
+January 26, 2010 at 3:32 am</a> </div>
+<p>Raid 5 only requires a minimum of 3 disks. With 4 disks, you will 
+only loose 1/4 of your HD space. As for file size, that is upto whatever
+ file system you put on the volume created by you Raid array.</p>
+</div>
+</li> 
+</ul> 
+</li> 
+<li class="comment even thread-even depth-1 parent" id="comment-37989">
+<div id="div-comment-37989" class="comment-body">
+<div class="comment-author vcard">
+<img alt="" src="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/030d672740bf5e72adcf83d19087aa55.jpg" srcset="http://0.gravatar.com/avatar/030d672740bf5e72adcf83d19087aa55?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32"> <cite class="fn"><a href="http://www.prepressure.com/library/technology/raid" rel="external nofollow" class="url">Ramesh</a></cite> <span class="says">says:</span> </div>
+<div class="comment-meta commentmetadata"><a href="http://www.prepressure.com/library/technology/raid#comment-37989">
+November 23, 2009 at 8:21 am</a> </div>
+<p>Raid5 5disc failure how to recovery data pl explain</p>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="http://www.prepressure.com/library/technology/raid?replytocom=37989#respond" onclick='return addComment.moveForm( "div-comment-37989", "37989", "respond", "255" )' aria-label="Reply to Ramesh">Reply</a></div>
+</div>
+<ul class="children">
+<li class="comment odd alt depth-2" id="comment-40064">
+<div id="div-comment-40064" class="comment-body">
+<div class="comment-author vcard">
+<img alt="" src="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/9dea2ed6f7c2a53d74dd3b09fe36a712.jpg" srcset="http://0.gravatar.com/avatar/9dea2ed6f7c2a53d74dd3b09fe36a712?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32"> <cite class="fn">s</cite> <span class="says">says:</span> </div>
+<div class="comment-meta commentmetadata"><a href="http://www.prepressure.com/library/technology/raid#comment-40064">
+January 27, 2010 at 10:59 pm</a> </div>
+<p>In simplistic terms:</p>
+<p>1. Replace failed drive with good drive</p>
+</div>
+</li> 
+</ul> 
+</li> 
+<li class="comment even thread-odd thread-alt depth-1" id="comment-37681">
+<div id="div-comment-37681" class="comment-body">
+<div class="comment-author vcard">
+<img alt="" src="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/1d4a117a540adb07d0fb5656e88f996c.jpg" srcset="http://1.gravatar.com/avatar/1d4a117a540adb07d0fb5656e88f996c?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32"> <cite class="fn">Russell Mujee</cite> <span class="says">says:</span> </div>
+<div class="comment-meta commentmetadata"><a href="http://www.prepressure.com/library/technology/raid#comment-37681">
+November 11, 2009 at 1:59 pm</a> </div>
+<p>I have used RAID 6 in one of my server. This has allowed me to create
+ two hot swap disks. I deceided to use it on case scenarios such as: if 
+two active disks fail at the same time. or if two disks will fail at 
+diferent intervals but the chance of getting a new replacement is in the
+ process and has not arrived yet. Featured in a NEC server rack mount.</p>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="http://www.prepressure.com/library/technology/raid?replytocom=37681#respond" onclick='return addComment.moveForm( "div-comment-37681", "37681", "respond", "255" )' aria-label="Reply to Russell Mujee">Reply</a></div>
+</div>
+</li> 
+<li class="comment odd alt thread-even depth-1" id="comment-31856">
+<div id="div-comment-31856" class="comment-body">
+<div class="comment-author vcard">
+<img alt="" src="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/9975f1ba3251eeb91969a06b5756a92e.jpg" srcset="http://0.gravatar.com/avatar/9975f1ba3251eeb91969a06b5756a92e?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32"> <cite class="fn">Bob Twain</cite> <span class="says">says:</span> </div>
+<div class="comment-meta commentmetadata"><a href="http://www.prepressure.com/library/technology/raid#comment-31856">
+June 12, 2009 at 9:17 pm</a> </div>
+<p>I have head that the government is now doing work on RAID -17 (yes, 
+negative 17). This technology is based on tensors and promises to put 
+all other RAID to shame.</p>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="http://www.prepressure.com/library/technology/raid?replytocom=31856#respond" onclick='return addComment.moveForm( "div-comment-31856", "31856", "respond", "255" )' aria-label="Reply to Bob Twain">Reply</a></div>
+</div>
+</li> 
+<li class="comment even thread-odd thread-alt depth-1" id="comment-13246">
+<div id="div-comment-13246" class="comment-body">
+<div class="comment-author vcard">
+<img alt="" src="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/326beb4dd6d860c25bf064ae0d21147e.jpg" srcset="http://0.gravatar.com/avatar/326beb4dd6d860c25bf064ae0d21147e?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32"> <cite class="fn">Pinar</cite> <span class="says">says:</span> </div>
+<div class="comment-meta commentmetadata"><a href="http://www.prepressure.com/library/technology/raid#comment-13246">
+November 18, 2008 at 7:36 am</a> </div>
+<p>Actually you can have RAID 1+0 with only two disks.</p>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="http://www.prepressure.com/library/technology/raid?replytocom=13246#respond" onclick='return addComment.moveForm( "div-comment-13246", "13246", "respond", "255" )' aria-label="Reply to Pinar">Reply</a></div>
+</div>
+</li> 
+<li class="comment odd alt thread-even depth-1" id="comment-61">
+<div id="div-comment-61" class="comment-body">
+<div class="comment-author vcard">
+<img alt="" src="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/5ca4136a060a2574a936cdf6881f733c.jpg" srcset="http://2.gravatar.com/avatar/5ca4136a060a2574a936cdf6881f733c?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32"> <cite class="fn">max</cite> <span class="says">says:</span> </div>
+<div class="comment-meta commentmetadata"><a href="http://www.prepressure.com/library/technology/raid#comment-61">
+August 21, 2007 at 8:57 pm</a> </div>
+<p>you can get 1+0 on two disk using two partitions. this can be done with software raid. dunno if HW controllers can support this.</p>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="http://www.prepressure.com/library/technology/raid?replytocom=61#respond" onclick='return addComment.moveForm( "div-comment-61", "61", "respond", "255" )' aria-label="Reply to max">Reply</a></div>
+</div>
+</li> 
+<li class="comment byuser comment-author-admin bypostauthor even thread-odd thread-alt depth-1 parent" id="comment-55">
+<div id="div-comment-55" class="comment-body">
+<div class="comment-author vcard">
+<img alt="" src="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/362e84fb52247fc0cf504f5b2a5de5ae.png" srcset="http://0.gravatar.com/avatar/362e84fb52247fc0cf504f5b2a5de5ae?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32"> <cite class="fn">Laurens</cite> <span class="says">says:</span> </div>
+<div class="comment-meta commentmetadata"><a href="http://www.prepressure.com/library/technology/raid#comment-55">
+August 21, 2007 at 2:55 am</a> </div>
+<p>Don’t the HP tools state “1(+0)”? On some controllers such as HP 
+ones, all available options can be selected even if there aren’t enough 
+disks available. With 2 disks, selecting RAID 1+0 effectively gives you a
+ RAID 1 set. The disks won’t be striped.</p>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="http://www.prepressure.com/library/technology/raid?replytocom=55#respond" onclick='return addComment.moveForm( "div-comment-55", "55", "respond", "255" )' aria-label="Reply to Laurens">Reply</a></div>
+</div>
+<ul class="children">
+<li class="comment odd alt depth-2" id="comment-89800">
+<div id="div-comment-89800" class="comment-body">
+<div class="comment-author vcard">
+<img alt="" src="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/cfd93f11ff4ff5b03ea5708faac517fd.jpg" srcset="http://0.gravatar.com/avatar/cfd93f11ff4ff5b03ea5708faac517fd?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32"> <cite class="fn">generalacc</cite> <span class="says">says:</span> </div>
+<div class="comment-meta commentmetadata"><a href="http://www.prepressure.com/library/technology/raid#comment-89800">
+June 29, 2011 at 7:51 pm</a> </div>
+<p>Many thanks, glad your answer was 1st hit google in my search <img src="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/simple-smile.png" alt=":)" class="wp-smiley" style="height: 1em; max-height: 1em;"></p>
+</div>
+</li> 
+<li class="comment even depth-2 parent" id="comment-443960">
+<div id="div-comment-443960" class="comment-body">
+<div class="comment-author vcard">
+<img alt="" src="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/cbb70191ce7b128e8647fa9ec90fa311.jpg" srcset="http://0.gravatar.com/avatar/cbb70191ce7b128e8647fa9ec90fa311?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32"> <cite class="fn">Ashe' Gupta</cite> <span class="says">says:</span> </div>
+<div class="comment-meta commentmetadata"><a href="http://www.prepressure.com/library/technology/raid#comment-443960">
+April 7, 2015 at 2:44 pm</a> </div>
+<p>I am a newbie when it comes to NAS. I am trying to configure 4 drives
+ of 3 TB each. If I use RAID 1, what is my effective capacity?</p>
+</div>
+</li> 
+<li class="comment byuser comment-author-admin bypostauthor odd alt depth-2" id="comment-443961">
+<div id="div-comment-443961" class="comment-body">
+<div class="comment-author vcard">
+<img alt="" src="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/362e84fb52247fc0cf504f5b2a5de5ae.png" srcset="http://0.gravatar.com/avatar/362e84fb52247fc0cf504f5b2a5de5ae?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32"> <cite class="fn">Laurens</cite> <span class="says">says:</span> </div>
+<div class="comment-meta commentmetadata"><a href="http://www.prepressure.com/library/technology/raid#comment-443961">
+April 7, 2015 at 7:38 pm</a> </div>
+<p>As stated in the RAID 1 section: <em>‘The main disadvantage is that 
+the effective storage capacity is only half of the total drive capacity 
+because all data get written twice.’</em>. That means your effective capacity will be 6 TB.</p>
+</div>
+</li> 
+</ul> 
+</li> 
+<li class="comment even thread-even depth-1 parent" id="comment-31">
+<div id="div-comment-31" class="comment-body">
+<div class="comment-author vcard">
+<img alt="" src="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/8f4540f5aa653df3c3cc623918376033.jpg" srcset="http://2.gravatar.com/avatar/8f4540f5aa653df3c3cc623918376033?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32"> <cite class="fn">puzzled</cite> <span class="says">says:</span> </div>
+<div class="comment-meta commentmetadata"><a href="http://www.prepressure.com/library/technology/raid#comment-31">
+August 17, 2007 at 1:31 am</a> </div>
+<p>In the HP ACU page, I see on our array two disks, labeled as RAID 
+1+0. However, if I understand it correctly, RAID 1+0 is a four disk 
+minimum. How can you have RAID 1+0 with two disks? Isn’t this 
+essentially RAID 1?</p>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="http://www.prepressure.com/library/technology/raid?replytocom=31#respond" onclick='return addComment.moveForm( "div-comment-31", "31", "respond", "255" )' aria-label="Reply to puzzled">Reply</a></div>
+</div>
+<ul class="children">
+<li class="comment odd alt depth-2" id="comment-64430">
+<div id="div-comment-64430" class="comment-body">
+<div class="comment-author vcard">
+<img alt="" src="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/0ed813e4095ddef7608966c486604be6.jpg" srcset="http://0.gravatar.com/avatar/0ed813e4095ddef7608966c486604be6?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32"> <cite class="fn">Marky Daniels</cite> <span class="says">says:</span> </div>
+<div class="comment-meta commentmetadata"><a href="http://www.prepressure.com/library/technology/raid#comment-64430">
+October 19, 2010 at 7:33 pm</a> </div>
+<p>Actually it is a Raid +1 -0.</p>
+</div>
+</li> 
+</ul> 
+</li> 
+</ol>
+<div class="navigation">
+<div class="alignleft"></div>
+<div class="alignright"></div>
+</div>
+<div id="respond">
+<h3>Leave a Reply</h3>
+<div id="cancel-comment-reply">
+<small><a rel="nofollow" id="cancel-comment-reply-link" href="http://www.prepressure.com/library/technology/raid#respond" style="display:none;">Click here to cancel reply.</a></small>
+</div>
+<form action="http://www.prepressure.com/wp-comments-post.php" method="post" id="commentform">
+<p><input name="author" id="author" size="22" tabindex="1" aria-required="true" type="text">
+<label for="author"><small>Name (required)</small></label></p>
+<p><input name="email" id="email" size="22" tabindex="2" aria-required="true" type="text">
+<label for="email"><small>Mail (will not be published) (required)</small></label></p>
+<p><input name="url" id="url" size="22" tabindex="3" type="text">
+<label for="url"><small>Website</small></label></p>
+<p><textarea name="comment" id="comment" cols="58" rows="10" tabindex="4"></textarea></p>
+<p><input name="submit" id="submit" tabindex="5" value="Submit Comment" type="submit">
+<input name="comment_post_ID" value="255" id="comment_post_ID" type="hidden">
+<input name="comment_parent" id="comment_parent" value="0" type="hidden">
+</p>
+<p style="display: none;"><input id="akismet_comment_nonce" name="akismet_comment_nonce" value="195cd51c00" type="hidden"></p><p class="cptch_block"><br><span class="cptch_wrap">
+<label class="cptch_label" for="cptch_input">
+<span class="cptch_span"><input id="cptch_input" class="cptch_input" autocomplete="off" name="cptch_number" maxlength="2" size="2" aria-required="true" required="required" style="margin-bottom:0;display:inline;font-size: 12px;width: 40px;" type="text"></span>
+<span class="cptch_span">&nbsp;×&nbsp;</span>
+<span class="cptch_span">eight</span>
+<span class="cptch_span">&nbsp;=&nbsp;</span>
+<span class="cptch_span">thirty two</span>
+<input name="cptch_result" value="qOI=" type="hidden">
+<input name="cptch_time" value="1461338335" type="hidden">
+<input value="Version: 4.1.9" type="hidden">
+</label><span class="cptch_reload_button_wrap hide-if-no-js">
+<noscript>
+<style type="text/css">.hide-if-no-js{display:none!important;}</style>
+</noscript>
+<span class="cptch_reload_button dashicons dashicons-update"></span>
+</span></span></p><p style="display: none;"></p>
+<input id="ak_js" name="ak_js" value="1461338337518" type="hidden"></form>
+</div>
+</div>
+</article>
+</div>
+<div id="sidebarLT">
+<nav>
+<h4>Navigation</h4>
+<ul>
+<div class="menu-navigation-container"><ul id="menu-navigation" class="menu"><li id="menu-item-9771" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-9771"><a href="http://www.prepressure.com/?utm_campaign=InternalLink&amp;utm_medium=Navigation&amp;utm_source=Home">Home</a></li>
+<li id="menu-item-8213" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-8213"><a title="Technical information about graphic design" href="http://www.prepressure.com/design?utm_campaign=InternalLink&amp;utm_medium=Navigation&amp;utm_source=Design">Design</a>
+<ul class="sub-menu">
+<li id="menu-item-8215" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-8215"><a title="Basic principles of print design" href="http://www.prepressure.com/design/basics">Basics</a></li>
+<li id="menu-item-8226" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-8226"><a title="How to optimize a layout for printing" href="http://www.prepressure.com/design/optimize_design">Troublefree Output</a></li>
+<li id="menu-item-8248" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-8248"><a title="How to fix Adobe InDesign problems" href="http://www.prepressure.com/design/troubleshooting/indesign-problems">Troubleshoot InDesign</a></li>
+</ul>
+</li>
+<li id="menu-item-8214" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-8214"><a title="Premedia basics" href="http://www.prepressure.com/prepress?utm_campaign=InternalLink&amp;utm_medium=Navigation&amp;utm_source=Prepress">Prepress</a>
+<ul class="sub-menu">
+<li id="menu-item-8249" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-8249"><a title="Prepress workflow software" href="http://www.prepressure.com/prepress/workflow">Workflow Systems</a></li>
+<li id="menu-item-8230" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-8230"><a title="Evolution of prepress" href="http://www.prepressure.com/prepress/history">Prepress History</a></li>
+</ul>
+</li>
+<li id="menu-item-8216" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-8216"><a title="The industrial print process &amp; industry" href="http://www.prepressure.com/printing?utm_campaign=InternalLink&amp;utm_medium=Navigation&amp;utm_source=Printing">Printing</a>
+<ul class="sub-menu">
+<li id="menu-item-8231" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-8231"><a title="Applications of industrial printing" href="http://www.prepressure.com/printing/products">Printed Products</a></li>
+<li id="menu-item-8232" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-8232"><a title="Print market segmentation" href="http://www.prepressure.com/printing/industry">Printing Industry</a></li>
+<li id="menu-item-8233" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-8233"><a title="Offset, flexo, inkjet &amp; other printing technologies" href="http://www.prepressure.com/printing/processes">Printing Processes</a></li>
+<li id="menu-item-8338" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-8338"><a title="How print evolved" href="http://www.prepressure.com/printing/history">History of Printing</a></li>
+<li id="menu-item-8337" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-8337"><a title="Pictures from printing museums" href="http://www.prepressure.com/printing/museum">Printing Museums</a></li>
+</ul>
+</li>
+<li id="menu-item-8217" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-8217"><a href="http://www.prepressure.com/finishing?utm_campaign=InternalLink&amp;utm_medium=Navigation&amp;utm_source=Finishing">Finishing</a>
+<ul class="sub-menu">
+<li id="menu-item-10097" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-10097"><a href="http://www.prepressure.com/finishing/how-to-fold-a-brochure">Folding</a></li>
+<li id="menu-item-10098" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-10098"><a href="http://www.prepressure.com/finishing/perfect-binding">Perfect Binding</a></li>
+</ul>
+</li>
+<li id="menu-item-8218" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-8218"><a title="Glossary of graphic design, prepress &amp; print terms" href="http://www.prepressure.com/printing-dictionary?utm_campaign=InternalLink&amp;utm_medium=Navigation&amp;utm_source=Dictionary">Printing Dictionary</a>
+<ul class="sub-menu">
+<li id="menu-item-10064" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-10064"><a href="http://www.prepressure.com/printing-dictionary/a">A – ‘A2′ to ‘azure’</a></li>
+<li id="menu-item-10065" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-10065"><a href="http://www.prepressure.com/printing-dictionary/b">B – ‘back lining’ to ‘byline’</a></li>
+<li id="menu-item-10066" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-10066"><a href="http://www.prepressure.com/printing-dictionary/c">C – ‘C1S’ to ‘cyan’</a></li>
+<li id="menu-item-10067" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-10067"><a href="http://www.prepressure.com/printing-dictionary/d">D – ‘Dagger’ to ‘Dye’</a></li>
+<li id="menu-item-10068" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-10068"><a href="http://www.prepressure.com/printing-dictionary/e">E – ‘E-13B’ to ‘extension’</a></li>
+<li id="menu-item-10069" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-10069"><a href="http://www.prepressure.com/printing-dictionary/f">F – ‘face’ to ‘fuzzy font’</a></li>
+<li id="menu-item-10070" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-10070"><a href="http://www.prepressure.com/printing-dictionary/g">G – ‘GAA’ to ‘gutter’</a></li>
+<li id="menu-item-10071" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-10071"><a href="http://www.prepressure.com/printing-dictionary/h">H – ‘hairline’ to ‘hyphen’</a></li>
+<li id="menu-item-10072" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-10072"><a href="http://www.prepressure.com/printing-dictionary/i">I – ‘IBC’ to ‘ivory board’</a></li>
+<li id="menu-item-10073" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-10073"><a href="http://www.prepressure.com/printing-dictionary/j">J – ‘jacket’ to ‘justify’</a></li>
+<li id="menu-item-10074" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-10074"><a href="http://www.prepressure.com/printing-dictionary/k">K – ‘kanji’ to ‘KS/KSSM’</a></li>
+<li id="menu-item-10075" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-10075"><a href="http://www.prepressure.com/printing-dictionary/l">L – ‘L*A*B’ to ‘LZW’</a></li>
+<li id="menu-item-10076" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-10076"><a href="http://www.prepressure.com/printing-dictionary/m">M – ‘Mac’ to ‘M weight’</a></li>
+<li id="menu-item-10077" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-10077"><a href="http://www.prepressure.com/printing-dictionary/n">N – ‘nameplate’ to ‘#’</a></li>
+<li id="menu-item-10078" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-10078"><a href="http://www.prepressure.com/printing-dictionary/o">O – ‘OBC’ to ‘Ozalid’</a></li>
+<li id="menu-item-10079" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-10079"><a href="http://www.prepressure.com/printing-dictionary/p">P – ‘packing’ to ‘pyroxylin’</a></li>
+<li id="menu-item-10080" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-10080"><a href="http://www.prepressure.com/printing-dictionary/q">Q – ‘QC’ to ‘quire’</a></li>
+<li id="menu-item-10081" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-10081"><a href="http://www.prepressure.com/printing-dictionary/r">R – ‘ragged’ to ‘runout’</a></li>
+<li id="menu-item-10082" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-10082"><a href="http://www.prepressure.com/printing-dictionary/s">S – ‘saddle’ to ‘Syquest’</a></li>
+<li id="menu-item-10083" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-10083"><a href="http://www.prepressure.com/printing-dictionary/t">T – ‘tabloid’ to ‘typo’</a></li>
+<li id="menu-item-10084" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-10084"><a href="http://www.prepressure.com/printing-dictionary/u">U – ‘UCA’ to ‘UV’</a></li>
+<li id="menu-item-10085" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-10085"><a href="http://www.prepressure.com/printing-dictionary/v">V – ‘vacuum’ to ‘VRML’</a></li>
+<li id="menu-item-10086" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-10086"><a href="http://www.prepressure.com/printing-dictionary/w">W – ‘W&amp;B’ to ‘WYSIWYG’</a></li>
+<li id="menu-item-10087" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-10087"><a href="http://www.prepressure.com/printing-dictionary/x">X – ‘X.25′ to ‘xylography’</a></li>
+<li id="menu-item-10088" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-10088"><a href="http://www.prepressure.com/printing-dictionary/y">Y – ‘YAG’ to ‘YMCK’</a></li>
+<li id="menu-item-10089" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-10089"><a href="http://www.prepressure.com/printing-dictionary/z">Z – ‘z-axis’ to ‘zymurgy’</a></li>
+</ul>
+</li>
+<li id="menu-item-8219" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-8219"><a title="Technical aspects of fonts &amp; their use in printed communication" href="http://www.prepressure.com/fonts?utm_campaign=InternalLink&amp;utm_medium=Navigation&amp;utm_source=Fonts">Fonts</a>
+<ul class="sub-menu">
+<li id="menu-item-8235" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-8235"><a title="Font formats, OS support &amp; font management utilities" href="http://www.prepressure.com/fonts/basics">Font Basics</a></li>
+<li id="menu-item-8236" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-8236"><a title="The evolution of modern font formats" href="http://www.prepressure.com/fonts/basics/history">History Of Fonts</a></li>
+<li id="menu-item-8234" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-8234"><a title="30 important fonts" href="http://www.prepressure.com/fonts/interesting">Interesting Typefaces</a></li>
+<li id="menu-item-8250" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-8250"><a title="Yes, Comic Sans leads the pack" href="http://www.prepressure.com/fonts/interesting/most_hated">Most Hated Fonts</a></li>
+</ul>
+</li>
+<li id="menu-item-8223" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-8223"><a title="The industry standard page description language" href="http://www.prepressure.com/postscript?utm_campaign=InternalLink&amp;utm_medium=Navigation&amp;utm_source=PostScript">PostScript</a>
+<ul class="sub-menu">
+<li id="menu-item-8237" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-8237"><a title="PostScript as a programming language" href="http://www.prepressure.com/postscript/basics">PostScript Basics</a></li>
+<li id="menu-item-8238" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-8238"><a title="How to work around PS errors &amp; a list of them" href="http://www.prepressure.com/postscript/troubleshooting">PostScript Errors</a></li>
+<li id="menu-item-8239" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-8239"><a title="The evolution of PostScript from 1984 till now" href="http://www.prepressure.com/postscript/basics/history">History Of PostScript</a></li>
+</ul>
+</li>
+<li id="menu-item-8222" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-8222"><a href="http://www.prepressure.com/pdf?utm_campaign=InternalLink&amp;utm_medium=Navigation&amp;utm_source=PDF">PDF</a>
+<ul class="sub-menu">
+<li id="menu-item-8240" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-8240"><a title="How to create &amp; edit PDF files, the file format,…" href="http://www.prepressure.com/pdf/basics">PDF Basics</a></li>
+<li id="menu-item-8241" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-8241"><a title="How PDF became such an important file format" href="http://www.prepressure.com/pdf/basics/history">History Of PDF</a></li>
+</ul>
+</li>
+<li id="menu-item-8220" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-8220"><a title="The Job Definition Format" href="http://www.prepressure.com/jdf?utm_campaign=InternalLink&amp;utm_medium=Navigation&amp;utm_source=JDF">JDF</a>
+<ul class="sub-menu">
+<li id="menu-item-8251" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-8251"><a title="The file format and its history" href="http://www.prepressure.com/jdf/basics">JDF Basics</a></li>
+<li id="menu-item-8252" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-8252"><a title="How to get JDF working for you" href="http://www.prepressure.com/jdf/implementation">Implementing JDF</a></li>
+<li id="menu-item-10108" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-10108"><a href="http://www.prepressure.com/jdf/basics/history">History of JDF</a></li>
+</ul>
+</li>
+<li id="menu-item-8221" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-8221"><a title="Various bits of information" href="http://www.prepressure.com/library?utm_campaign=InternalLink&amp;utm_medium=Navigation&amp;utm_source=Library">Library</a>
+<ul class="sub-menu">
+<li id="menu-item-8243" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-8243"><a title="Graphic file formats such as EPS, TIFF, DCS,.. " href="http://www.prepressure.com/library/file-formats">File Formats</a></li>
+<li id="menu-item-8242" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-8242"><a title="Techniques to reduce file size" href="http://www.prepressure.com/library/compression-algorithm">Compression Algorithms</a></li>
+<li id="menu-item-8244" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-8244"><a title="A list of page sizes, such as ISO A4, Legal and Metric Demy Octavo" href="http://www.prepressure.com/library/paper-size">Paper Sizes</a></li>
+<li id="menu-item-8253" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-8253"><a href="http://www.prepressure.com/library/technology/qr-code">QR Codes</a></li>
+<li id="menu-item-10101" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-10101"><a href="http://www.prepressure.com/library/technology/qr-code">RAID Storage</a></li>
+</ul>
+</li>
+<li id="menu-item-8224" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-8224"><a href="http://www.prepressure.com/blog?utm_campaign=InternalLink&amp;utm_medium=Navigation&amp;utm_source=Blog">Blog</a>
+<ul class="sub-menu">
+<li id="menu-item-8371" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-8371"><a title="Gotta rant when you’re on the web" href="http://www.prepressure.com/blog/rant">Rants</a></li>
+<li id="menu-item-8372" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-8372"><a title="Reviews of software and hardware products" href="http://www.prepressure.com/blog/review">Reviews</a></li>
+<li id="menu-item-8373" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-8373"><a title="Tips for various applications and OS’es" href="http://www.prepressure.com/blog/tips-and-tricks">Tips &amp; Tricks</a></li>
+<li id="menu-item-8370" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-8370"><a href="http://www.prepressure.com/blog/photography">Photography</a></li>
+<li id="menu-item-8374" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-8374"><a title="Polls about the graphic arts industry" href="http://www.prepressure.com/blog/poll">Polls</a></li>
+</ul>
+</li>
+<li id="menu-item-8225" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-8225"><a href="http://www.prepressure.com/about?utm_campaign=InternalLink&amp;utm_medium=Navigation&amp;utm_source=About">About</a>
+<ul class="sub-menu">
+<li id="menu-item-10090" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-10090"><a href="http://www.prepressure.com/about/archive-2010">2010 Archive</a></li>
+<li id="menu-item-10091" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-10091"><a href="http://www.prepressure.com/about/archive-2011">2011 Archive</a></li>
+<li id="menu-item-10092" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-10092"><a href="http://www.prepressure.com/about/the-2012-archive">2012 Archive</a></li>
+<li id="menu-item-10093" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-10093"><a href="http://www.prepressure.com/about/the-2013-archive">2013 Archive</a></li>
+<li id="menu-item-10094" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-10094"><a href="http://www.prepressure.com/about/the-2014-archive">2014 Archive</a></li>
+<li id="menu-item-10421" class="menu-item menu-item-type- menu-item-object- menu-item-10421"><a>2015 Archive</a></li>
+</ul>
+</li>
+</ul></div> </ul>
+</nav>
+<hr>
+<aside>
+<div class="related-posts">
+<div id="related-posts-MRP_all" class="related-posts-type">
+<h4>Related Pages</h4>
+<p>None</p>
+</div></div> <hr>
+<h4>Popular Pages</h4>
+<div class="menu-popularpages-container"><ul id="menu-popularpages" class="menu"><li id="menu-item-8254" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-8254"><a title="How to edit a PDF file" href="http://www.prepressure.com/pdf/basics/editing?utm_campaign=InternalLink&amp;utm_medium=PopularPages&amp;utm_source=PDFediting">PDF Editing</a></li>
+<li id="menu-item-9768" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-9768"><a href="http://www.prepressure.com/pdf/basics/metadata?utm_campaign=InternalLink&amp;utm_medium=PopularPages&amp;utm_source=PDFmetadata">PDF Metadata</a></li>
+<li id="menu-item-9770" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-9770"><a href="http://www.prepressure.com/pdf/basics/page-boxes?utm_campaign=InternalLink&amp;utm_medium=PopularPages&amp;utm_source=PDFboxes">PDF Page Boxes</a></li>
+<li id="menu-item-8259" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-8259"><a href="http://www.prepressure.com/pdf/basics/preflight?utm_campaign=InternalLink&amp;utm_medium=PopularPages&amp;utm_source=PDFpreflight">Preflight PDF Files</a></li>
+<li id="menu-item-8257" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-8257"><a href="http://www.prepressure.com/library/paper-size?utm_campaign=InternalLink&amp;utm_medium=PopularPages&amp;utm_source=PaperSizes">Paper Sizes</a></li>
+<li id="menu-item-8255" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-8255"><a href="http://www.prepressure.com/library/file-formats/eps?utm_campaign=InternalLink&amp;utm_medium=PopularPages&amp;utm_source=EPSformat">EPS File Format</a></li>
+<li id="menu-item-8256" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-8256"><a href="http://www.prepressure.com/library/file-formats/bitmap-versus-vector?utm_campaign=InternalLink&amp;utm_medium=PopularPages&amp;utm_source=BitmapVsVector">Bitmap versus Vector</a></li>
+<li id="menu-item-9769" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-9769"><a href="http://www.prepressure.com/design/basics/bleed?utm_campaign=InternalLink&amp;utm_medium=PopularPages&amp;utm_source=Bleed">Page Bleed</a></li>
+<li id="menu-item-8258" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-8258"><a href="http://www.prepressure.com/library/technology/qr-code?utm_campaign=InternalLink&amp;utm_medium=PopularPages&amp;utm_source=QRcodes">QR Codes</a></li>
+<li id="menu-item-9767" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-9767"><a href="http://www.prepressure.com/library/technology/raid?utm_campaign=InternalLink&amp;utm_medium=PopularPages&amp;utm_source=Raid">RAID 0, 1, 5, 6 &amp; 10</a></li>
+</ul></div> </aside>
+</div>
+</div>
+<div id="sidebarRT">
+<aside>
+<h4>About</h4>
+<p style="font-style:italic">Prepressure is my notebook about prepress, 
+printing and publishing. It covers PDF, fonts, file formats, design and 
+anything else that catches my interest. Thanks for visiting!</p>
+<hr>
+<h4>Polls</h4><div id="polls-47" class="wp-polls">
+<form id="polls_form_47" class="wp-polls-form" action="/index.php" method="post">
+<p style="display: none;"><input id="poll_47_nonce" name="wp-polls-nonce" value="ad8c178f43" type="hidden"></p>
+<p style="display: none;"><input name="poll_id" value="47" type="hidden"></p>
+<p style="text-align: center;"><strong>Who processes data for offset and digital printing?</strong></p><div id="polls-47-ans" class="wp-polls-ans"><ul class="wp-polls-ul">
+<li><input id="poll-answer-249" name="poll_47" value="249" type="radio"> <label for="poll-answer-249">The same prepress operators handle both</label></li>
+<li><input id="poll-answer-250" name="poll_47" value="250" type="radio"> <label for="poll-answer-250">Separate operators for offset and digital</label></li>
+<li><input id="poll-answer-251" name="poll_47" value="251" type="radio"> <label for="poll-answer-251">Not applicable for us</label></li>
+</ul><p style="text-align: center;"><input name="vote" value="   Vote   " class="Buttons" onclick="poll_vote(47);" onkeypress="poll_result(47);" type="button"></p><p style="text-align: center;"><a href="#ViewPollResults" onclick="poll_result(47); return false;" onkeypress="poll_result(47); return false;" title="View Results Of This Poll">View Results</a></p></div>
+</form>
+</div>
+<div id="polls-47-loading" class="wp-polls-loading"><img src="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/loading.gif" alt="Loading ..." title="Loading ..." class="wp-polls-image" height="16" width="16">&nbsp;Loading ...</div>
+<ul><li><a href="http://www.prepressure.com/blog/poll">Polls Archive</a></li></ul> </aside>
+<hr>
+<h4>Advertising</h4>
+<script async="" src="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/adsbygoogle.js"></script>
+ 
+<ins data-adsbygoogle-status="done" class="adsbygoogle" style="display:inline-block;width:160px;height:600px" data-ad-client="ca-pub-3018011865981043" data-ad-slot="8843074577"><ins id="aswift_1_expand" style="display:inline-table;border:none;height:600px;margin:0;padding:0;position:relative;visibility:visible;width:160px;background-color:transparent"><ins id="aswift_1_anchor" style="display:block;border:none;height:600px;margin:0;padding:0;position:relative;visibility:visible;width:160px;background-color:transparent"><iframe marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" scrolling="no" allowfullscreen="true" onload="var i=this.id,s=window.google_iframe_oncopy,H=s&amp;&amp;s.handlers,h=H&amp;&amp;H[i],w=this.contentWindow,d;try{d=w.document}catch(e){}if(h&amp;&amp;d&amp;&amp;(!d.body||!d.body.firstChild)){if(h.call){setTimeout(h,0)}else if(h.match){try{h=s.upd(h,i)}catch(e){}w.location.replace(h)}}" id="aswift_1" name="aswift_1" style="left:0;position:absolute;top:0;" frameborder="0" height="600" width="160"></iframe></ins></ins></ins>
+<script>
+		(adsbygoogle = window.adsbygoogle || []).push({});
+	</script>
+</div>
+</div>
+<div id="footer">
+<footer>
+ 
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script><script src="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/ga.js" type="text/javascript"></script>
+<script type="text/javascript">
+var pageTracker = _gat._getTracker("UA-6237775-1");
+pageTracker._initData();
+pageTracker._trackPageview();
+</script>
+ <script type="text/javascript" src="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/form.js"></script>
+<script type="text/javascript">
+/* <![CDATA[ */
+var pollsL10n = {"ajax_url":"http:\/\/www.prepressure.com\/wp-admin\/admin-ajax.php","text_wait":"Your last request is still being processed. Please wait a while ...","text_valid":"Please choose a valid poll answer.","text_multiple":"Maximum number of choices allowed: ","show_loading":"1","show_fading":"1"};
+/* ]]> */
+</script>
+<script type="text/javascript" src="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/polls-js.js"></script>
+<script type="text/javascript" src="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/devicepx-jetpack.js"></script>
+<script type="text/javascript" src="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/wp-embed.js"></script>
+<script type="text/javascript" src="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/e-201616.js" async="" defer="defer"></script>
+<script type="text/javascript">
+	_stq = window._stq || [];
+	_stq.push([ 'view', {v:'ext',j:'1:3.9.6',blog:'2312704',post:'255',tz:'1',srv:'www.prepressure.com'} ]);
+	_stq.push([ 'clickTrackerInit', '2312704', '255' ]);
+</script>
+<div id="cookie-notice" class="cn-bottom wp-default" style="color: rgb(255, 255, 255); background-color: rgb(137, 137, 137); display: block;"><div class="cookie-notice-container"><span id="cn-notice-text">A cookie is used to collect visitor statistics. The adverts also use one. You are free to leave if you dislike their use.</span><a href="#" id="cn-accept-cookie" data-cookie-set="accept" class="cn-set-cookie button wp-default">Got it</a>
+</div>
+</div> <p>© 1997-2015 – <a href="https://plus.google.com/u/0/107216845903231667154?rel=author">Laurens Leurs</a> | All Rights Reserved</p>
+</footer>
+</div>
+</div>
+
+
+ 
+ 
+ <img id="wpstats" src="RAID%20level%200,%201,%205,%206%20and%2010%20_%20Advantage,%20disadvantage,%20use_files/g.gif"></body></html>
