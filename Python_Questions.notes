@@ -47,15 +47,25 @@ print [m(2) for m in multipliers()]
 How would you modify the definition of multipliers to produce the presumably desired behavior?
 ###################################################################################
 The output of the above code will be [6, 6, 6, 6] (not [0, 2, 4, 6]).
-The reason for this is that Python’s closures are late binding. This means that the values of variables used in closures are looked up at the time the inner function is called. So as a result, when any of the functions returned by multipliers() are called, the value of i is looked up in the surrounding scope at that time. By then, regardless of which of the returned functions is called, the for loop has completed and i is left with its final value of 3. Therefore, every returned function multiplies the value it is passed by 3, so since a value of 2 is passed in the above code, they all return a value of 6 (i.e., 3 x 2).
-(Incidentally, as pointed out in The Hitchhiker’s Guide to Python, there is a somewhat widespread misconception that this has something to do with lambdas, which is not the case. Functions created with a lambda expression are in no way special and the same behavior is exhibited by functions created using an ordinary def.)
+The reason for this is that Python’s closures are late binding. This means that the values 
+of variables used in closures are looked up at the time the inner function is called. So as 
+a result, when any of the functions returned by multipliers() are called, the value of i is 
+looked up in the surrounding scope at that time. By then, regardless of which of the returned 
+functions is called, the for loop has completed and i is left with its final value of 3. 
+Therefore, every returned function multiplies the value it is passed by 3, so since a value 
+of 2 is passed in the above code, they all return a value of 6 (i.e., 3 x 2).
+(Incidentally, as pointed out in The Hitchhiker’s Guide to Python, there is a somewhat 
+widespread misconception that this has something to do with lambdas, which is not the case. 
+Functions created with a lambda expression are in no way special and the same behavior is 
+exhibited by functions created using an ordinary def.)
 Below are a few examples of ways to circumvent this issue.
 One solution would be use a Python generator as follows:
 def multipliers():
   for i in range(4): yield lambda x : i * x 
 
 
-Another solution is to create a closure that binds immediately to its arguments by using a default argument. For example:
+Another solution is to create a closure that binds immediately to its arguments by using 
+a default argument. For example:
 def multipliers():
   return [lambda x, i=i : i * x for i in range(4)]
 
@@ -947,8 +957,11 @@ Python maintains a count of the number of references to each object in memory. I
 occasionally things called "reference cycles" happen. The garbage collector periodically looks for these and cleans them up. An example would be if you have two objects o1 and o2such that o1.x == o2 and o2.x == o1. If o1 and o2 are not referenced by anything else then they shouldn't be live. But each of them has a reference count of 1.
 Certain heuristics are used to speed up garbage collection. For example, recently created objects are more likely to be dead. As objects are created, the garbage collector assigns them to generations. Each object gets one generation, and younger generations are dealt with first.
 This explanation is CPython specific.
+
 Question 13
-Place the following functions below in order of their efficiency. They all take in a list of numbers between 0 and 1. The list can be quite long. An example input list would be[random.random() for i in range(100000)]. How would you prove that your answer is correct?
+Place the following functions below in order of their efficiency. They all take in a list of numbers 
+between 0 and 1. The list can be quite long. An example input list would be
+[random.random() for i in range(100000)]. How would you prove that your answer is correct?
 def f1(lIn):
     l1 = sorted(lIn)
     l2 = [i for i in l1 if i<0.5]
@@ -966,7 +979,8 @@ def f3(lIn):
 
 
 Answer
-Most to least efficient: f2, f1, f3. To prove that this is the case, you would want to profile your code. Python has a lovely profiling package that should do the trick.
+Most to least efficient: f2, f1, f3. To prove that this is the case, you would want to profile 
+your code. Python has a lovely profiling package that should do the trick.
 import cProfile
 lIn = [random.random() for i in range(100000)]
 cProfile.run('f1(lIn)')
@@ -1012,10 +1026,16 @@ For completion's sake, here is what the above profile outputs:
 
 
 Why do we care?
-Locating and avoiding bottlenecks is often pretty worthwhile. A lot of coding for efficiency comes down to common sense - in the example above it's obviously quicker to sort a list if it's a smaller list, so if you have the choice of filtering before a sort it's often a good idea. The less obvious stuff can still be located through use of the proper tools. It's good to know about these tools.
+Locating and avoiding bottlenecks is often pretty worthwhile. A lot of coding for efficiency 
+comes down to common sense - in the example above it's obviously quicker to sort a list if 
+it's a smaller list, so if you have the choice of filtering before a sort it's often a good 
+idea. The less obvious stuff can still be located through use of the proper tools. It's good 
+to know about these tools.
 
 What are the ways to write a function using call by reference?
-Arguments in python are passed as an assignment. This assignment creates an object that has no relationship between an argument name in source and target. The procedure to write the function using call by reference includes:
+Arguments in python are passed as an assignment. This assignment creates an object that has no 
+relationship between an argument name in source and target. The procedure to write the function
+using call by reference includes:
 The tuple result can be returned to the object which called it. The example below shows it:
 def function(a, b):
 a = 'value' 
@@ -1023,8 +1043,10 @@ b = b + 1
 # a and b are local variables that are used to assign the new objects
 return a, b 
 # This is the function that is used to return the value stored in b
-- The use of global variables allows the function to be called as reference but this is not the safe method to call any function. 
-- The use of mutable (they are the classes that consists of changeable objects) objects are used to pass the function by reference.
+- The use of global variables allows the function to be called as reference but this is not the 
+safe method to call any function. 
+- The use of mutable (they are the classes that consists of changeable objects) objects are used 
+to pass the function by reference.
 def function(a):
 a[0] = 'string' 
 a[1] = a[1] + 1 
@@ -1033,19 +1055,37 @@ args = ['string', 10]
 func1(args)
 print args[0], args[1] 
 #This prints the value stored in the array of ‘a’
+
 What are the commands that are used to copy an object in Python?
 The command that is used to copy an object in python includes: 
-- copy.copy() function: This makes a copy of the file from source to destination. It returns a shallow copy of the parameter that is passed. 
-- copy.deepcopy(): This also creates a copy of the object from source to destination. It returns a deep copy of the parameter that is passed to the function. 
+- copy.copy() function: This makes a copy of the file from source to destination. It returns 
+a shallow copy of the parameter that is passed. 
+- copy.deepcopy(): This also creates a copy of the object from source to destination. It 
+returns a deep copy of the parameter that is passed to the function. 
 The dictionary consists of all the objects and the copy() method which is used as:
 newdict = olddict.copy()
-The assignment statement doesn’t copy any object but it creates a binding between the target and the object that is used for the mutable items. Copy is required to keep a copy of it using the modules that is provided to give generic and shallow operations.
+The assignment statement doesn’t copy any object but it creates a binding between the target 
+and the object that is used for the mutable items. Copy is required to keep a copy of it using 
+the modules that is provided to give generic and shallow operations.
+
 What is the difference between deep and shallow copy?
-- Shallow copy is used when a new instance type gets created and it keeps the values that are copied in the new instance. Whereas, deep copy is used to store the values that are already copied. 
-- Shallow copy is used to copy the reference pointers just like it copies the values. These references point to the original objects and the changes made in any member of the class will also affect the original copy of it. Whereas, deep copy doesn’t copy the reference pointers to the objects. Deep copy makes the reference to an object and the new object that is pointed by some other object gets stored. The changes made in the original copy won’t affect any other copy that uses the object. 
-- Shallow copy allows faster execution of the program and it depends on the size of the data that is used. Whereas, deep copy makes it slower due to making certain copies for each object that is been called.
+- Shallow copy is used when a new instance type gets created and it keeps the values that are 
+copied in the new instance. Whereas, deep copy is used to store the values that are already copied. 
+- Shallow copy is used to copy the reference pointers just like it copies the values. These 
+references point to the original objects and the changes made in any member of the class will 
+also affect the original copy of it. Whereas, deep copy doesn’t copy the reference pointers to 
+the objects. Deep copy makes the reference to an object and the new object that is pointed by 
+some other object gets stored. The changes made in the original copy won’t affect any other 
+copy that uses the object. 
+- Shallow copy allows faster execution of the program and it depends on the size of the data 
+that is used. Whereas, deep copy makes it slower due to making certain copies for each object 
+that is been called.
+
 Write a program to find out the name of an object in python.
-The object doesn’t have any name and there is no way the can be found out for objects. The assignment is used to bind a name to the value that includes the name of the object that has to be bound by a value. If the value is callable then the statements are made true and then the program followed can be used to find the reference name of an object.
+The object doesn’t have any name and there is no way the can be found out for objects. The 
+assignment is used to bind a name to the value that includes the name of the object that has 
+to be bound by a value. If the value is callable then the statements are made true and then 
+the program followed can be used to find the reference name of an object.
 class try:
 pass
 B = A
@@ -1054,26 +1094,58 @@ b = a
 print b
 <__main__.try instance at 0x16D07CC>
 print b
-The class consists of name and the names are invoked by using the the variable B that creates an instance for the class try. The method is to find out from all the namespaces that the object exists and then print the name of the object.
+The class consists of name and the names are invoked by using the the variable B that 
+creates an instance for the class try. The method is to find out from all the namespaces 
+that the object exists and then print the name of the object.
+
 How can the ternary operators be used in python?
-The ternary operator is the operator that is used to show the conditional statements. This consists of the true or false values with a statement that has to be evaluated for it. The operator will be given as:
+The ternary operator is the operator that is used to show the conditional statements. 
+This consists of the true or false values with a statement that has to be evaluated 
+for it. The operator will be given as:
 [on_true] if [expression] else [on_false]
 x, y = 25, 50
 big = x if x < y else y
-This is the lowest priority operator that is used in making a decision that is based on the values of true or false. The expression gets evaluated like if x<y else y, in this case if x<y is true then the value is returned as big=x and if it is incorrect then big=y will be sent as a result.
+This is the lowest priority operator that is used in making a decision that is based on 
+the values of true or false. The expression gets evaluated like if x<y else y, in this 
+case if x<y is true then the value is returned as big=x and if it is incorrect then 
+big=y will be sent as a result.
+
 How the string does get converted to a number?
-- To convert the string into a number the built-in functions are used like int() constructor. It is a data type that is used like int (‘1’) ==1. 
+- To convert the string into a number the built-in functions are used like int() constructor.
+It is a data type that is used like int (‘1’) ==1. 
 - float() is also used to show the number in the format as float(‘1’)=1.
-- The number by default are interpreted as decimal and if it is represented by int(‘0x1’) then it gives an error as ValueError. In this the int(string,base) function takes the parameter to convert string to number in this the process will be like int(‘0x1’,16)==16. If the base parameter is defined as 0 then it is indicated by an octal and 0x indicates it as hexadecimal number. 
-- There is function eval() that can be used to convert string into number but it is a bit slower and present many security risks like __import__('os').system("rm -rf$HOME") - use of this will delete the home directory of the system.
+- The number by default are interpreted as decimal and if it is represented by int(‘0x1’)
+then it gives an error as ValueError. In this the int(string,base) function takes the 
+parameter to convert string to number in this the process will be like int(‘0x1’,16)==16. 
+If the base parameter is defined as 0 then it is indicated by an octal and 0x indicates 
+it as hexadecimal number. 
+- There is function eval() that can be used to convert string into number but it is a bit 
+slower and present many security risks like __import__('os').system("rm -rf$HOME") - use of 
+this will delete the home directory of the system.
+
 What is the function of negative index?
-The sequences in python are indexed and it consists of the positive as well as negative numbers. The numbers that are positive uses ‘0’ that is uses as first index and ‘1’ as the second index and the process goes on like that. The index for the negative number starts from ‘-1’ that represents the last index in the sequence and ‘-2’ as the penultimate index and the sequence carries forward like the positive number. The negative index is used to remove any new-line spaces from the string and allow the string to except the last character that is given as S[:-1]. The negative index is also used to show the index to represent the string in correct order.
+The sequences in python are indexed and it consists of the positive as well as negative 
+numbers. The numbers that are positive uses ‘0’ that is uses as first index and ‘1’ as 
+the second index and the process goes on like that. The index for the negative number 
+starts from ‘-1’ that represents the last index in the sequence and ‘-2’ as the penultimate 
+index and the sequence carries forward like the positive number. The negative index is used 
+to remove any new-line spaces from the string and allow the string to except the last character 
+that is given as S[:-1]. The negative index is also used to show the index to represent the 
+string in correct order.
+
 Write a program to check whether the object is of a class or its subclass.
-There is a method which is built-in to show the instances of an object that consists of many classes by providing a tuple in a table instead of individual classes. The method is given as isinstance(obj,cls) and in more details given as:
+There is a method which is built-in to show the instances of an object that consists of many 
+classes by providing a tuple in a table instead of individual classes. The method is given as 
+isinstance(obj,cls) and in more details given as:
 
-isinstance(obj, (class1, class2, ...)) that is used to check about the object’s presence in one of the classes. The built in types can also have many formats of the same function like isinstance(obj, str) or isinstance(obj, (int, long, float, complex)). 
+isinstance(obj, (class1, class2, ...)) that is used to check about the object’s presence in
+one of the classes. The built in types can also have many formats of the same function like 
+isinstance(obj, str) or isinstance(obj, (int, long, float, complex)). 
 
-It is not preferred to use the class instead user-defined classes are made that allow easy object-oriented style to define the behavior of the object’s class. These perform different thing that is based on the class. The function differs from one class to another class. 
+It is not preferred to use the class instead user-defined classes are made that allow easy 
+object-oriented style to define the behavior of the object’s class. These perform different
+thing that is based on the class. The function differs from one class to another class. 
+
 To find out the object of the particular class the following program is used:
 def search(obj):
 if isinstance(obj, box):
@@ -1083,8 +1155,17 @@ elif isinstance(obj, Document):
 elif 
 obj.search()
 #This is the function used to search the object’s class.
+
+
 Why does delegation performed in Python?
-Delegation is a technique that is used in object oriented programming. This is used to show the object and the behavior of the methods that are used. The class can be created to provide an implementation of the method that allows the method to be referenced. The delegate is having the parameter and the return value in an object. It also allows the methods to be passed as parameters and allow the defining of the callback methods that can be grouped together in multiple methods. These methods can be called from a single event. The example shows a class that captures the behavior of the file and converts data from lower to uppercase.
+Delegation is a technique that is used in object oriented programming. This is used to 
+show the object and the behavior of the methods that are used. The class can be created
+to provide an implementation of the method that allows the method to be referenced. The
+delegate is having the parameter and the return value in an object. It also allows the
+methods to be passed as parameters and allow the defining of the callback methods that
+can be grouped together in multiple methods. These methods can be called from a single 
+event. The example shows a class that captures the behavior of the file and converts data
+from lower to uppercase.
 class upcase:
 def __init__(self, out):
 self._out = out
@@ -1092,17 +1173,45 @@ def write(self, s):
 self._outfile.write(s.upper())
 def __getattr__(self, name):
 return getattr(self._out, name)
-The write() method that is used in the upcase class converts the string to the uppercase before calling another method. The delegation is being given using the self.__outfile object.
+The write() method that is used in the upcase class converts the string to the uppercase 
+before calling another method. The delegation is being given using the self.__outfile object.
+
 What is the function of “self”?
-“Self” is a variable that represent the instance of the object to itself. In most of the object oriented programming language, this is passed as to the methods as a hidden parameters that is defined by an object. But, in python it is declare it and pass it explicitly. It is the first argument that gets created in the instance of the class A and the parameters to the methods are passed automatically. It refers to separate instance of the variable for individual objects. This is the first argument that is used in the class instance and the “self” method is defined explicitly to all the methods that are used and present. The variables are referred as “self.xxx”.
+“Self” is a variable that represent the instance of the object to itself. In most of the 
+object oriented programming language, this is passed as to the methods as a hidden parameters
+that is defined by an object. But, in python it is declare it and pass it explicitly. It is
+the first argument that gets created in the instance of the class A and the parameters to the
+methods are passed automatically. It refers to separate instance of the variable for individual
+objects. This is the first argument that is used in the class instance and the “self” method is
+defined explicitly to all the methods that are used and present. The variables are referred as
+“self.xxx”.
+
 
 How is “self” explicitly defined in a method?
-“Self” is a reference variable and an instance attribute that is used instead of the local variable inside the class. The function or the variable of the self like self.x or self.meth() can be used in case the class is not known. There are no variables declared as local. It doesn’t have any syntax and it allow the reference to be passed explicity or call the method for the class that is in use. The use of writebaseclass.methodname(self, <argument list>) shows that the method of _init_() can be extended to the base class methods. This also solves the problem that is syntactic by using the assignment and the local variables. This tells a way to the interpreter the values that are to be used for the instance variables and local variables. The use of explicit self.var solves the problem mentioned above.
+“Self” is a reference variable and an instance attribute that is used instead of the local 
+variable inside the class. The function or the variable of the self like self.x or self.meth()
+can be used in case the class is not known. There are no variables declared as local. It 
+doesn’t have any syntax and it allow the reference to be passed explicity or call the method 
+for the class that is in use. The use of writebaseclass.methodname(self, <argument list>)
+shows that the method of _init_() can be extended to the base class methods. This also solves 
+the problem that is syntactic by using the assignment and the local variables. This tells a way
+to the interpreter the values that are to be used for the instance variables and local variables.
+The use of explicit self.var solves the problem mentioned above.
+
+
 What is the use of join() for a string rather than list or tuple method?
-The functions and the methods that are used for the functionality uses the string module. This string module is represented as by using the join function in it:
+The functions and the methods that are used for the functionality uses the string module.
+This string module is represented as by using the join function in it:
 ", ".join(['1', '2', '4', '8', '16']) that results in "1, 2, 4, 8, 16"
-The string variable that is used provide a fixed string literal to allow the names that are used to be bounded to the strings. join() is a string method that is used to provide a separator string to use the function over the sequence of the string and insert the function to an adjacent elements. The method uses any number of arguments that follow some rules that has to be put up for the sequence objects that the class defines for itself. The join is used for the string module that is used to join the string characters together as it is given in the program. The example is given as:
+The string variable that is used provide a fixed string literal to allow the names that 
+are used to be bounded to the strings. join() is a string method that is used to provide
+a separator string to use the function over the sequence of the string and insert the 
+function to an adjacent elements. The method uses any number of arguments that follow 
+some rules that has to be put up for the sequence objects that the class defines for 
+itself. The join is used for the string module that is used to join the string characters
+together as it is given in the program. The example is given as:
 string.join(['1', '2', '4', '8', '16'], ", ")
+
 What is the process of compilation and linking in python?
 The compiling and linking allows the new extensions to be compiled properly without any error and the linking can be done only when it passes the compiled procedure. If the dynamic loading is used then it depends on the style that is being provided with the system. The python interpreter can be used to provide the dynamic loading of the configuration setup files and will rebuild the interpreter. 
 The steps that is required in this as:
@@ -1112,6 +1221,8 @@ The steps that is required in this as:
 - Run the file using spam comp.o
 - After successful run of this rebuild the interpreter by using the make command on the top-level directory. 
 - If the file is changed then run rebuild Makefile by using the command as ‘make Makefile’.
+
+
 What is the procedure to extract values from the object used in python?
 To extract the value it requires the object type to be defined and according to the object type only the values will be fetched. 
 The values will be extracted as:
@@ -1119,6 +1230,8 @@ The values will be extracted as:
 - If the object is a list then PyListSize() is having the same function that is defined for the tuple and PyList_GetItem() that also return the data items at a specified index.
 - Strings uses PyString_Size() to return the length of the value and PyString_AsString() that return the pointer to its value. 
 - To check the type of the object and the extracted values use of methods like PyString_Check(), PyTuple_Check(), PyList_Check(), etc are used.
+
+
 What are the steps required to make a script executable on Unix?
 The steps that are required to make a script executable are to:
 - First create a script file and write the code that has to be executed in it.
@@ -1131,6 +1244,7 @@ The steps that are required to make a script executable are to:
 # Write your code here
 exec python $0 ${1+"$@"}
 # Write the function that need to be included.
+
 How does global value mutation used for thread-safety?
 The global interpreter lock is used to allow the running of the thread one at a time. This is internal to the program only and used to distribute the functionality along all the virtual machines that are used. Python allows the switching between the threads to be performed by using the byte code instructions that are used to provide platform-independence. The sys.setcheckinterval() method is used that allow the switching to occur during the implementation of the program and the instruction. This provides the understanding in the field of accounting to use the byte code implementation that makes it portable to use. The atomicity can be provided such that the shared variables can be given as built-in data types.
 Write a program to read and write the binary data using python?
@@ -1171,7 +1285,8 @@ Singleton& Singleton::Handle()
    return *psingle;
 }
 Write a function f()
-Q: We have the following code with unknown function f(). In f(), we do not want to use return, instead, we may want to use generator.
+Q: We have the following code with unknown function f(). In f(), we do not want to use return, 
+instead, we may want to use generator.
 for x in f(5):
     print x,
 
@@ -1184,6 +1299,8 @@ Write a function f() so that we can have the output above.
 We may use the following f() to get the same output:
 def f(n):
    return [x**3 for x in range(5)]
+   
+   
 But we want to use generator not using return.
 So, the answer should look like this:
 def f(n):
@@ -1262,20 +1379,12 @@ try:
 except IOError:
     print "No such file exists"
 
-
-
-
-
-
 How can we get home directory using '~' in Python?
 We need to import os module, and add just one line:
 import os
 print os.path.expanduser('~')
 Output:
 /home/k
-
-
-
 
 The usage of os.path.dirname() & os.path.basename()
 For example, we have the path like this, /home/k/TEST/PYTHON/p.py:
@@ -1370,7 +1479,8 @@ range vs xrange
 >>> 
 
 
-range() returns a list to the sum function containing all the numbers from 1 to 100. But xrange() returns an iterator rather than a list, which makes it more lighter in terms of memory use as shown below.
+range() returns a list to the sum function containing all the numbers from 1 to 100. But xrange() returns 
+an iterator rather than a list, which makes it more lighter in terms of memory use as shown below.
 >>> range(1,5)
 [1, 2, 3, 4]
 >>> xrange(1,5)
@@ -1398,12 +1508,12 @@ With the generator expression, to make list comprehension, we can just wrap it w
 >>> list(x ** 3 for x in range(5))
 [0, 1, 8, 27, 64]
 
-
-For more information about generators, please visit:
-http://www.bogotobogo.com/python/python_generators.php
 Manipulating functions as first-class objects
 Functions as first-class objects?
-That means we can pass them around as objects and can manipulate them. In other words, most of the times, this just means we can pass these first-class citizens as arguments to functions, or return them from functions. Everything in Python is a proper object. Even things that are "primitive types" in other languages:
+That means we can pass them around as objects and can manipulate them. In other words, 
+most of the times, this just means we can pass these first-class citizens as arguments 
+to functions, or return them from functions. Everything in Python is a proper object. 
+Even things that are "primitive types" in other languages:
 >>> dir (100)
 ['__abs__', '__add__', '__and__', '__class__', '__cmp__', '__coerce__', 
 '__delattr__', '__div__', '__divmod__', '__doc__', '__float__', 
@@ -1444,8 +1554,14 @@ def my_function():
     '''our docstring'''
 
 
-Everything between the triple quotes (with double quotes, """ or with single quotes,''') is the function's docstring, which documents what the function does. A docstring, if it exists, must be the first thing defined in a function. In other words, it should appear on the next line after the function declaration. We don't technically need to give our function a docstring, but we always should. The docstring will be available at runtime as an attribute of the function.
-Writing documentation for our program this way makes the code more readable. We can also use comments for clarification of what the code is doing. In general, docstrings are for documentation, comments are for a code reader.
+Everything between the triple quotes (with double quotes, """ or with single quotes,''') is the 
+function's docstring, which documents what the function does. A docstring, if it exists, must be 
+the first thing defined in a function. In other words, it should appear on the next line after 
+the function declaration. We don't technically need to give our function a docstring, but we always
+should. The docstring will be available at runtime as an attribute of the function.
+Writing documentation for our program this way makes the code more readable. We can also use 
+comments for clarification of what the code is doing. In general, docstrings are for documentation,
+comments are for a code reader.
 Monkey-patching
 The origin of monkey-patch according to wiki is :
 "The term monkey patch seems to have come from an earlier term, guerrilla patch, which referred to changing code sneakily at runtime. The word guerrilla, homophonous with gorilla, became monkey, possibly to make the patch sound less intimidating."
@@ -1470,10 +1586,17 @@ monkey_f()
 >>> 
 
 
-As we can see, we did make some changes in the behavior of f() in MyClass using the function we defined, monkey_f(), outside of the module m.
+As we can see, we did make some changes in the behavior of f() in MyClass using the 
+function we defined, monkey_f(), outside of the module m.
 It is a risky thing to do, but sometimes we need this trick, such as testing.
 pdb - The Python Debugger
-The module pdb defines an interactive source code debugger for Python programs. It supports setting (conditional) breakpoints and single stepping at the source line level, inspection of stack frames, source code listing, and evaluation of arbitrary Python code in the context of any stack frame. It also supports post-mortem debugging and can be called under program control.
+The module pdb defines an interactive source code debugger for Python programs. It supports
+setting (conditional) breakpoints and single stepping at the source line level, inspection 
+of stack frames, source code listing, and evaluation of arbitrary Python code in the context
+of any stack frame. It also supports post-mortem debugging and can be called under program 
+control.
+
+
 Using Lambda
 Python supports the creation of anonymous functions (i.e. functions that are not bound to a name) at runtime, using a construct called lambda. This is not exactly the same as lambda in functional programming languages such as Lisp, but it is a very powerful concept that's well integrated into Python and is often used in conjunction with typical functional concepts like filter(), map() and reduce().
 The following code shows the difference between a normal function definition, func and a lambda function, lamb:
@@ -1489,16 +1612,27 @@ The following code shows the difference between a normal function definition, fu
 >>> 
 
 
-As we can see, func() and lamb() do exactly the same and can be used in the same ways. Note that the lambda definition does not include a return statement -- it always contains an expression which is returned. Also note that we can put a lambda definition anywhere a function is expected, and we don't have to assign it to a variable at all.
+As we can see, func() and lamb() do exactly the same and can be used in the same ways. Note that
+the lambda definition does not include a return statement -- it always contains an expression which
+is returned. Also note that we can put a lambda definition anywhere a function is expected, and we 
+don't have to assign it to a variable at all.
 The lambda's general form is :
 lambda arg1, arg2, ...argN : expression using arguments
 
 
-Function objects returned by running lambda expressions work exactly the same as those created and assigned by defs. However, there are a few differences that make lambda useful in specialized roles:
+Function objects returned by running lambda expressions work exactly the same as those created 
+and assigned by defs. However, there are a few differences that make lambda useful in specialized
+roles:
 lambda is an expression, not a statement.
-Because of this, a lambda can appear in places a def is not allowed. For example, places like inside a list literal, or a function call's arguments. As an expression, lambda returns a value that can optionally be assigned a name. In contrast, the def statement always assigns the new function to the name in the header, instead of returning is as a result.
+Because of this, a lambda can appear in places a def is not allowed. For example, places like 
+inside a list literal, or a function call's arguments. As an expression, lambda returns a value
+that can optionally be assigned a name. In contrast, the def statement always assigns the new 
+function to the name in the header, instead of returning is as a result.
 lambda's body is a single expression, not a block of statements.
-The lambda's body is similar to what we'd put in a def body's return statement. We simply type the result as an expression instead of explicitly returning it. Because it is limited to an expression, a lambda is less general that a def. We can only squeeze design, to limit program nesting. lambda is designed for coding simple functions, and def handles larger tasks.
+The lambda's body is similar to what we'd put in a def body's return statement. We simply type the 
+result as an expression instead of explicitly returning it. Because it is limited to an expression,
+a lambda is less general that a def. We can only squeeze design, to limit program nesting. lambda 
+is designed for coding simple functions, and def handles larger tasks.
 >>> 
 >>> def f(x, y, z): return x + y + z
 
@@ -1506,20 +1640,25 @@ The lambda's body is similar to what we'd put in a def body's return statement. 
 432
 
 
-We can achieve the same effect with lambda expression by explicitly assigning its result to a name through which we can call the function later:
+We can achieve the same effect with lambda expression by explicitly assigning its result to a name 
+through which we can call the function later:
 >>> 
 >>> f = lambda x, y, z: x + y + z
 >>> f(2, 30, 400)
 432
 >>> 
 
-
-Here, the function object the lambda expression creates is assigned to f. This is how def works, too. But in def, its assignment is an automatic must.
-For more, please go to Functions lambda
 Properties vs Getters/Setters
 We have more detailed discussion in Classes and Instances - Method: Properties.
-In general, properties are more flexible than attributes. That's because we can define functions that describe what is supposed to happen when we need setting, getting or deleting them. If we don't need this additional flexibility, we may just use attributes since they are easier to declare and faster.
-However, when we convert an attribute into a property, we just define some getter and setter that we attach to it, that will hook the data access. Then, we don't need to rewrite the rest of our code, the way for accessing the data is the same, whatever our attribute is a property or not.
+In general, properties are more flexible than attributes. That's because we can define functions
+that describe what is supposed to happen when we need setting, getting or deleting them. If we 
+don't need this additional flexibility, we may just use attributes since they are easier to declare 
+and faster.
+However, when we convert an attribute into a property, we just define some getter and setter that 
+we attach to it, that will hook the data access. Then, we don't need to rewrite the rest of our 
+code, the way for accessing the data is the same, whatever our attribute is a property or not.
+
+
 classmethod vs staticmethod
 From the official Python documentation on @classmethod:
 classmethod(function)
@@ -1556,9 +1695,6 @@ The instance is ignored except for its class.
 Static methods in Python are similar to those found in Java or C++.
 
 
-For more info on static vs class methods, please visit:
-@static method vs class method
-
 Making a list with unique element from a list with duplicate elements
 Iterating the list is not a desirable solution. The right answer should look like this:
 >>> dup_list = [1,2,3,4,4,4,5,1,2,7,8,8,10]
@@ -1581,7 +1717,9 @@ The syntax of map is:
 map(aFunction, aSequence)
 
 
-The first argument is a function to be executed for all the elements of the iterable given as the second argument. If the function given takes in more than 1 arguments, then many iterables are given.
+The first argument is a function to be executed for all the elements of the iterable given
+as the second argument. If the function given takes in more than 1 arguments, then many 
+iterables are given.
 >>> def cubic(x):
     return x*x*x
 
@@ -1592,7 +1730,8 @@ The first argument is a function to be executed for all the elements of the iter
 >>> list(map(lambda x,y: x*y, [1,2,3], [4,5,6]))
 [4, 10, 18]
 >>> 
-map is similar to list comprehension but is more limited because it requires a function instead of an arbitrary expression.
+map is similar to list comprehension but is more limited because it requires a function 
+instead of an arbitrary expression.
 What is filter and reduce?
 Just for comparison purpose, in the following example, we will include map as well.
 >>> integers = [ x for x in range(11)]
@@ -1625,7 +1764,8 @@ We may want to use *args when we're not sure how many arguments might be passed 
 >>> 
 
 
-The keyword arguments is a special name=value syntax in function calls that specifies passing by name. It is often used to provide configuration options.
+The keyword arguments is a special name=value syntax in function calls that specifies 
+passing by name. It is often used to provide configuration options.
 >>> def kargs_function(**kargs):
     for k,v in kargs.items():
         print (k,v)
@@ -1651,7 +1791,8 @@ tuple, frozen set, int, float, str
 list, set, dict, byte array
 
 Difference between remove, del and pop on lists
-To remove a list element, we can use either the del statement if we know exactly which element(s) we are deleting or the remove() method if we do not know.
+To remove a list element, we can use either the del statement if we know exactly which 
+element(s) we are deleting or the remove() method if we do not know.
 list.remove(element), del list(index), list.pop(index)
 remove() removes the first matching value, not a specific index:
 >>> a = [5,6,7,7,8]
@@ -1678,7 +1819,8 @@ Both del and pop work on index:
 
 
 Join with new line
-Given a list of string, ['Black', 'holes', 'are', 'where', 'God', 'divided', 'by', 'zero'], print each word in a new line:
+Given a list of string, ['Black', 'holes', 'are', 'where', 'God', 'divided', 'by', 'zero'], 
+print each word in a new line:
 >>> s = ['Black', 'holes', 'are', 'where', 'God', 'divided', 'by', 'zero']
 >>> print '\n'.join(s)
 Black
@@ -1698,7 +1840,8 @@ Creating a dictionary using tuples
 >>> d
 {'three': 3, 'two': 2, 'one': 1}
 Floor operation on integers
-Write a floor division function without using '/' or '%' operator. For example, f(5,2) = 5/2 = 2, f(-5,2) = -5/2 = -3.
+Write a floor division function without using '/' or '%' operator. For example, 
+f(5,2) = 5/2 = 2, f(-5,2) = -5/2 = -3.
 def floor(a,b):
    count = 0
    sign = 1
@@ -1829,33 +1972,12 @@ Or
 >>> sum(filter(lambda x: x % 2, range(1,101)))
 
 
-
-
 Truncating division
 Two divisions - '/' and '//':
 >>> 5.5/2
 2.75
 >>> 5.5//2
 2.0
-
-
-
-
-Python 2 vs Python 3
-Q: What are the differences between Python 2 and Python 3? 
-Please visit Python 2 vs Python 3.
-
-
-
-
-len(set)
-What's the output?
->>> len(set([1,1,2,3,3,3,4]))
-Output:
-4
-set() only retains unique values.
-
-
 
 
 Print a list of file in a directory
