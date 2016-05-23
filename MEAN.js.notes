@@ -350,11 +350,6 @@ $ mongo mean
 ##############################################
 MongoDB collections
 ##############################################
-below will create a collection named "posts" and insert first documents
-> db.posts.insert({"title":"First Post", "user": "bob"})
-
-> db.posts.find()
-
 > show collections
 
 delete the posts collection, you will need to execute the drop()
@@ -362,38 +357,17 @@ command as follows:
 > db.posts.drop()
 
 Creating a new document
-You're already familiar with the basic method of creating a new document using
-the insert() method, as you previously did in earlier examples. Besides the
-insert() method, there are two more methods called update() and save() to
-create new objects.
-
-Creating a document using insert()
-The most common way to create a new document is to use the insert() method.
-The insert method takes a single argument that represents the new document.
-To insert a new post, just issue the following command in the MongoDB shell:
-      > db.posts.insert({"title":"Second Post", "user": "alice"})
-
-Creating a document using update()
-The update() method is usually used to update an existing document. You can also
-use it to create a new document, if no document matches the query criteria, using the
-following upsert flag:
-      > db.posts.update({
-      "user": "alice"
-      }, {
-      "title": "Second Post",
-      "user": "alice"
-      }, {
-      upsert: true
-      })
-      
-Creating a document using save()
-Another way of creating a new document is by calling the save() method, passing it
-a document that either doesn't have an _id field or has an _id field that doesn't exist
-in the collection:
+insert(), update(), and save() to create new objects.
+      > db.posts.insert({"title":"First Post", "user": "bob"})
       > db.posts.save({"title":"Second Post", "user": "alice"})
-
-Finding all the collection documents
-> db.posts.find()
+      > db.posts.update({
+                              "user": "alice"
+                              }, {
+                              "title": "Second Post",
+                              "user": "alice"
+                              }, {
+                              upsert: true
+                              })
 
 > db.posts.find({ "user": "alice" })
 
@@ -404,15 +378,7 @@ you can use the following $in operator:
 > db.posts.find( { $or: [{ "user": "alice" }, { "user": "bob" }] })
 
 Updating documents using update()
-      > db.posts.update({
-            "user": "alice"
-      }, {
-      $set: {
-            "title": "Second Post"
-      }
-      }, {
-            multi: true
-      })
+      > db.posts.update({"user": "alice"}, {$set: {"title": "Second Post"}}, {multi: true})
       
 Deleting all documents
 > db.posts.remove()
@@ -421,6 +387,38 @@ Deleting all documents
 
 to remove the first post made by alice , you'll need to execute the following command:
       > db.posts.remove({ "user": "alice" }, true)
+
+
+#############################################################
+insert() vs save()
+#############################################################
+Let us consider the two cases here for save :-
+
+                        Save ()
+                        /     \
+                       /       \
+
+                 Having _id     Not Having _id 
+
+  ->In this case save will do    ->  It will do normal insertion 
+    upsert to insert.Now             in this case as insert() do.
+    what that means, it means 
+    take the document and replace 
+    the complete document having same
+    _id.
+
+                        Insert()
+                       /        \
+                      /          \
+
+   Doc Having _id in collection    Doc Not Having _id 
+  ->  E11000 duplicate key     ->Insert a new doc inside the collection.
+      error index:       
+
+
+
+
+
       
 ##########################################
 Mongoose
